@@ -1,0 +1,79 @@
+
+@font-face {
+    font-family: "cooperblack";
+    src: url("../fonts/cooprblk.ttf") format("opentype");
+}
+
+.title-text{
+    font-family: cooperblack;
+    font-size: 8vw;
+}
+
+html {
+    background-color: #315D40;
+}
+
+.left-align {
+    margin-left: 1em;
+}
+
+h1{
+    font-size: 500%;
+}
+
+h2{
+    font-size: 500%;
+}
+
+h4{
+    color: #627c66;
+}
+
+.header {
+    color: #385b3e;
+    background-color: #F2F2F2;
+    padding: 5px;
+}
+
+.footer {
+    bottom: 1em;
+    /*left:0;*/
+    height: 3em;
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 1em;
+    line-height: 1.5em;
+    text-align: center;
+    background-color: #F2F2F2;
+}
+
+/*.wrapper {*/
+    /*min-height: 100%;*/
+    /*margin: 0 auto -2em; /!* the bottom margin is the negative value of the footer's height *!/*/
+/*}*/
+
+.green-text {
+    color : #385b3e;
+}
+
+.white-text {
+    color : #F2F2F2;
+}
+
+.centered-image{
+    display: block;
+    margin: 10% auto;
+}
+
+.green-background{
+    background-color: #315D40;
+    border: solid #315D40;
+}
+
+.button {
+    display: inline-block;
+    vertical-align: middle;
+    line-height: normal;
+    min-height: 100%;
+}

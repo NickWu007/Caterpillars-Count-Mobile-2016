@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="UTF-8">
+<title>Caterpillars Count!</title>
+<script src="./js/jquery-1.11.3.min.js"></script>
+<script src="cordova.js"></script>
+<script src="./js/input-page.js"></script>
+<!--<script src="./js/jQuery.ptTimeSelect-0.8/src/jquery.ptTimeSelect.js"></script>-->
+<script src="./bootstrap-3.3.5-dist/js/bootstrap.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="css/style.css">
+<!--<link rel="stylesheet" type="text/css" href="./js/jQuery.ptTimeSelect-0.8/src/jquery.ptTimeSelect.css">-->
+
+<link rel="stylesheet" type="text/css" href="./jquery-ui-1.11.4.custom/jquery-ui.min.css">
+<script src="./jquery-ui-1.11.4.custom/jquery-ui.min.js"></script>
+
+
+<script type="text/javascript" src="./js/jquery.ddslick.min.js"></script>
+
+</head>
+
+<body>
+
+	<div class='header-footer navbar-fixed-top white-text'> 
+		<div class='left-align'> 
+			<span class="back-button glyphicon glyphicon-menu-left" onclick="returnToMainSelectScreen( )"></span>
+			<img src='pictures/ic_launcher.png' height='25' width='25'> 
+			Caterpillars Count! 
+		</div> 
+	</div>
+
+	<div class="main-select-screen">
+
+		<div class="section left-align top-section">
+
+			<div class="col-xs-4">
+				<h6>Temp.</h6>
+                <select class = "temperature-select" id = "temperature">
+					<option value ="default" selected disabled hidden></option>
+					<option value="<30"><30°F</option>
+                    <option value="30-39">30-39°F</option>
+                    <option value="40-49">40-49°F</option>
+                    <option value="50-59">50-59°F</option>
+                    <option value="60-69">60-69°F</option>
+                    <option value="70-79">70-79°F</option>
+                    <option value="80-89">80-89°F</option>
+                    <option value="90-99">90-99°F</option>
+                    <option value="100-109">100-109°F</option>
+					<option value=">109">>109°F</option>
+                </select>
+			</div>
+
+			<div class="col-xs-4">
+				<h6>Time</h6>
+				<input class = "time-start" type = "time" name="time" value="" id="time"/>
+			</div>
+
+			<div class="col-xs-4">
+				<h6>Date</h6>
+				<input class = "date" type="date" name="date" id="date" />
+			</div>
+
+		</div>
+
+		<div class="section left-align site-information">
+			
+			<h3>Site Information</h3>
+
+			<div data-toggle="tooltip" title="TODO" class = "more-info white-text">
+	    		<div class="more-info-content" onclick = "toolTip('site-info')">?</div>
+			</div>
+
+			<div>
+				<h6>Site</h6>
+				<select id="site" onchange="retrieveCircleCount()">
+					<option value ="default" selected disabled hidden>Please select a site</option>
+				</select>
+			</div>
+			<div>
+				<h6>Site Password</h6>
+				<input type = "text" id="visible-password" class="site-password" placeholder="Please enter the site password"/>
+				<input type = "password" id="hidden-password" class="site-password" placeholder="Please enter the site password"/>
+				<input type = "checkbox" id = "show-password" onclick = "togglePassword()"/><label for = "show-password">Show password</label>
+			</div>
+
+			<div>
+				<h6>Survey Type</h6>
+				<select class="survey-type" onchange="editableLeafCount()">
+					<option value ="default" selected disabled hidden>Please select a survey type</option>
+					<option value="Visual">Visual Survey</option>
+					<option value="Beat_Sheet">Beat Sheet</option>
+				</select>
+			</div>
+
+			<div>
+				<h6>Circle</h6>
+				<select id = "circle" onclick="checkIfCirclesRetrieved()">
+					<option value ="default" selected disabled hidden>Please select a circle</option>
+				</select>
+			</div>
+
+			<div>
+				<h6>Survey</h6>
+				<select class="survey" id="survey">
+					<option value ="default" selected disabled hidden>Please select a survey</option>
+					<option value="A">A</option>
+					<option value="B">B</option>
+					<option value="C">C</option>
+                    <option value="D">D</option>
+                    <option value="E">E</option>
+                </select>
+
+			</div>
+
+
+
+			<div>
+				<h6>Notes</h6>
+				<input class="notes"/>
+			</div>
+
+		</div>
+
+		<div class="section left-align arthropod-order-information">
+			
+			<h3>Arthropod Order Info</h3>
+
+			<div data-toggle="tooltip" title="TODO" class = "more-info white-text">
+	    		<div class="more-info-content" onclick = "toolTip('order-info')">?</div>
+			</div>
+
+			<div class="new-button white-text" onclick="showArthropodSelectScreen( )"><a>NEW</a></div>
+
+		</div>
+
+		<div class="section left-align plant-information">
+		
+			<h3>Plant Information</h3>
+
+			
+			<div data-toggle="tooltip" title="TODO" class = "more-info white-text">
+	    		<div class="more-info-content" onclick = "toolTip('plant-info')">?</div>
+			</div>
+
+			<div>
+				<h6>Plant Species</h6>
+				<input class="plant-species"/>
+			</div>
+
+            <div>
+                <h6>Leaf Count</h6>
+                <input class="leaf-count" type = "number" readonly min = "0" max ="200" placeholder="(0 to 200 leaves)"/>
+            </div>
+
+			<div>
+				
+				<h6>Herbivory</h6>	
+
+				<select id="herbivory-select">
+					<!--Replaced by ddSlick in input-page.js-->
+					<!--<option selected disabled hidden value = "default">Please select an herbivory score.</option>-->
+					<!--<option data-imagesrc="pictures/none.png" value = "None"></option>-->
+				    <!--<option data-imagesrc="pictures/trace.png" value ="Trace"></option>-->
+				    <!--<option data-imagesrc="pictures/light.png" value ="Light"></option>-->
+				    <!--<option data-imagesrc="pictures/moderate.png" value = "Moderate"></option>-->
+				    <!--<option data-imagesrc="pictures/heavy.png" value = "Heavy"></option>-->
+				</select>
+
+			</div>
+
+				
+		</div>
+
+		<div class="section left-align leaf-photo">
+
+			<h3>Leaf Photo</h3>
+
+			<div data-toggle="tooltip" title="TODO" class = "more-info white-text">
+	    		<div class="more-info-content" onclick = "toolTip('leaf-photo')">?</div>
+			</div>
+			<div id = "leaf-capture">
+				<div class="capture white-text" onclick="leafCapture()">
+					<div class = "capture-text">CAPTURE</div>
+				</div>
+			</div>
+
+
+		</div>
+
+		<div class="wrapper">
+			<div class="header-footer footer text-center white-text" onclick='submit( )'>
+				SUBMIT
+			</div>
+		</div>
+
+
+	</div>
+
+	<div class = "wrapper arthropod-order-select-screen">
+
+		        <div class="section left-align arthropod-order">
+		                <div class = "section-title"><h3>Arthropod Order</h3></div>
+		            <p>
+		                <select class = "order-selection" id = "order-selection" onchange = "caterpillarSelected()">
+		                    <option value ="default" selected disabled hidden>Please choose arthropod order</option>
+		                    <option value="ant">Ants (Formicidae)</option>
+		                    <option value="aphid">Aphids and Psyllids (Sternorrhyncha)</option>
+		                    <option value="bee">Bees and Wasps (Hymenoptera excluding ants)</option>
+		                    <option value="beetle">Beetles (Coleoptera)</option>
+		                    <option value="caterpillar">Caterpillars (Lepidoptera larvae)</option>
+		                    <option value="daddylonglegs">Daddy longlegs (Opiliones)</option>
+		                    <option value="fly">Flies (Diptera)</option>
+		                    <option value="grasshopper">Grasshoppers, Crickets (Orthoptera)</option>
+		                    <option value="leafhopper">Leaf Hoppers and Cicadas (Auchenorrhyncha)</option>
+		                    <option value="moths">Moths, Butterflies (Lepidoptera)</option>
+		                    <option value="spider">Spiders (Araneae; NOT daddy longlegs!)</option>
+		                    <option value="truebugs">True Bugs (Heteroptera)</option>
+		                    <option value="other">OTHER (describe in Notes)</option>
+		                    <option value="unidentified">UNIDENTIFIED (describe in Notes)</option>
+		                </select>
+		            </p>
+		            <div><input name="Length" type="number" min="1" max = "300" placeholder="Length (1 to 300 mm):" /></div>
+		            <div><input name="Count" type="number" min="1" max = "1000" placeholder="Count (1 to 1000):" /></div>
+		            <div><input name="Notes" type="text" placeholder="Notes" /></div>
+					<div class = "caterpillar-checklist">
+						<h4>Caterpillar features</h4>
+						<div>
+							<b>Hairy or spiny?</b>
+							<input type="radio" name="hairyOrSpiny" id="hairyOrSpiny" value="1">
+							<label for = "hairyOrSpiny">True</label>
+							<input type="radio" name="hairyOrSpiny" id="notHairyOrSpiny" value="0">
+							<label for = "notHairyOrSpiny">False</label>
+						</div>
+						<div>
+							<b>Leaf roll?</b>
+							<input type="radio" name="leafRoll" id="leafRoll" value="1">
+							<label for = "leafRoll">True</label>
+							<input type="radio" name="leafRoll" id="notLeafRoll" value="0">
+							<label for = "notLeafRoll">False</label>
+						</div>
+						<div>
+							<b>Silk tent?</b>
+							<input type="radio" name="silkTent" id="silkTent" value="1">
+							<label for = "silkTent">True</label>
+							<input type="radio" name="silkTent" id="notSilkTent" value="0">
+							<label for = "notSilkTent">False</label>
+						</div>
+					</div>
+		        </div>
+
+		        <div class = "section left-align photo">
+
+					<div class = "section-title">
+						<h3>Photo</h3>
+					</div>
+
+					<div id = "arthropod-capture">
+						<div class="capture white-text" onclick="arthropodCapture()">
+							<div class = "capture-text">CAPTURE</div>
+						</div>
+					</div>
+
+		        </div>
+
+		        <div class="wrapper">
+		            <div class="header-footer footer text-center white-text" onclick="saveArthropod( )">
+		                <a>Save</a>
+		            </div>
+		        </div>
+
+	</div>
+
+	<!--Tooltip dialogs-->
+	<div id = "site-info-tooltip" class="dialog" title="Site Information">
+		<p>Enter the Site, Circle, and Survey
+		associated with where you are currently
+		recording data.</p>
+		<p>Enter any notes you may deem
+		relevant to data reviewers.</p>
+	</div>
+
+	<div id = "order-info-tooltip" class="dialog" title="Order Information">
+		<p>Add a record for each Arthropod Order
+		that you see, estimating its length in mm
+		and noting how many you saw.</p>
+
+		<p>If necessary, submit observations for an
+		Order using multiple records (e.g., you
+		saw 10 ants of size 4 mm, and 3 ants of
+		size 12 mm).</p>
+
+		<p>You can add multiple Arthropod Orders
+		to each submission.</p>
+	</div>
+	<div id = "plant-info-tooltip" class="dialog" title="Plant Information">
+		<p>Enter the name of the plant species that
+		you surveyed.</p>
+
+		<p>If the survey type is beat-sheet, enter the number of leaves on the branch
+		that was surveyed.</p>
+
+		<p>Choose the herbivory score that best
+		characterizes the average level of
+		herbivory across all leaves examined in
+		the survey.</p>
+	</div>
+
+	<div id = "leaf-photo-tooltip" class="dialog" title="Leaf Photo">
+		<img id="photo-instruction" src="pictures/camera_direction.png">
+	</div>
+</body>
+
+</html>

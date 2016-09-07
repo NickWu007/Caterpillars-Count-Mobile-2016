@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="goldenCompass.caterpillarCount" version="1.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>Caterpillars Count!</name>
+    <description>
+        An application for conducting surveys of arthropod populations
+    </description>
+    <author email="caterpillarscount@gmail.com">
+        Caterpillars Count Team
+    </author>
+    <content src="StartScreen.html" />
+    <plugin name="cordova-plugin-whitelist" version="1" />
+    <access origin="*" />
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+    <allow-intent href="tel:*" />
+    <allow-intent href="sms:*" />
+    <allow-intent href="mailto:*" />
+    <allow-intent href="geo:*" />
+    <platform name="android">
+        <allow-intent href="market:*" />
+        <preference name="AndroidPersistentFileLocation" value="Compatibility" />
+        <icon src="www/pictures/mdpi_icon.png" density="mdpi" />
+        <icon src="www/pictures/hdpi_icon.png" density="hdpi" />
+        <icon src="www/pictures/xhdpi_icon.png" density="xhdpi" />
+        <icon src="www/pictures/xxhdpi_icon.png" density="xxhdpi" />
+        <icon src="www/pictures/xxxhdpi_icon.png" density="xxxhdpi" />
+
+    </platform>
+    <platform name="ios">
+        <allow-intent href="itms:*" />
+        <allow-intent href="itms-apps:*" />
+        <preference name="StatusBarOverlaysWebView" value="false" />
+        <preference name="StatusBarBackgroundColor" value="#000000" />
+        <preference name="StatusBarStyle" value="lightcontent" />
+    </platform>
+</widget>
