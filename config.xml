@@ -32,5 +32,6 @@
         <preference name="StatusBarOverlaysWebView" value="false" />
         <preference name="StatusBarBackgroundColor" value="#000000" />
         <preference name="StatusBarStyle" value="lightcontent" />
+        <hook type="before_build" src="plugins/cordova-plugin-qrscanner/scripts/swift-support.js" />
     </platform>
 </widget>

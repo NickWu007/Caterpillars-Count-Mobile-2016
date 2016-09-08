@@ -71,6 +71,35 @@ var ddData = [
 	}
 ];
 
+var QRCodePrepareDone = function(err, status){
+  if(err){
+    console.error(err._message);
+  } else {
+    console.log('QRScanner is initialized. Status:');
+    console.log(status);
+  }
+};
+
+var QRCodeCallback = function(err, contents){
+  if(err){
+    console.error(err._message);
+  }
+  alert('The QR Code contains: ' + contents);
+};
+ 
+var scanQRCode = function() {
+  QRScanner.prepare(QRCodePrepareDone);
+  navigator.camera.getPicture(onSuccessQRCode, onFail, {
+		quality: 50,
+		sourceType: Camera.PictureSourceType.CAMERA,
+		destinationType: Camera.DestinationType.FILE_URI
+	});
+};
+
+var onSuccessQRCode = fucntion(imageData) {
+  QRScanner.scan(QRCodeCallback);
+};
+
 document.addEventListener("deviceready", onDeviceReady, false);
 //Return to start screen if android back button is pressed
 function onDeviceReady(){
