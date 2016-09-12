@@ -20,8 +20,8 @@ $(document).ready(function(){
     $submitButton.click(function (e) {
         e.preventDefault();
 
-        if (navigator.connection.type === Connection.NONE) {
-            window.location.assign("index.html?userID=421&password=Wja673581429");
+        if (!navigator.onLine) {
+            window.location.assign("homepage.html?userID=421&password=Wja673581429");
             return;
         }
 
@@ -58,7 +58,7 @@ $(document).ready(function(){
                     console.log(data);
                     //If successfully logged in, display main survey page with userID and password as (hidden) url parameters.
                     if (data.privilegeLevel >= 0 ) {
-                        window.location.assign("index.html?userID="+data.userID+"&password="+json_obj.password);
+                        window.location.assign("homepage.html?userID="+data.userID+"&password="+json_obj.password);
                     }
                     if (data.validPw === 0) {
                         $pw.val("");
