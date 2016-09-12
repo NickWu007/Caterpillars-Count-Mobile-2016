@@ -5,14 +5,36 @@ body {
     background-color: #315D40;
     color: #F2F2F2;
     padding: 5px;
+    padding-top:10px;
 }
-
+#NewSurvey{
+    padding:0px;
+}
+span{
+    margin-bottom: 0px;
+}
+button{
+    padding:0px;
+    margin: 0px;
+}
 .left-align {
     margin-left: 1em;
 }
 
+.right-align{
+    align:right;
+}
+
 .section {
-    margin : 1em;
+    margin-left : 40px;
+    margin-right:40px;
+    margin-top: 45px;
+    margin-bottom: 45px;
+}
+
+.survey_list{
+    padding-top:20px;
+    padding-bottom: 30px;
 }
 
 h3 {
@@ -34,6 +56,10 @@ input {
     width: 100%;
 }
 
+
+.navlink{
+    font-size:20px;
+}    
 .wrapper {
     min-height: 100%;
     margin: 0 auto; /* the bottom margin is the negative value of the footer's height */
@@ -51,10 +77,10 @@ input {
 .footer {
     padding-top: 5%;
     bottom:0;
-    left: 5%;
-    width: 90%;
-    margin-left: auto;
-    margin-right: auto;
+    left: 0%;
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
     margin-bottom: 1em;
 }
 
@@ -105,12 +131,33 @@ input[type="checkbox"]{
     float: right;
 }
 
-.survey_detail{
-    background: #315D40
+.survey_delete{
+    background: saddlebrown;
+    font-size: 16px;
+    width: 80%;
+    left:10%;
+    margin-left: 10%;
 }
 
 .survey_item {
     padding: 10px;
     background: #ddd;
     border-radius: 10px;
+}
+
+.upload-button{
+    font-size: 16px;
+}
+.survey-count{
+    margin-top:10px;
+    margin-bottom: 10px;
+    width: 100%;
+    background: #f0f0f0;
+    color:brown;
+    font-size:20px;
+}
+
+.background{
+    margin-top:45px;
+    margin-bottom: 70px;
 }
