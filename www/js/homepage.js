@@ -2,6 +2,7 @@
  * Created by skuroda on 11/6/15.
  */
 $(document).ready(function(){
+    // Consider change to the devel site url.
     var DOMAIN = "http://master-caterpillars.vipapps.unc.edu";
     var $list_length = $(".survey_item").length; //computes number of items in the survey list
 
@@ -14,6 +15,7 @@ $(document).ready(function(){
         }, false);
         
     }
+<<<<<<< HEAD
  
     $(".survey-count").html("Total Stored Survey: " + $list_length); //updates survey-count
 
@@ -123,6 +125,8 @@ Please log in or use a different email.</p>");
             }
         });
     });
+=======
+>>>>>>> offline_proto
 });
 //Handles device rotation
 window.shouldRotateToOrientation = function() {

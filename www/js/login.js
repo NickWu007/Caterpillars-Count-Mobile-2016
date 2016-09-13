@@ -20,6 +20,12 @@ $(document).ready(function(){
     $submitButton.click(function (e) {
         e.preventDefault();
 
+        // Offline log in logic, faking for now.
+        if (!navigator.onLine) {
+            window.location.assign("homepage.html?userID=421&password=Wja673581429");
+            return;
+        }
+
         //Use hiddenpw variable to make sure that css is consistent when toggling password visibility
         var $pw, $hiddenpw;
         var showPasswordCheckboxIsChecked = document.getElementById("show-password").checked;
@@ -53,9 +59,9 @@ $(document).ready(function(){
                     console.log(data);
                     //If successfully logged in, display main survey page with userID and password as (hidden) url parameters.
                     if (data.privilegeLevel >= 0 ) {
-                        window.location.assign("index.html?userID="+data.userID+"&password="+json_obj.password);
+                        window.location.assign("homepage.html?userID="+data.userID+"&password="+json_obj.password);
                     }
-                    if (data.validPw == 0) {
+                    if (data.validPw === 0) {
                         $pw.val("");
                         $(".error").remove();
                         //Reset email field styling
@@ -66,19 +72,19 @@ $(document).ready(function(){
                         $hiddenpw.css("border", "1px solid red");
                         $email.before("<p class = 'error'> Password not correct!</p>");
                     }
-                    if (data.active == 0) {
+                    if (data.active === 0) {
                         //$pw.val("");
                         //$email.val("");
                         $(".error").remove();
                         //$email.css("border", "1px solid red");
                         $email.before("<p class = 'error'>User not activated! Please check your email for an activation email.</p>");
                     }
-                    if (data.validUser == 0) {
+                    if (data.validUser === 0) {
                         $pw.val("");
                         $email.val("");
                         $(".error").remove();
                         //$email.css("border", "1px solid red");
-                        $email.before("<p class = 'error'>User has been marked invalid. Please contact an administrator.</p>")
+                        $email.before("<p class = 'error'>User has been marked invalid. Please contact an administrator.</p>");
                     }
                     //If return value for validUser (or any field) is null
                     if(!data.validUser){
@@ -106,8 +112,8 @@ $(document).ready(function(){
                         $hiddenpw.css("border-bottom", "thin solid gray");
 
                         $email.css("border", "1px solid red");
-                        $email.before("<p class = 'error'>User not found!</p>")
-                    }
+                        $email.before("<p class = 'error'>User not found!</p>");
+                    }  
                     //else if (xhr.status == 403) {
                     //    $pw.val("");
                     //    $email.val("");
@@ -116,7 +122,7 @@ $(document).ready(function(){
                     //    $email.after("<p class = 'error'>User is not an administrator!</p>");
                     //}
                 }
-            });
+        });   
     });
 });
 

@@ -53,6 +53,8 @@
 		EFE40EB3C2F14542BE9AFCAF /* UIImage+CropScaleOrientation.m in Sources */ = {isa = PBXBuildFile; fileRef = 35B00B5CAA724AB1956149E4 /* UIImage+CropScaleOrientation.m */; };
 		FD693BB852934697A6156094 /* CDVCamera.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F3899A31C39479789B1506A /* CDVCamera.m */; };
 		787259C4CC9142F697B57007 /* CDVJpegHeaderWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 766B024FA02043A0B80004E5 /* CDVJpegHeaderWriter.m */; };
+		D3E14EFA9A154E0498685703 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4795F63B1FF54F17B4027074 /* SystemConfiguration.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		369220A6D57A4BB5A7ABEF1E /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B020A85C05B4C04B2C0CB30 /* CoreTelephony.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -142,6 +144,8 @@
 		6C33423754AD4E7E96A523B9 /* CDVCamera.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CDVCamera.h"; path = "cordova-plugin-camera/CDVCamera.h"; sourceTree = "<group>"; fileEncoding = 4; };
 		0D2F033BCFEA4A21BAC33DC6 /* CDVJpegHeaderWriter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CDVJpegHeaderWriter.h"; path = "cordova-plugin-camera/CDVJpegHeaderWriter.h"; sourceTree = "<group>"; fileEncoding = 4; };
 		B5C38EB0E12244B490B16E83 /* CDVExif.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CDVExif.h"; path = "cordova-plugin-camera/CDVExif.h"; sourceTree = "<group>"; fileEncoding = 4; };
+		4795F63B1FF54F17B4027074 /* SystemConfiguration.framework */ = {isa = PBXFileReference; name = "SystemConfiguration.framework"; path = "System/Library/Frameworks/SystemConfiguration.framework"; sourceTree = SDKROOT; fileEncoding = undefined; lastKnownFileType = wrapper.framework; explicitFileType = undefined; includeInIndex = 0; };
+		9B020A85C05B4C04B2C0CB30 /* CoreTelephony.framework */ = {isa = PBXFileReference; name = "CoreTelephony.framework"; path = "System/Library/Frameworks/CoreTelephony.framework"; sourceTree = SDKROOT; fileEncoding = undefined; lastKnownFileType = wrapper.framework; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -157,6 +161,8 @@
 				8D5CDD0E428447B8936377FB /* CoreLocation.framework in Frameworks */,
 				FF8FFD0201704014BEA45194 /* AVFoundation.framework in Frameworks */,
 				320EABCC38BA47F58275DF87 /* AudioToolbox.framework in Frameworks */,
+				D3E14EFA9A154E0498685703 /* SystemConfiguration.framework in Frameworks */,
+				369220A6D57A4BB5A7ABEF1E /* CoreTelephony.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -234,6 +240,8 @@
 				91F75CA3335645F1966CA77B /* CoreLocation.framework */,
 				0DE6A66FCCBF4B65B4BB57B4 /* AVFoundation.framework */,
 				9AB4172932EE413CA2D2820F /* AudioToolbox.framework */,
+				4795F63B1FF54F17B4027074 /* SystemConfiguration.framework */,
+				9B020A85C05B4C04B2C0CB30 /* CoreTelephony.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
