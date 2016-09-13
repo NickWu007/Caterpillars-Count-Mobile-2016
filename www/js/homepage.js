@@ -3,6 +3,7 @@
  */
 $(document).ready(function(){
     var DOMAIN = "http://master-caterpillars.vipapps.unc.edu";
+    var $list_length = $(".survey_item").length;
 
     document.addEventListener("deviceready", onDeviceReady, false);
     //Return to start screen if android back button is pressed
@@ -11,7 +12,10 @@ $(document).ready(function(){
             e.preventDefault();
             window.location.assign("StartScreen.html");
         }, false);
+        
     }
+ 
+    $(".survey-count").html("Total Stored Survey: " + $list_length);
 
     var $submitButton = $(".register-button");
     $submitButton.click(function () {
@@ -124,3 +128,4 @@ Please log in or use a different email.</p>");
 window.shouldRotateToOrientation = function() {
     return true;
 };
+
