@@ -3,7 +3,7 @@
  */
 $(document).ready(function(){
     var DOMAIN = "http://master-caterpillars.vipapps.unc.edu";
-    var $list_length = $(".survey_item").length;
+    var $list_length = $(".survey_item").length; //computes number of items in the survey list
 
     document.addEventListener("deviceready", onDeviceReady, false);
     //Return to start screen if android back button is pressed
@@ -15,7 +15,7 @@ $(document).ready(function(){
         
     }
  
-    $(".survey-count").html("Total Stored Survey: " + $list_length);
+    $(".survey-count").html("Total Stored Survey: " + $list_length); //updates survey-count
 
     var $submitButton = $(".register-button");
     $submitButton.click(function () {
