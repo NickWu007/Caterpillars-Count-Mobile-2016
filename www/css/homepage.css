@@ -33,6 +33,7 @@ button{
 }
 
 .survey_list{
+    list-style-type: none;
     padding-top:20px;
     padding-bottom: 30px;
 }
