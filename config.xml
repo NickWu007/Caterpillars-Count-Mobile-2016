@@ -32,4 +32,5 @@
         <preference name="StatusBarBackgroundColor" value="#000000" />
         <preference name="StatusBarStyle" value="lightcontent" />
     </platform>
+    <plugin name="cordova-sqlite-storage" spec="~1.4.7" />
 </widget>
