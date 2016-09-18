@@ -36,6 +36,8 @@ button{
     list-style-type: none;
     padding-top:20px;
     padding-bottom: 30px;
+    margin:0;
+    padding-left:0; //centers list items
 }
 
 h3 {
