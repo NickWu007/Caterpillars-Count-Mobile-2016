@@ -31,6 +31,10 @@
                         {
                             "xml": "<feature name=\"Camera\"><param name=\"android-package\" value=\"org.apache.cordova.camera.CameraLauncher\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"SQLitePlugin\"><param name=\"android-package\" value=\"io.sqlc.SQLitePlugin\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -77,6 +81,9 @@
             "PACKAGE_NAME": "goldenCompass.caterpillarCount"
         },
         "cordova-plugin-camera": {
+            "PACKAGE_NAME": "goldenCompass.caterpillarCount"
+        },
+        "cordova-sqlite-storage": {
             "PACKAGE_NAME": "goldenCompass.caterpillarCount"
         }
     },
@@ -295,6 +302,14 @@
             "clobbers": [
                 "CameraPopoverHandle"
             ]
+        },
+        {
+            "id": "cordova-sqlite-storage.SQLitePlugin",
+            "file": "plugins/cordova-sqlite-storage/www/SQLitePlugin.js",
+            "pluginId": "cordova-sqlite-storage",
+            "clobbers": [
+                "SQLitePlugin"
+            ]
         }
     ],
     "plugin_metadata": {
@@ -304,6 +319,7 @@
         "cordova-plugin-statusbar": "1.0.1",
         "cordova-plugin-whitelist": "1.0.0",
         "cordova-plugin-compat": "1.0.0",
-        "cordova-plugin-camera": "2.2.0"
+        "cordova-plugin-camera": "2.2.0",
+        "cordova-sqlite-storage": "1.4.7"
     }
 }

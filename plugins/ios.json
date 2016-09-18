@@ -21,6 +21,9 @@
         },
         "cordova-plugin-camera": {
             "PACKAGE_NAME": "goldenCompass.caterpillarCount"
+        },
+        "cordova-sqlite-storage": {
+            "PACKAGE_NAME": "goldenCompass.caterpillarCount"
         }
     },
     "dependent_plugins": {
