@@ -20,6 +20,7 @@ $(document).ready(function(){
     $submitButton.click(function (e) {
         e.preventDefault();
 
+        // Offline log in logic, faking for now.
         if (!navigator.onLine) {
             window.location.assign("homepage.html?userID=421&password=Wja673581429");
             return;
