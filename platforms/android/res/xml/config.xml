@@ -21,6 +21,9 @@
     <feature name="Camera">
         <param name="android-package" value="org.apache.cordova.camera.CameraLauncher" />
     </feature>
+    <feature name="SQLitePlugin">
+        <param name="android-package" value="io.sqlc.SQLitePlugin" />
+    </feature>
     <name>Caterpillars Count!</name>
     <description>
         An application for conducting surveys of arthropod populations
@@ -44,7 +47,4 @@
     <icon density="xxxhdpi" src="www/pictures/xxxhdpi_icon.png" />
     <preference name="loglevel" value="DEBUG" />
     <preference name="AndroidPersistentFileLocation" value="Compatibility" />
-    <feature name="SQLitePlugin">
-        <param name="android-package" value="io.sqlc.SQLitePlugin" />
-    </feature>
 </widget>
