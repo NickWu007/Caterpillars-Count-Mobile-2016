@@ -39,19 +39,31 @@ $(document).ready(function() {
                 alert("Error Open Database:"+JSON.stringify(error));
             }
         );
-         if(db==null){
-                alert("db is null");
-        }
+            var firsttime=true;
             db.transaction(function(tx){
+                //tx.executeSql("Drop Table if exists USER");
                 tx.executeSql("CREATE TABLE IF NOT EXISTS USER (name, password, currentUser, userId)");
-                tx.executeSql("INSERT INTO USER VALUES (?,?,?,?)", ['First_User','ABCDEFG','TRUE',1]);
-                tx.executeSql("INSERT INTO USER VALUES (?,?,?,?)", ['Second_User','1234567','FALSE',2]);
-                
+                tx.executeSql('SELECT count(*) AS NUM from USER',[], function(tx, rs){
+                    alert("#lines in db:"+rs.rows.item(0).NUM);
+                    if(parseInt(rs.rows.item(0).NUM)>0){
+                        firsttime=false;
+                    }
+                    
+                    if(firsttime){
+                        db.transaction(function(tx){
+                            tx.executeSql("INSERT INTO USER VALUES (?,?,?,?)", ['First_User','ABCDEFG','TRUE',"1"]);
+                            tx.executeSql("INSERT INTO USER VALUES (?,?,?,?)", ['Second_User','1234567','FALSE',"2"]);
+                        }  , function(error){
+                            alert("Transaction Error: "+error.message);
+                        }   );
+                    }
+                });    
             }, function(error){
                 alert("Transaction Error: "+error.message);
             }, function(){
-                alert("Transaction OK");
+                console.log("Transaction OK");
             });
+
         function DBsuccess(){
             alert("DB open ok, Create Table etc");
         };
