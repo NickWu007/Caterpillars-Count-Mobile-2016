@@ -10,6 +10,20 @@ body {
 #NewSurvey{
     padding:0px;
 }
+#pending-survey{
+    padding:0px;
+}
+
+.pending-button{
+    font-size:20px;
+    position: relative;
+    
+}
+
+#filler{
+    height:200px;
+}
+
 span{
     margin-bottom: 0px;
 }
@@ -161,6 +175,7 @@ input[type="checkbox"]{
 }
 
 .background{
+    display: none;
     margin-top:45px;
     margin-bottom: 70px;
 }
