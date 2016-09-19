@@ -16,15 +16,26 @@ function onDeviceReady(){
 
 $(document).ready(function(){
 
+    // If offline, auto fill out login info
+    // TODO: integrate with SQLite once it is availble.
+    if (!navigator.onLine) {
+        var $email = $($('.email')[0]);
+        $email.val("junaowu@live.unc.edu");
+        $email.css("backgroundColor", "yellow");
+        var $pw;
+        var showPasswordCheckboxIsChecked = document.getElementById("show-password").checked;
+        if(showPasswordCheckboxIsChecked){
+            $pw = $("#visible-password");
+        }else{
+            $pw = $("#hidden-password");
+        }
+        $pw.val("Wja673581429");
+        $pw.css("backgroundColor", "yellow");
+    }
+
     var $submitButton = $(".login-button");
     $submitButton.click(function (e) {
         e.preventDefault();
-
-        // Offline log in logic, faking for now.
-        if (!navigator.onLine) {
-            window.location.assign("homepage.html?userID=421&password=Wja673581429");
-            return;
-        }
 
         //Use hiddenpw variable to make sure that css is consistent when toggling password visibility
         var $pw, $hiddenpw;
@@ -47,6 +58,14 @@ $(document).ready(function(){
             $email.before("<p class = 'error'>Please fill in both fields before submitting!</p>");
             return;
         }
+        
+        // Check if offline. If so, use offline login logic
+        // Offline log in logic, faking for now.
+        if (!navigator.onLine) {
+            window.location.assign("homepage.html?userID=421&password=Wja673581429");
+            return;
+        }
+
         //Attempt login
         var json_obj = {email: $email.val(), password: $pw.val()};
         $.ajax(DOMAIN +"/api/login.php",
