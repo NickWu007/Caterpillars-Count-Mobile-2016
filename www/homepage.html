@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!--<meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *">-->
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/homepage.css">
+    <title>Home</title>
+    <script src="cordova.js"></script>
+
+    <script src="./js/jquery-1.11.3.min.js"></script>
+    <script src="./js/homepage.js"></script>
+    <script src="./js/upload.js"></script>
+
+</head>
+<body>
+<nav class="header navbar-default navbar-fixed-top">
+    <div class="container-fluid" align="right">
+        <a href="setting.html" class="navlink">
+        Setting
+        <span class="setting-icon glyphicon glyphicon-cog"></span>
+        <span class="icon glyphicon glyphicon-menu-right"></span>
+        </a>
+    </div>
+</nav>
+
+<nav class="header navbar-default navbar-fixed-bottom">
+    <div class="container-fluid" align="center" id="NewSurvey">
+    <a href="survey.html">
+    <div class="navlink" align="center">Create New Survey</div></a>
+    </div>
+</nav>
+
+<div class = "background">
+    <div class= "left-align section">
+
+        <div class = "green-text"><h3>Pending Surveys</h3></div>
+        <p class = "error">
+        <br>
+        </p>
+        <div class="survey-count" align="center">
+            Total Stored Survey: 2
+        </div>
+        <div class="wrapper">
+            <div class="header-footer footer text-center white-text">
+                <div class = "upload-button" >Upload Now</div>
+            </div>
+        </div>
+
+        <div class = "survey_list">
+                <div class="survey_item">
+                    <h5>Site: BBS-27-041-11</h5>
+                    <h5>Circle: 2</h5>
+                    <h5>Survey: A</h5>
+                    <h5>Time: 2016-Sep-09 11:53AM</h5>
+                    <h5>id: d23fa24da322</h5>
+                    <div class="survey_delete text-center white-text">
+                        Delete this Survey
+                    </div>
+                </div> 
+                <hr>
+                <div class="survey_item">
+                    <h5>Site: BBS-27-041-11</h5>
+                    <h5>Circle: 2</h5>
+                    <h5>Survey: B</h5>
+                    <h5>Time: 2016-Sep-09 11:56AM</h5>
+                    <h5>id: 24rtfg114rd</h5>
+                    <div class="survey_delete text-center white-text">
+                        Delete this Survey
+                    </div>
+                </div> 
+                
+        </div>   
+    </div> 
+
+</div>
+
+</body>
+</html>

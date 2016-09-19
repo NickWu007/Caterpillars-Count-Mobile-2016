@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!--<meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *">-->
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/setting.css">
+    <link rel="stylesheet" type="text/css" href="./jquery-ui-1.11.4.custom/jquery-ui.min.css">
+    <title>Setting</title>
+    <script src="cordova.js"></script>
+    <script src="./js/jquery-1.11.3.min.js"></script>
+    <script src="./jquery-ui-1.11.4.custom/jquery-ui.min.js"></script>
+    <script src="./js/setting.js"></script>
+</head>
+<body>
+    <div class='header'>
+       <div class="goback">
+            <a href="homepage.html">
+                <div class="left-align">
+                    <span class="back-button glyphicon glyphicon-menu-left"></span>
+                    <img src='pictures/ic_launcher.png' height='25' width='25'> Home
+                </div>
+            </a>
+        </div>
+        <div class="logoff">
+            <a href="StartScreen.html">
+                <div align="right">
+                    log off&nbsp;
+                    <span class=" logout glyphicon glyphicon-log-out"></span>
+                </div>
+            </a>
+        </div>
+    </div>
+    
+    <div class="Setting">
+            <div class="setting-item">
+                <form class="data-perference">
+                    <input type="checkbox" name="data" value="submit">Use Data(3G,4G) to submit Survey?<br>
+                    By Default, we only automatically submit Survey using WIFI
+                </form>
+            </div>
+            <div class="setting-item">
+                <form class="iNaturalist">
+                    <input type="checkbox" name="iNaturalist" value="submit">Do you allow us to automatically Submit Caterpillar Image to iNaturalist Website for identification?<br>
+                </form>    
+            </div>
+    </div>
+
+    <div class="about">
+        <h3>About</h3>
+        <div>
+            Caterpillar Count Version: 2.0.0 Alpha
+        </div>
+    </div>
+
+</body>
+</html>

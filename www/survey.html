@@ -6,7 +6,8 @@
 <title>Caterpillars Count!</title>
 <script src="./js/jquery-1.11.3.min.js"></script>
 <script src="cordova.js"></script>
-<script src="./js/input-page.js"></script>
+<!--<script src="./js/input-page.js"></script>-->
+<script src="./js/submit.js"></script>
 <!--<script src="./js/jQuery.ptTimeSelect-0.8/src/jquery.ptTimeSelect.js"></script>-->
 <script src="./bootstrap-3.3.5-dist/js/bootstrap.min.js"></script>
 
@@ -24,11 +25,12 @@
 
 <body>
 
-	<div class='header-footer navbar-fixed-top white-text'> 
-		<div class='left-align'> 
-			<span class="back-button glyphicon glyphicon-menu-left" onclick="returnToMainSelectScreen( )"></span>
-			<img src='pictures/ic_launcher.png' height='25' width='25'> 
-			Caterpillars Count! 
+	<div class="header-footer navbar-fixed-top white-text"> 
+		<div class="left-align"> 
+			<a href="homepage.html" font-size="20px">
+			<span class=" icon glyphicon glyphicon-menu-left"></span>
+			<span class=" icon glyphicon glyphicon-home"></span>
+			&nbsp;Go back</a>
 		</div> 
 	</div>
 
@@ -191,9 +193,11 @@
 		</div>
 
 		<div class="wrapper">
-			<div class="header-footer footer text-center white-text" onclick='submit( )'>
-				SUBMIT
-			</div>
+			<div class="header-footer footer text-center white-text">
+            <div class = "submit-button">SUBMIT</div>
+            </div>
+        </div>
+				
 		</div>
 
 

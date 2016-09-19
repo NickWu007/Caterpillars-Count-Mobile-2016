@@ -14,8 +14,11 @@ body {
 .header-footer {
 	background-color: #385b3e;
 	padding : 5px;
+	padding-top: 8px;
 	font-size: 150%;
+	
 }
+
 
 .section {
 	margin : 1em;
@@ -224,6 +227,7 @@ span {
 	display: inline-block;
 	vertical-align: middle;
 	line-height: normal;
+	margin-bottom: 8px;
 }
 
 
