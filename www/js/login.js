@@ -19,10 +19,18 @@ $(document).ready(function(){
     // If offline, auto fill out login info
     // TODO: integrate with SQLite once it is availble.
     if (!navigator.onLine) {
-        $('.email')[0].value = "junaowu@live.unc.edu";
-        $('.email')[0].style.backgroundColor = "yellow";
-        document.getElementById("hidden-password").value = "Wja673581429";
-        document.getElementById("hidden-password").style.backgroundColor = "yellow";
+        var $email = $($('.email')[0]);
+        $email.val("junaowu@live.unc.edu");
+        $email.css("backgroundColor", "yellow");
+        var $pw;
+        var showPasswordCheckboxIsChecked = document.getElementById("show-password").checked;
+        if(showPasswordCheckboxIsChecked){
+            $pw = $("#visible-password");
+        }else{
+            $pw = $("#hidden-password");
+        }
+        $pw.val("Wja673581429");
+        $pw.css("backgroundColor", "yellow");
     }
 
     var $submitButton = $(".login-button");
