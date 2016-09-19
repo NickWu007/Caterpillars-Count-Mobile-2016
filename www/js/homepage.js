@@ -19,15 +19,10 @@ $(document).ready(function(){
     $(".pending-button").click(function(){
         $(".background").toggle();
         var $pending_button_content = $(".pending-button").text();
-        var elem = document.getElementById("filler");
         if($pending_button_content==="Show Pending Surveys"){
             $(".pending-button").html("Hide Pending Surveys");
-            elem.setAttribute("style", "height:0px");
         }
-        else{
-            $(".pending-button").html("Show Pending Surveys");
-            elem.setAttribute("style", "height:200px");
-        }
+        else{$(".pending-button").html("Show Pending Surveys");}
     }); 
     //hides and shows pending surveys
 });

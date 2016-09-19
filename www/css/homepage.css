@@ -7,21 +7,25 @@ body {
     padding: 5px;
     padding-top:10px;
 }
-#NewSurvey{
+
+.bottom-button{
     padding:0px;
+    height:30px;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 30px;
 }
+
 #pending-survey{
     padding:0px;
+    height:30px;
 }
 
 .pending-button{
     font-size:20px;
     position: relative;
+    margin-bottom:0px;
     
-}
-
-#filler{
-    height:200px;
 }
 
 span{
@@ -177,5 +181,5 @@ input[type="checkbox"]{
 .background{
     display: none;
     margin-top:45px;
-    margin-bottom: 70px;
+    margin-bottom: 100px;
 }
