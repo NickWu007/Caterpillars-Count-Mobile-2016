@@ -9,27 +9,18 @@ body {
 }
 
 .outer-wrapper {
-    
-}
+    position: absolute;
+    top:0;
+    bottom:0;
+    left:0;
+    right:0;
 
-.bottom-button{
-    padding:0px;
-    height:30px;
-    text-align: center;
-    vertical-align: middle;
-    line-height: 30px;
+    margin: auto;    
 }
 
 #pending-survey{
     padding:0px;
     height:30px;
-}
-
-.pending-button{
-    font-size:20px;
-    position: relative;
-    margin-bottom:0px;
-    
 }
 
 span{
@@ -51,6 +42,13 @@ button{
     margin-left : 40px;
     margin-right:40px;
     margin-top: 45px;
+    margin-bottom: 45px;
+}
+
+.nav-section{
+    margin-left : 40px;
+    margin-right: 40px;
+    margin-top: 100px;
     margin-bottom: 45px;
 }
 
@@ -189,7 +187,6 @@ input[type="checkbox"]{
 }
 
 .background{
-    display: none;
     margin-top:45px;
     margin-bottom: 100px;
 }
