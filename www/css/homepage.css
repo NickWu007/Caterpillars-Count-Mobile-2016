@@ -140,7 +140,12 @@ input[type="checkbox"]{
     margin-left: 10%;
 }
 
-.survey_item {
+.survey_item1 {
+    padding: 10px;
+    background: #ddd;
+    border-radius: 10px;
+}
+.survey_item2 {
     padding: 10px;
     background: #ddd;
     border-radius: 10px;
@@ -161,4 +166,7 @@ input[type="checkbox"]{
 .background{
     margin-top:45px;
     margin-bottom: 70px;
+}
+.newsite{
+    font-size: 50px;
 }
