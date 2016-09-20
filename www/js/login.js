@@ -2,36 +2,56 @@
  * Created by skuroda on 10/27/15.
  */
 var DOMAIN = "http://master-caterpillars.vipapps.unc.edu";
-
+var db;
+var stored_user_info;
 
 document.addEventListener("deviceready", onDeviceReady, false);
 //Return to start screen if android back button is pressed
 function onDeviceReady(){
     document.addEventListener("backbutton", function(e){
+        db.close();
         e.preventDefault();
         window.location.assign("StartScreen.html");
     }, false);
+
+    db=window.sqlitePlugin.openDatabase(
+        {name: 'app.db', location: 'default'}, 
+        DBSuccessCB(), 
+        function(error){alert("Error Open Database:"+JSON.stringify(error));}
+    );
+    function DBSuccessCB(){
+        alert("DB open OK");
+
+    }
+
+    // If there's a stored user info, pre-populate it to login fileds.
+    db.transaction(function(tx){
+        tx.executeSql('select distinct name, password, userId from USER', [], function(tx, rs){
+            if (rs.rows.length > 0) stored_user_info=rs.rows.item(0);
+        });
+        }, function(error){
+            alert("Transaction Error: "+error.message);
+        }, function() {
+            alert("successfully retrieved cached user info.");
+            if (stored_user_info !== null) {
+            var $email = $($('.email')[0]);
+            $email.val(stored_user_info.name);
+            $email.css("backgroundColor", "yellow");
+            var $pw;
+            var showPasswordCheckboxIsChecked = document.getElementById("show-password").checked;
+            if(showPasswordCheckboxIsChecked){
+                $pw = $("#visible-password");
+            } else {
+                $pw = $("#hidden-password");
+            }
+            $pw.val(stored_user_info.password);
+            $pw.css("backgroundColor", "yellow");
+        }
+    });
 }
 
 
 $(document).ready(function(){
-
-    // If offline, auto fill out login info
-    // TODO: integrate with SQLite once it is availble.
-    if (!navigator.onLine) {
-        var $email = $($('.email')[0]);
-        $email.val("junaowu@live.unc.edu");
-        $email.css("backgroundColor", "yellow");
-        var $pw;
-        var showPasswordCheckboxIsChecked = document.getElementById("show-password").checked;
-        if(showPasswordCheckboxIsChecked){
-            $pw = $("#visible-password");
-        }else{
-            $pw = $("#hidden-password");
-        }
-        $pw.val("Wja673581429");
-        $pw.css("backgroundColor", "yellow");
-    }
 
     var $submitButton = $(".login-button");
     $submitButton.click(function (e) {
@@ -62,7 +82,8 @@ $(document).ready(function(){
         // Check if offline. If so, use offline login logic
         // Offline log in logic, faking for now.
         if (!navigator.onLine) {
-            window.location.assign("homepage.html?userID=421&password=Wja673581429");
+            db.close();
+            window.location.assign("homepage.html?userID="+ stored_user_info.userId + "&password=" + $pw.val());
             return;
         }
 
@@ -78,6 +99,7 @@ $(document).ready(function(){
                     console.log(data);
                     //If successfully logged in, display main survey page with userID and password as (hidden) url parameters.
                     if (data.privilegeLevel >= 0 ) {
+                        db.close();
                         window.location.assign("homepage.html?userID="+data.userID+"&password="+json_obj.password);
                     }
                     if (data.validPw === 0) {

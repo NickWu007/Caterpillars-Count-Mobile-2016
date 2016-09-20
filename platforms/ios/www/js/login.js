@@ -2,15 +2,52 @@
  * Created by skuroda on 10/27/15.
  */
 var DOMAIN = "http://master-caterpillars.vipapps.unc.edu";
-
+var db;
+var stored_user_info;
 
 document.addEventListener("deviceready", onDeviceReady, false);
 //Return to start screen if android back button is pressed
 function onDeviceReady(){
     document.addEventListener("backbutton", function(e){
+        db.close();
         e.preventDefault();
         window.location.assign("StartScreen.html");
     }, false);
+
+    db=window.sqlitePlugin.openDatabase(
+        {name: 'app.db', location: 'default'}, 
+        DBSuccessCB(), 
+        function(error){alert("Error Open Database:"+JSON.stringify(error));}
+    );
+    function DBSuccessCB(){
+        alert("DB open OK");
+
+    }
+
+    // If there's a stored user info, pre-populate it to login fileds.
+    db.transaction(function(tx){
+        tx.executeSql('select distinct name, password, userId from USER', [], function(tx, rs){
+            if (rs.rows.length > 0) stored_user_info=rs.rows.item(0);
+        });
+        }, function(error){
+            alert("Transaction Error: "+error.message);
+        }, function() {
+            alert("successfully retrieved cached user info.");
+            if (stored_user_info !== null) {
+            var $email = $($('.email')[0]);
+            $email.val(stored_user_info.name);
+            $email.css("backgroundColor", "yellow");
+            var $pw;
+            var showPasswordCheckboxIsChecked = document.getElementById("show-password").checked;
+            if(showPasswordCheckboxIsChecked){
+                $pw = $("#visible-password");
+            } else {
+                $pw = $("#hidden-password");
+            }
+            $pw.val(stored_user_info.password);
+            $pw.css("backgroundColor", "yellow");
+        }
+    });
 }
 
 
@@ -19,12 +56,6 @@ $(document).ready(function(){
     var $submitButton = $(".login-button");
     $submitButton.click(function (e) {
         e.preventDefault();
-
-        // Offline log in logic, faking for now.
-        if (!navigator.onLine) {
-            window.location.assign("homepage.html?userID=421&password=Wja673581429");
-            return;
-        }
 
         //Use hiddenpw variable to make sure that css is consistent when toggling password visibility
         var $pw, $hiddenpw;
@@ -47,6 +78,15 @@ $(document).ready(function(){
             $email.before("<p class = 'error'>Please fill in both fields before submitting!</p>");
             return;
         }
+        
+        // Check if offline. If so, use offline login logic
+        // Offline log in logic, faking for now.
+        if (!navigator.onLine) {
+            db.close();
+            window.location.assign("homepage.html?userID="+ stored_user_info.userId + "&password=" + $pw.val());
+            return;
+        }
+
         //Attempt login
         var json_obj = {email: $email.val(), password: $pw.val()};
         $.ajax(DOMAIN +"/api/login.php",
@@ -59,6 +99,7 @@ $(document).ready(function(){
                     console.log(data);
                     //If successfully logged in, display main survey page with userID and password as (hidden) url parameters.
                     if (data.privilegeLevel >= 0 ) {
+                        db.close();
                         window.location.assign("homepage.html?userID="+data.userID+"&password="+json_obj.password);
                     }
                     if (data.validPw === 0) {
