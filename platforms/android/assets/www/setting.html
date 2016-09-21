@@ -34,17 +34,21 @@
             </a>
         </div>
     </div>
-    
     <div class="Setting">
             <div class="setting-item">
                 <form class="data-perference">
-                    <input type="checkbox" name="data" value="submit">Use Data(3G,4G) to submit Survey?<br>
-                    By Default, we only automatically submit Survey using WIFI
+                    <h4>Use Data to submit?(Default is no)</h4>
+                    <select><option value ="default" selected disabled hidden>No</option>
+					<option value="A">Yes</option>
+                    <option value="A">No</option></select>
                 </form>
             </div>
             <div class="setting-item">
                 <form class="iNaturalist">
-                    <input type="checkbox" name="iNaturalist" value="submit">Do you allow us to automatically Submit Caterpillar Image to iNaturalist Website for identification?<br>
+                    <h4>Do you allow us to automatically Submit Caterpillar Image to iNaturalist Website for identification?</h4>
+                    <select><option value ="default" selected disabled hidden>Yes</option>
+					<option value="A">Yes</option>
+                    <option value="A">No</option></select>
                 </form>    
             </div>
     </div>
@@ -55,6 +59,6 @@
             Caterpillar Count Version: 2.0.0 Alpha
         </div>
     </div>
-
+    
 </body>
 </html>
