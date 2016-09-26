@@ -21,4 +21,3 @@ $(document).ready(function(){
 window.shouldRotateToOrientation = function() {
     return true;
 };
-
