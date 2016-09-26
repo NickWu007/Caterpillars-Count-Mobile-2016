@@ -54,7 +54,6 @@ var retrieveSiteList = function(){
 	});
 };
 
-//"CREATE TABLE IF NOT EXISTS ALLSITE (siteId, siteName)"
 //Populates the site dropdown list
 var populateSiteList = function(siteResult){
         //alert(siteResult.length+" sites get");
@@ -66,7 +65,6 @@ var populateSiteList = function(siteResult){
 		siteList.add(siteOption);
 	}
 };
-//CREATE TABLE IF NOT EXISTS USER_SITE (siteId, siteName, userId)
 var permission_list;
 //get permission for this user, also populate the list
 var retriveSitePermission = function(){
