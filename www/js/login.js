@@ -101,7 +101,9 @@ $(document).ready(function(){
                     console.log(data);
                     //If successfully logged in, display main survey page with userID and password as (hidden) url parameters.
                     if (data.privilegeLevel >= 0 ) {
+                        alert("before sql xact.");
                         db.transaction(function(tx){
+                            tx.executeSql('delete from USER_INFO');
                             tx.executeSql('INSERT INTO USER_INFO VALUES (?,?,?)', [json_obj.email, json_obj.password, data.userID], function(tx, resultSet) {
                                 alert('resultSet.insertId: ' + resultSet.insertId);
                                 alert('resultSet.rowsAffected: ' + resultSet.rowsAffected);
@@ -116,7 +118,9 @@ $(document).ready(function(){
                         }, function() {
                             alert("new user added into database.");
                         });
+                        db.commit();
                         db.close();
+                        alert("after sql xact.");
                         window.location.assign("homepage.html?userID="+data.userID+"&password="+json_obj.password);
                     }
                     if (data.validPw === 0) {

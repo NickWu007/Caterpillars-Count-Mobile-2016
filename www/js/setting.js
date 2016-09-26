@@ -23,9 +23,9 @@ function onDeviceReady(){
         // When manually clicks to log off
         alert("manually clicks to log off");
         db.transaction(function(tx){
-            tx.executeSql('DROP TABLE IF EXISTS USER_INFO');
+            tx.executeSql('delete from USER_INFO');
         });
-
+        db.commit();
         db.close();
         window.assign("StartScreen.html");
     });
