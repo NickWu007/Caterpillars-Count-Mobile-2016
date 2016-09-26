@@ -117,15 +117,11 @@ $(document).ready(function(){
                             alert("Transaction Error: " + error.message);
                         }, function() {
                             alert("new user added into database.");
-                            db.commit();
-                            db.close();
-                            alert("after sql xact.");
-                            window.location.assign("homepage.html?userID="+data.userID+"&password="+json_obj.password);
                         });
-                        // db.commit();
-                        // db.close();
-                        // alert("after sql xact.");
-                        // window.location.assign("homepage.html?userID="+data.userID+"&password="+json_obj.password);
+                        db.commit();
+                        db.close();
+                        alert("after sql xact.");
+                        window.location.assign("homepage.html?userID="+data.userID+"&password="+json_obj.password);
                     }
                     if (data.validPw === 0) {
                         $pw.val("");

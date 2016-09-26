@@ -118,7 +118,7 @@ $(document).ready(function(){
                         }, function() {
                             alert("new user added into database.");
                         });
-                        db.commit();
+                        // db.commit();
                         db.close();
                         alert("after sql xact.");
                         window.location.assign("homepage.html?userID="+data.userID+"&password="+json_obj.password);

@@ -24,8 +24,8 @@ function onDeviceReady(){
         alert("manually clicks to log off");
         db.transaction(function(tx){
             tx.executeSql('delete from USER_INFO');
+            tx.executeSql("COMMIT",[]);
         });
-        db.commit();
         db.close();
         window.assign("StartScreen.html");
     });
