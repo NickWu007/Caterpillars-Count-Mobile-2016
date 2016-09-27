@@ -46,10 +46,34 @@ function onDeviceReady() {
             alert("Error Open Database:"+JSON.stringify(error));
         }
     );
+
+    var survey_list = $("#survey_list");
+    var survey_result;
+    db.transaction(function(tx){
+        tx.executeSql("Select distinct site, circle, survey, time, id from SURVEY", [], function(tx, rs){
+            survey_result = rs.rows;
+            //alert();
+        });
+    }, function(error){
+        alert("Transaction error: "+error.message);
+    }, function(){
+        var list_content;
+        for(var j=0; j<survey_result.length; j++){
+
+            var row=survey_result.item(i);
+            var new_list_item = "<li><h5>Site: "+ row.site+"</h5><h5>Circle: "+row.circle+
+            "</h5><h5>Survey: "+row.survey+"</h5><h5>Time: "+row.time+"</h5><h5>id: "+
+            row.id+"</h5></li>";
+
+            list_content += new_list_item;
+        }
+        $("#survey_list").html(list_content);
+    }
+    );
         
 }
 
-var retrievePendingSurveys = function(){
+/*var retrievePendingSurveys = function(){
     $.ajax({
         url : DOMAIN + "/api/surveys.php", //name probably not correct. verify when testing.
         type: "POST",
@@ -69,5 +93,10 @@ var retrievePendingSurveys = function(){
 
 var populateSurveyList = function(survey_result){
     var survey_list = document.getElementById("survey_list");
-};
+    for(var i=0; survey_result.length; i++){
+        var stored_survey = document.createElement("survey");
+        stored_survey.text = survey_result[i].
+        survey_list.append(stored_survey);
+    }
+}; */
 
