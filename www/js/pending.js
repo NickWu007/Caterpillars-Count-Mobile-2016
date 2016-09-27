@@ -18,7 +18,6 @@ $(document).ready(function(){
             alert("DB Closing Error:"+error.message);
         });
     }
-});
     
 function onDeviceReady() {
     document.addEventListener("backbutton", function (e) {
@@ -39,18 +38,43 @@ function onDeviceReady() {
         alert("DB open ok, Create Table etc");
     }
 
+    var firsttime = true;
+    db.transaction(function(tx){
+        tx.executeSql("CREATE TABLE IF NOT EXISTS SURVEY (siteID, circle, survey, timeSubmit, surveyID)");
+        tx.executeSql('SELECT count(*) AS NUM from SURVEY', [], function(tx, rs){
+            alert("#lines in db: "+rs.rows.item(0).NUM);
+            if(parseInt(rs.rows.item(0).NUM)>0){
+                firsttime=false;
+            }
+
+            if(firsttime){
+                db.transaction(function(tx){
+                    tx.execute("INSERT INTO SURVEY VALUES (?,?,?,?,?)", ['BBS-27-041-11', "2", 'A', '2016-Sep-27 1:03PM',
+                    'd23fa24da322']);
+                }, function(error){
+                    alert("Transaction Error: "+error.message);
+                });
+            }
+        });
+    }, function(error){
+        alert("Transaction error: "+error.message);
+    }, function(){
+        console.log("Transaction OK. Database initialized sucessfully.");
+    });
+    closeDB();
+
     var resultset;
     var db = window.sqlitePlugin.openDatabase({name: 'app.db', location: 'default'},
         DBsuccess(),
         function(error){
             alert("Error Open Database:"+JSON.stringify(error));
-        }
-    );
+        });
 
     var survey_list = $("#survey_list");
     var survey_result;
+
     db.transaction(function(tx){
-        tx.executeSql("Select distinct site, circle, survey, time, id from SURVEY", [], function(tx, rs){
+        tx.executeSql("Select distinct siteID, circle, survey, timeSubmit, surveyID from SURVEY", [], function(tx, rs){
             survey_result = rs.rows;
             //alert();
         });
@@ -68,10 +92,10 @@ function onDeviceReady() {
             list_content += new_list_item;
         }
         $("#survey_list").html(list_content);
+      });      
     }
-    );
-        
 }
+
 
 /*var retrievePendingSurveys = function(){
     $.ajax({
