@@ -68,6 +68,6 @@ var retrievePendingSurveys = function(){
 };
 
 var populateSurveyList = function(survey_result){
-
+    var survey_list = document.getElementById("survey_list");
 };
 
