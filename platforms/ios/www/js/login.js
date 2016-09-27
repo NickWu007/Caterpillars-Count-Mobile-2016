@@ -29,9 +29,6 @@ function onDeviceReady(){
         tx.executeSql('select distinct name, password, userId from USER', [], function(tx, rs){
             if (rs.rows.length > 0) stored_user_info=rs.rows.item(0);
         });
-        tx.executeSql('select distinct survey from SURVEY',[],function(tx,rs){
-                if (rs.rows.length > 0) alert("successful get " +rs.rows.item(0).survey);
-        });
         }, function(error){
             alert("Transaction Error: "+error.message);
         }, function() {
