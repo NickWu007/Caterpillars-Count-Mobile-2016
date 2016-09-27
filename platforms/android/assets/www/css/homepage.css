@@ -7,9 +7,22 @@ body {
     padding: 5px;
     padding-top:10px;
 }
-#NewSurvey{
-    padding:0px;
+
+.outer-wrapper {
+    position: absolute;
+    top:0;
+    bottom:0;
+    left:0;
+    right:0;
+
+    margin: auto;    
 }
+
+#pending-survey{
+    padding:0px;
+    height:30px;
+}
+
 span{
     margin-bottom: 0px;
 }
@@ -32,10 +45,20 @@ button{
     margin-bottom: 45px;
 }
 
+.nav-section{
+    margin-left : 40px;
+    margin-right: 40px;
+    margin-top: 100px;
+    margin-bottom: 45px;
+}
+
 .survey_list{
     list-style-type: none;
     padding-top:20px;
     padding-bottom: 30px;
+    padding-left:0;//centers list items
+    margin-left:auto;
+    margin-right:auto;
 }
 
 h3 {
@@ -146,6 +169,7 @@ input[type="checkbox"]{
     border-radius: 10px;
 }
 
+
 .upload-button{
     font-size: 16px;
 }
@@ -160,5 +184,39 @@ input[type="checkbox"]{
 
 .background{
     margin-top:45px;
-    margin-bottom: 70px;
+    margin-bottom: 100px;
+}
+.newsite{
+    font-size: 50px;
+}
+
+select, option{
+	margin: auto;
+	border: 1px solid #111;
+	background: lightgray;
+	padding: 5px 35px 5px 5px;
+	font-size: 16px;
+	height: 34px;
+	width: 100%
+	/*-webkit-appearance: none;*/
+	/*-moz-appearance: none;*/
+	/*appearance: none;*/
+}
+
+#site{
+    margin-top: 30px;
+    width:80%;
+    margin-left: 10%;
+    margin-right:10%;
+
+}
+
+div.newsite{
+    width:80%;
+    font-size:20px;
+    margin-left:10%;
+    margin-right:10%;
+    color:white;
+    background-color: #385b31;
+    margin-top:30px;
 }
