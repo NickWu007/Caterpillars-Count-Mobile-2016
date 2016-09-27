@@ -7,7 +7,7 @@ var db;
 document.addEventListener("deviceready", onDeviceReady, false);
     
 function onDeviceReady() {
-    alert("ondeviceready fired");
+    console.log("ondeviceready fired");
     document.addEventListener("backbutton", function (e) {
         db.close;
         e.preventDefault();
