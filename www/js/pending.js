@@ -61,9 +61,9 @@ function onDeviceReady() {
         for(var j=0; j<survey_result.length; j++){
 
             var row=survey_result.item(i);
-            var new_list_item = "<li><h5>Site: "+ row.site+"</h5><h5>Circle: "+row.circle+
-            "</h5><h5>Survey: "+row.survey+"</h5><h5>Time: "+row.time+"</h5><h5>id: "+
-            row.id+"</h5></li>";
+            var new_list_item = "<li><h5>Site: "+ row.siteID+"</h5><h5>Circle: "+row.circle+
+            "</h5><h5>Survey: "+row.survey+"</h5><h5>Time: "+row.timeSubmit+"</h5><h5>id: "+
+            row.surveyID+"</h5></li>";
 
             list_content += new_list_item;
         }
