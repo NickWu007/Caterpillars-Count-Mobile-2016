@@ -1,4 +1,4 @@
-var DOMAIN = "http://master-caterpillars.vipapps.unc.edu";
+var DOMAIN = "http://develop-caterpillars.vipapps.unc.edu";
 
 var leafPhotoTaken = false;
 
@@ -81,7 +81,7 @@ function onDeviceReady(){
         function(error){alert("Error Open Database:"+JSON.stringify(error));}
     );
     function DBSuccessCB(){
-        //alert("DB open OK");
+        alert("DB open OK");
             //retrive site data from server
         
         //retrive sites with permission
@@ -122,6 +122,15 @@ function onConfirmQuit(button){
 
 //Initializes the main survey screen
 $( document ).ready(function() {
+
+    var $submitButton = $(".submit-button");
+  $submitButton.click(function() {
+                submitSurveyToServer();
+         
+   }
+)
+
+
 	$('#herbivory-select').ddslick({
 		data: ddData,
 		width: 300,
@@ -662,7 +671,24 @@ var toolTip = function(toolTipLocation){
 //Calls submitArthropodsToServer if survey upload is successful
 var submitSurveyToServer = function(){
 //	navigator.notification.alert("Submitting survey");
-	$.ajax({
+	var online = navigator.onLine;
+	if(online == false){
+		//alert("Insdie of submit Survey function");
+		db.transaction(function(tx){
+                        tx.executeSql("INSERT INTO SURVEY VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", ['survey','123','MattWu',"9406","2","C","08:05","40","49","note","bird","1","Normal_Type","5","Mobile"]);
+						//alert("survey database inside");
+                    }  , function(error){
+                        alert("Transaction Error: "+error.message);
+                    },function(){
+						alert("This page was successfully stored");
+						window.location = "homepage.html";
+
+					}
+					);
+			
+	}else{
+		window.location = "homepage.html"; //just fake it
+	 $.ajax({
 		url: DOMAIN + "/api/submission_full.php",
 		type : "POST",
 		crossDomain: true,
@@ -687,6 +713,7 @@ var submitSurveyToServer = function(){
 		}),
 		success: function(result){
 			//Upload leaf photo
+			window.location = "homepage.html";
 			uploadPhoto(leafImageURI, "leaf-photo", result.surveyID);
 			submitArthropodsToServer(result);
 		},
@@ -695,6 +722,7 @@ var submitSurveyToServer = function(){
 		}
 
 	});
+}
 };
 
 //Submits arthropod info to server for each saved order/
