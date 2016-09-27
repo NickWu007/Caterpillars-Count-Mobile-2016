@@ -20,8 +20,7 @@ function onDeviceReady(){
         function(error){alert("Error Open Database:"+JSON.stringify(error));}
     );
     function DBSuccessCB(){
-        alert("DB open OK");
-
+        // alert("DB open OK");
     }
 
     stored_user_info = null;
@@ -101,15 +100,12 @@ $(document).ready(function(){
                     console.log(data);
                     //If successfully logged in, display main survey page with userID and password as (hidden) url parameters.
                     if (data.privilegeLevel >= 0 ) {
-                        alert("before sql xact.");
+                        // alert("before sql xact.");
                         db.transaction(function(tx){
                             tx.executeSql('delete from USER_INFO');
                             tx.executeSql('INSERT INTO USER_INFO VALUES (?,?,?)', [json_obj.email, json_obj.password, data.userID], function(tx, resultSet) {
-                                alert('resultSet.insertId: ' + resultSet.insertId);
-                                alert('resultSet.rowsAffected: ' + resultSet.rowsAffected);
-                                alert("inserted email: " + json_obj.email);
-                                alert("inserted password: " + json_obj.password);
-                                alert("inserted userID: " + data.userID);
+                                // alert('resultSet.insertId: ' + resultSet.insertId);
+                                // alert('resultSet.rowsAffected: ' + resultSet.rowsAffected);
                             }, function(tx, error) {
                                 alert('INSERT error: ' + error.message);
                             });
@@ -117,11 +113,9 @@ $(document).ready(function(){
                             alert("Transaction Error: " + error.message);
                         }, function() {
                             alert("new user added into database.");
+                            window.location.assign("homepage.html?userID="+data.userID+"&password="+json_obj.password);
                         });
-                        // db.commit();
-                        db.close();
-                        alert("after sql xact.");
-                        window.location.assign("homepage.html?userID="+data.userID+"&password="+json_obj.password);
+                        // alert("after sql xact.");
                     }
                     if (data.validPw === 0) {
                         $pw.val("");

@@ -107,9 +107,6 @@ $(document).ready(function(){
                             tx.executeSql('INSERT INTO USER_INFO VALUES (?,?,?)', [json_obj.email, json_obj.password, data.userID], function(tx, resultSet) {
                                 alert('resultSet.insertId: ' + resultSet.insertId);
                                 alert('resultSet.rowsAffected: ' + resultSet.rowsAffected);
-                                alert("inserted email: " + json_obj.email);
-                                alert("inserted password: " + json_obj.password);
-                                alert("inserted userID: " + data.userID);
                             }, function(tx, error) {
                                 alert('INSERT error: ' + error.message);
                             });
@@ -117,11 +114,12 @@ $(document).ready(function(){
                             alert("Transaction Error: " + error.message);
                         }, function() {
                             alert("new user added into database.");
+                            window.location.assign("homepage.html?userID="+data.userID+"&password="+json_obj.password);
                         });
-                        db.commit();
-                        db.close();
+                        // db.commit();
+                        // db.close();
                         alert("after sql xact.");
-                        window.location.assign("homepage.html?userID="+data.userID+"&password="+json_obj.password);
+                        // window.location.assign("homepage.html?userID="+data.userID+"&password="+json_obj.password);
                     }
                     if (data.validPw === 0) {
                         $pw.val("");

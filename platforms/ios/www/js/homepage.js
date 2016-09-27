@@ -26,19 +26,17 @@ $(document).ready(function(){
         }
 
         db.transaction(function(tx){
-        tx.executeSql('SELECT name from USER_INFO',[], function(tx, rs){
-            alert("#lines in db:"+rs.rows.length);
-            if(rs.rows.length > 0){
-                alert("show user info");
-                $(".user-info").html("<h4>Logged in as " + rs.rows.item(0).name + "</h4>");
-            }
-        });    
+            tx.executeSql('SELECT name from USER_INFO',[], function(tx, rs){
+                alert("#lines in db:"+rs.rows.length);
+                if(rs.rows.length > 0){
+                    alert("logged in as: " + rs.rows.item(0).name);
+                }
+            });    
         }, function(error){
             alert("Transaction Error: "+error.message);
         }, function(){
             console.log("Transaction OK.");
         });
-    closeDB();
     }
 });
 //Handles device rotation

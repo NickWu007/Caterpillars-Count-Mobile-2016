@@ -21,12 +21,16 @@ function onDeviceReady(){
     var $logoffButton = $(".logoff");
     $logoffButton.click(function (e) {
         // When manually clicks to log off
-        alert("manually clicks to log off");
+        // alert("manually clicks to log off");
+        // alert("before sql xact.");
         db.transaction(function(tx){
             tx.executeSql('delete from USER_INFO');
-            tx.executeSql("COMMIT",[]);
+        }, function(error){
+            alert("Transaction Error: " + error.message);
+        }, function() {
+            alert("user deleted from database.");
+            window.location.assign("StartScreen.html");
         });
-        db.close();
-        window.assign("StartScreen.html");
+        // alert("after sql xact.");
     });
 }
