@@ -20,7 +20,8 @@ function onDeviceReady(){
 
     var $logoffButton = $(".logoff");
     $logoffButton.click(function (e) {
-        // When manually clicks to log off
+        // When manually clicks to log off, deletes stored login info.
+        
         // alert("manually clicks to log off");
         // alert("before sql xact.");
         db.transaction(function(tx){

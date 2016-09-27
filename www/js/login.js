@@ -98,7 +98,9 @@ $(document).ready(function(){
                 success: function (data, status, xhr) {
                     console.log("success");
                     console.log(data);
-                    //If successfully logged in, display main survey page with userID and password as (hidden) url parameters.
+                    // If successfully logged in, display main survey page with userID 
+                    // and password as (hidden) url parameters. Also store the login info
+                    // for future login.
                     if (data.privilegeLevel >= 0 ) {
                         // alert("before sql xact.");
                         db.transaction(function(tx){
