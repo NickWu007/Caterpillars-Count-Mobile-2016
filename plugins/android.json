@@ -7,6 +7,9 @@
         "files": {}
     },
     "installed_plugins": {
+        "cordova-plugin-camera": {
+            "PACKAGE_NAME": "goldenCompass.caterpillarCount"
+        },
         "cordova-plugin-dialogs": {
             "PACKAGE_NAME": "goldenCompass.caterpillarCount"
         },
@@ -19,18 +22,15 @@
         "cordova-plugin-whitelist": {
             "PACKAGE_NAME": "goldenCompass.caterpillarCount"
         },
-        "cordova-plugin-camera": {
-            "PACKAGE_NAME": "goldenCompass.caterpillarCount"
-        },
         "cordova-sqlite-storage": {
             "PACKAGE_NAME": "goldenCompass.caterpillarCount"
         }
     },
     "dependent_plugins": {
-        "cordova-plugin-file": {
+        "cordova-plugin-compat": {
             "PACKAGE_NAME": "goldenCompass.caterpillarCount"
         },
-        "cordova-plugin-compat": {
+        "cordova-plugin-file": {
             "PACKAGE_NAME": "goldenCompass.caterpillarCount"
         }
     }

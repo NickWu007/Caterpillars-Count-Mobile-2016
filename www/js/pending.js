@@ -1,15 +1,27 @@
 /**
  * Created by palmour on 9/20/16
 */
-var db;
 var DOMAIN = "http://develop-caterpillars.vipapps.unc.edu";
+var db;
+
 document.addEventListener("deviceready", onDeviceReady, false);
-
-$(document).ready(function(){
-
     
-    var $list_length = $(".survey_item").length; //computes number of items in the survey list
-        $(".survey-count").html("Total Stored Survey: " + $list_length); //updates survey-count
+function onDeviceReady() {
+    alert("ondeviceready fired");
+    document.addEventListener("backbutton", function (e) {
+        db.close;
+        e.preventDefault();
+        window.location.assign("homepage.html");
+    }, false);
+
+    db=window.sqlitePlugin.openDatabase(
+        {name: 'app.db', location: 'default'}, 
+        DBSuccessCB(), 
+        function(error){alert("Error Open Database:"+JSON.stringify(error));}
+    );
+    function DBSuccessCB(){
+        alert("DB open OK");
+    }
 
     function  closeDB(){
         db.close(function(){
@@ -17,25 +29,6 @@ $(document).ready(function(){
         }, function(error){
             alert("DB Closing Error:"+error.message);
         });
-    }
-    
-function onDeviceReady() {
-    document.addEventListener("backbutton", function (e) {
-        e.preventDefault();
-        closeDB();
-        navigator.app.exitApp();
-    }, false);
-
-    window.sqlitePlugin.echoTest(function(){
-        console.log("echo test ok");
-    });
-
-    window.sqlitePlugin.selfTest(function(){
-        console.log("self test ok");
-    });
-
-    function DBsuccess(){
-        alert("DB open ok, Create Table etc");
     }
 
     var firsttime = true;
@@ -63,13 +56,6 @@ function onDeviceReady() {
     });
     closeDB();
 
-    var resultset;
-    var db = window.sqlitePlugin.openDatabase({name: 'app.db', location: 'default'},
-        DBsuccess(),
-        function(error){
-            alert("Error Open Database:"+JSON.stringify(error));
-        });
-
     var survey_list = $("#survey_list");
     var survey_result;
 
@@ -85,17 +71,22 @@ function onDeviceReady() {
         for(var j=0; j<survey_result.length; j++){
 
             var row=survey_result.item(i);
-            var new_list_item = "<li><h5>Site: "+ row.siteID+"</h5><h5>Circle: "+row.circle+
-            "</h5><h5>Survey: "+row.survey+"</h5><h5>Time: "+row.timeSubmit+"</h5><h5>id: "+
-            row.surveyID+"</h5></li>";
+            var new_list_item = '<li class= "survey_item"><h5>Site: '+ row.siteID+'</h5><h5>Circle: '+row.circle+
+            '</h5><h5>Survey: '+row.survey+'</h5><h5>Time: '+row.timeSubmit+'</h5><h5>id: '+
+            row.surveyID+'</h5></li>';
 
             list_content += new_list_item;
         }
         $("#survey_list").html(list_content);
       });      
-    }
-}
+    } 
 
+$(document).ready(function(){
+    
+    alert("document ready fired");
+    var $list_length = $(".survey_item").length; //computes number of items in the survey list
+        $(".survey-count").html("Total Stored Survey: " + $list_length); //updates survey-count 
+}
 
 /*var retrievePendingSurveys = function(){
     $.ajax({
