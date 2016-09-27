@@ -119,18 +119,7 @@ function onConfirmQuit(button){
 }
 
 
-
-//Initializes the main survey screen
 $( document ).ready(function() {
-
-    var $submitButton = $(".submit-button");
-  $submitButton.click(function() {
-                submitSurveyToServer();
-         
-   }
-)
-
-
 	$('#herbivory-select').ddslick({
 		data: ddData,
 		width: 300,
@@ -142,6 +131,7 @@ $( document ).ready(function() {
 		}
 	});
 	//Populate site list on page load
+	retrieveSiteList();
 	//Set initial value of time and date fields
 	setDateAndTime();
 	//Updates time every second
@@ -492,17 +482,6 @@ var submit = function( ) {
 		return;
 	}
 
-	var showPasswordCheckboxIsChecked = document.getElementById("show-password").checked;
-	if(showPasswordCheckboxIsChecked){
-		sitePassword = $("#visible-password").val();
-	}else{
-		sitePassword = $("#hidden-password").val();
-	}
-	if(!sitePassword){
-		navigator.notification.alert("Please enter the site password");
-		return;
-	}
-
 
 	surveyType = $(".survey-type option:selected").val();
 	if(surveyType.localeCompare("default")===0){
@@ -560,17 +539,32 @@ var submit = function( ) {
 			return;
 	}
 
-	if(!leafPhotoTaken){
-		navigator.notification.alert("Please take a leaf photo.");
-		return;
-	}
-	else{
-		leafImageURI = $("#leaf-photo").prop("src");
-	}
+	//if(!leafPhotoTaken){
+	//	navigator.notification.alert("Please take a leaf photo.");
+	//	return;
+	//}
+	//else{
+	//	leafImageURI = $("#leaf-photo").prop("src");
+	//}
 	//Check validity of site password
 	//Attempt to submit survey if password is valid
 	//navigator.notification.alert("SiteID: " + siteID +
 	//	"\nSite password: " +sitePassword);
+	var online = navigator.onLine;
+	if(online == false){
+		alert("Insdie of submit Survey function");
+		db.transaction(function(tx){
+                        tx.executeSql("INSERT INTO SURVEY VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", ['survey',siteID,getURLParameter("userID"),getURLParameter("password"),circle,survey,dateTime,10,20,$(".notes").val(),plantSpecies,herbivoryValue,surveyType,parseInt(leafCount),"Mobile"]);
+                    }  , function(error){
+                        alert("Transaction Error: "+error.message);
+                    },function(){
+						alert("This page was successfully stored");
+						window.location = "homepage.html";
+
+					}
+					);
+			
+	}else{
 	$.ajax({
 		url: DOMAIN + "/api/sites.php",
 		type : "POST",
@@ -596,6 +590,7 @@ var submit = function( ) {
 			navigator.notification.alert("Unexpected error checking site password.");
 		}
 	});
+	}
 
 };
 
@@ -671,22 +666,6 @@ var toolTip = function(toolTipLocation){
 //Calls submitArthropodsToServer if survey upload is successful
 var submitSurveyToServer = function(){
 //	navigator.notification.alert("Submitting survey");
-	var online = navigator.onLine;
-	if(online == false){
-		//alert("Insdie of submit Survey function");
-		db.transaction(function(tx){
-                        tx.executeSql("INSERT INTO SURVEY VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", ['survey','123','MattWu',"9406","2","C","08:05","40","49","note","bird","1","Normal_Type","5","Mobile"]);
-						//alert("survey database inside");
-                    }  , function(error){
-                        alert("Transaction Error: "+error.message);
-                    },function(){
-						alert("This page was successfully stored");
-						window.location = "homepage.html";
-
-					}
-					);
-			
-	}else{
 		window.location = "homepage.html"; //just fake it
 	 $.ajax({
 		url: DOMAIN + "/api/submission_full.php",
@@ -722,7 +701,6 @@ var submitSurveyToServer = function(){
 		}
 
 	});
-}
 };
 
 //Submits arthropod info to server for each saved order/
