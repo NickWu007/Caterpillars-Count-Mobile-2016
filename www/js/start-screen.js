@@ -44,6 +44,7 @@ $(document).ready(function() {
         var firsttime=true;
         db.transaction(function(tx){
             tx.executeSql("CREATE TABLE IF NOT EXISTS USER_INFO (name, password, userId)");
+            tx.executeSql("CREATE TABLE IF NOT EXISTS SURVEY(type, siteID, userID, password, circle, survey, timeStart, temperatureMin, temperatureMax, siteNotes, plantSpecies, herbivory, surveyType, leafCount, source)");
             tx.executeSql('SELECT count(*) AS NUM from USER_INFO',[], function(tx, rs){
                 alert("#lines in db:"+rs.rows.item(0).NUM);
                 if(parseInt(rs.rows.item(0).NUM)>0){
