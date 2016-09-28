@@ -17,20 +17,6 @@ function onDeviceReady(){
     };
 
     retriveSitePermission();
- 
-
-
-/*
-    db.transaction(function(tx){
-        tx.executeSql('select distinct name, password, userId from USER', [], function(tx, rs){
-            if (rs.rows.length > 0) stored_user_info=rs.rows.item(0);
-        });
-        }, function(error){
-            alert("Transaction Error: "+error.message);
-        }, function() {
-            alert("successfully retrieved cached user info.");
-
-    });*/
 };
 
 
@@ -113,9 +99,9 @@ $(document).ready(function(){
 		success: function(passwordCheckResult){
 			//navigator.notification.alert(passwordCheckResult.validSitePassword);
 			//If site password is correct, submit survey
-			if(passwordCheckResult.validSitePassword == 1){
+			if(passwordCheckResult.validSitePassword === 1){
 				//navigator.notification.alert("Site password correct");
-				pushSitetoDB(siteID);
+				retriveCircleCount(siteID);
 			}
 			else{
 				navigator.notification.alert("Site password is incorrect.");
@@ -141,7 +127,7 @@ $(document).ready(function(){
     });
 });
 //CREATE TABLE IF NOT EXISTS SITE (siteId, siteName, userId, circle, state)
-function pushSitetoDB(siteID){
+function retriveCircleCount(siteID){
         //get # of circle of specific site
         $.ajax({
 		url: DOMAIN + "/api/sites.php",

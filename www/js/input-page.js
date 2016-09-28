@@ -107,9 +107,6 @@ function onDeviceReady(){
 			);
 		}
 	}, false);
-	
-	
-
 }
 //Function called if the user confirms to exit the app
 function onConfirmQuit(button){
@@ -159,9 +156,8 @@ var retrieveSiteList = function(){
 						siteOption.value = site_list.item(i).siteId;
 						siteList.add(siteOption);
                 	}
-					//alert("3");
                 }else{
-                        alert("You do not have permission for any Site.");
+                    alert("You do not have permission for any Site.");
                 }
         });
 };
