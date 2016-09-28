@@ -46,6 +46,7 @@ $(document).ready(function() {
 <<<<<<< HEAD
             tx.executeSql("CREATE TABLE IF NOT EXISTS USER (name, password, currentUser, userId)");
             //tx.executeSql("DROP TABLE IF EXISTS SITE");
+            tx.executeSql("CREATE TABLE IF NOT EXISTS SURVEY(type, siteID, userID, password, circle, survey, timeStart, temperatureMin, temperatureMax, siteNotes, plantSpecies, herbivory, surveyType, leafCount, source)");
             tx.executeSql("CREATE TABLE IF NOT EXISTS SITE (siteId, siteName, userId, circle, state)");
             tx.executeSql('SELECT count(*) AS NUM from USER',[], function(tx, rs){
 =======
