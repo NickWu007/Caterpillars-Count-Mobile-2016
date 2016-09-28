@@ -29,14 +29,20 @@ function onDeviceReady(){
         tx.executeSql('select distinct name, password, userId from USER', [], function(tx, rs){
             if (rs.rows.length > 0) stored_user_info=rs.rows.item(0);
         });
+<<<<<<< HEAD
         tx.executeSql('select distinct userID, timeStart from SURVEY',[],function(tx,rs){
                 if (rs.rows.length > 0) alert("successful get" +rs.rows.item(0).userID);
         });
+=======
+>>>>>>> offline_proto
         }, function(error){
             alert("Transaction Error: "+error.message);
         }, function() {
             alert("successfully retrieved cached user info.");
+<<<<<<< HEAD
             //alert("successful get" +rs.rows.item(0).usrID);
+=======
+>>>>>>> offline_proto
             if (stored_user_info !== null) {
             var $email = $($('.email')[0]);
             $email.val(stored_user_info.name);

@@ -168,9 +168,9 @@ var retrieveSiteList = function(){
 
 //Alerts if user attempts to select a circle before selecting a site and populating the circle list
 var checkIfCirclesRetrieved = function(){
-	if(!circleCountRetrieved){
-		navigator.notification.alert("Please select a site first.");
-	}
+	//if(!circleCountRetrieved){
+	//	navigator.notification.alert("Please select a site first.");
+	//}
 };
 
 //Retrieves the circle count for the newly selected site
@@ -454,6 +454,7 @@ function getURLParameter(name) {
 
 var submit = function( ) {
 	//Check that a temperature has been selected
+	alert("temp");
 	temperature = $("#temperature option:selected").val();
 	if(temperature.localeCompare("default") === 0){
 		navigator.notification.alert("Please select a temperature range");
@@ -482,6 +483,16 @@ var submit = function( ) {
 		return;
 	}
 
+	var showPasswordCheckboxIsChecked = document.getElementById("show-password").checked;
+	//if(showPasswordCheckboxIsChecked){
+	//	sitePassword = $("#visible-password").val();
+	//}else{
+	//	sitePassword = $("#hidden-password").val();
+	//}
+	//if(!sitePassword){
+	//	navigator.notification.alert("Please enter the site password");
+	//	return;
+	//}
 
 	surveyType = $(".survey-type option:selected").val();
 	if(surveyType.localeCompare("default")===0){
@@ -490,10 +501,10 @@ var submit = function( ) {
 	}
 
 	circle = $("#circle option:selected").val();
-	if(circle.localeCompare("default")===0){
-		navigator.notification.alert("Please select a circle.");
-		return;
-	}
+	//if(circle.localeCompare("default")===0){
+	//	navigator.notification.alert("Please select a circle.");
+	//	return;
+	//}
 
 	survey = $("#survey option:selected").val();
 	if(survey.localeCompare("default")===0){
@@ -552,7 +563,7 @@ var submit = function( ) {
 	//	"\nSite password: " +sitePassword);
 	var online = navigator.onLine;
 	if(online == false){
-		alert("Insdie of submit Survey function");
+
 		db.transaction(function(tx){
                         tx.executeSql("INSERT INTO SURVEY VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", ['survey',siteID,getURLParameter("userID"),getURLParameter("password"),circle,survey,dateTime,temperatures[temperature].min,temperatures[temperature].max,$(".notes").val(),plantSpecies,herbivoryValue,surveyType,parseInt(leafCount),"Mobile"]);
                     }  , function(error){
