@@ -163,12 +163,16 @@ input[type="checkbox"]{
     margin-left: 10%;
 }
 
-.survey_item {
+.survey_item1 {
     padding: 10px;
     background: #ddd;
     border-radius: 10px;
 }
-
+.survey_item2 {
+    padding: 10px;
+    background: #ddd;
+    border-radius: 10px;
+}
 
 .upload-button{
     font-size: 16px;
@@ -188,35 +192,4 @@ input[type="checkbox"]{
 }
 .newsite{
     font-size: 50px;
-}
-
-select, option{
-	margin: auto;
-	border: 1px solid #111;
-	background: lightgray;
-	padding: 5px 35px 5px 5px;
-	font-size: 16px;
-	height: 34px;
-	width: 100%
-	/*-webkit-appearance: none;*/
-	/*-moz-appearance: none;*/
-	/*appearance: none;*/
-}
-
-#site{
-    margin-top: 30px;
-    width:80%;
-    margin-left: 10%;
-    margin-right:10%;
-
-}
-
-div.newsite{
-    width:80%;
-    font-size:20px;
-    margin-left:10%;
-    margin-right:10%;
-    color:white;
-    background-color: #385b31;
-    margin-top:30px;
 }
