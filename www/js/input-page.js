@@ -554,7 +554,7 @@ var submit = function( ) {
 	if(online == false){
 		alert("Insdie of submit Survey function");
 		db.transaction(function(tx){
-                        tx.executeSql("INSERT INTO SURVEY VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", ['survey',siteID,getURLParameter("userID"),getURLParameter("password"),circle,survey,dateTime,10,20,$(".notes").val(),plantSpecies,herbivoryValue,surveyType,parseInt(leafCount),"Mobile"]);
+                        tx.executeSql("INSERT INTO SURVEY VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", ['survey',siteID,getURLParameter("userID"),getURLParameter("password"),circle,survey,dateTime,temperatures[temperature].min,temperatures[temperature].max,$(".notes").val(),plantSpecies,herbivoryValue,surveyType,parseInt(leafCount),"Mobile"]);
                     }  , function(error){
                         alert("Transaction Error: "+error.message);
                     },function(){
