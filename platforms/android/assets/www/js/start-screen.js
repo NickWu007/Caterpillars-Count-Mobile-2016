@@ -44,6 +44,8 @@ $(document).ready(function() {
         var firsttime=true;
         db.transaction(function(tx){
             tx.executeSql("CREATE TABLE IF NOT EXISTS USER (name, password, currentUser, userId)");
+            //tx.executeSql("DROP TABLE IF EXISTS SITE");
+            tx.executeSql("CREATE TABLE IF NOT EXISTS SITE (siteId, siteName, userId, circle, state)");
             tx.executeSql('SELECT count(*) AS NUM from USER',[], function(tx, rs){
                 alert("#lines in db:"+rs.rows.item(0).NUM);
                 if(parseInt(rs.rows.item(0).NUM)>0){
