@@ -19,36 +19,35 @@ function onDeviceReady(){
         DBSuccessCB(), 
         function(error){alert("Error Open Database:"+JSON.stringify(error));}
     );
-   function DBSuccessCB(){
+    function DBSuccessCB(){
         alert("DB open OK");
 
-   }
-
-    if (navigator.connection.type === Connection.NONE) {
-        db.transaction(function(tx){
-            tx.executeSql('select distinct name, password, userId from USER', [], function(tx, rs){
-                if (rs.rows.length > 0) stored_user_info=rs.rows.item(0);
-            });
-            }, function(error){
-                alert("Transaction Error: "+error.message);
-            }, function() {
-                alert("successfully retrieved cached user info.");
-                if (stored_user_info !== null) {
-                var $email = $($('.email')[0]);
-                $email.val(stored_user_info.name);
-                $email.css("backgroundColor", "yellow");
-                var $pw;
-                var showPasswordCheckboxIsChecked = document.getElementById("show-password").checked;
-                if(showPasswordCheckboxIsChecked){
-                    $pw = $("#visible-password");
-                } else {
-                    $pw = $("#hidden-password");
-                }
-                $pw.val(stored_user_info.password);
-                $pw.css("backgroundColor", "yellow");
-            }
-        });
     }
+
+    // If there's a stored user info, pre-populate it to login fileds.
+    db.transaction(function(tx){
+        tx.executeSql('select distinct name, password, userId from USER', [], function(tx, rs){
+            if (rs.rows.length > 0) stored_user_info=rs.rows.item(0);
+        });
+        }, function(error){
+            alert("Transaction Error: "+error.message);
+        }, function() {
+            alert("successfully retrieved cached user info.");
+            if (stored_user_info !== null) {
+            var $email = $($('.email')[0]);
+            $email.val(stored_user_info.name);
+            $email.css("backgroundColor", "yellow");
+            var $pw;
+            var showPasswordCheckboxIsChecked = document.getElementById("show-password").checked;
+            if(showPasswordCheckboxIsChecked){
+                $pw = $("#visible-password");
+            } else {
+                $pw = $("#hidden-password");
+            }
+            $pw.val(stored_user_info.password);
+            $pw.css("backgroundColor", "yellow");
+        }
+    });
 }
 
 
