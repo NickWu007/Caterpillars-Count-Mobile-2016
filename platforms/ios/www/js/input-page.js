@@ -465,10 +465,10 @@ var submit = function( ) {
 
 	siteID = $("#site option:selected").val();
 
-	//if(siteID.localeCompare("default") === 0){
-	//	navigator.notification.alert("Please select a site");
-	//	return;
-	//}
+	if(siteID.localeCompare("default") === 0){
+		navigator.notification.alert("Please select a site");
+		return;
+	}
 
 	var showPasswordCheckboxIsChecked = document.getElementById("show-password").checked;
 	//if(showPasswordCheckboxIsChecked){
@@ -551,11 +551,8 @@ var submit = function( ) {
 	//	"\nSite password: " +sitePassword);
 	var online = navigator.onLine;
 	if(online == false){
-		alert("Insdie of submit Survey function");
 		db.transaction(function(tx){
-			            alert("hello");
                         tx.executeSql("INSERT INTO SURVEY VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", ['survey',siteID,getURLParameter("userID"),getURLParameter("password"),circle,survey,dateTime,temperatures[temperature].min,temperatures[temperature].max,$(".notes").val(),plantSpecies,herbivoryValue,surveyType,parseInt(leafCount),"Mobile"]);
-						alert("I am here");
                     }  , function(error){
                         alert("Transaction Error: "+error.message);
                     },function(){
