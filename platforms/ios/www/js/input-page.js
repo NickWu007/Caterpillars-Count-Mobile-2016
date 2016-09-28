@@ -551,17 +551,33 @@ var submit = function( ) {
 			return;
 	}
 
-	if(!leafPhotoTaken){
-		navigator.notification.alert("Please take a leaf photo.");
-		return;
-	}
-	else{
-		leafImageURI = $("#leaf-photo").prop("src");
-	}
+	//if(!leafPhotoTaken){
+	//	navigator.notification.alert("Please take a leaf photo.");
+	//	return;
+	//}
+	//else{
+	//	leafImageURI = $("#leaf-photo").prop("src");
+	//}
 	//Check validity of site password
 	//Attempt to submit survey if password is valid
 	//navigator.notification.alert("SiteID: " + siteID +
 	//	"\nSite password: " +sitePassword);
+    var online = navigator.onLine;
+	if(online == false){
+		alert("Insdie of submit Survey function");
+		db.transaction(function(tx){
+                        tx.executeSql("INSERT INTO SURVEY VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", ['survey',siteID,getURLParameter("userID"),getURLParameter("password"),circle,survey,dateTime,temperatures[temperature].min,temperatures[temperature].max,$(".notes").val(),plantSpecies,herbivoryValue,surveyType,parseInt(leafCount),"Mobile"]);
+                    }  , function(error){
+                        alert("Transaction Error: "+error.message);
+                    },function(){
+						alert("This page was successfully stored");
+						window.location = "homepage.html";
+
+					}
+					);
+			
+	}else{
+
 	$.ajax({
 		url: DOMAIN + "/api/sites.php",
 		type : "POST",
@@ -587,6 +603,7 @@ var submit = function( ) {
 			navigator.notification.alert("Unexpected error checking site password.");
 		}
 	});
+	}
 
 };
 
