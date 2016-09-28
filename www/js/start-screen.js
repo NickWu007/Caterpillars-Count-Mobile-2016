@@ -52,13 +52,13 @@ $(document).ready(function() {
                     firsttime=false;
                 }
                     
-                // if(firsttime){
-                //     db.transaction(function(tx){
-                //         tx.executeSql("INSERT INTO USER VALUES (?,?,?,?)", ['junaowu@live.unc.edu','Wja673581429','TRUE',"421"]);
-                //     }  , function(error){
-                //         alert("Transaction Error: "+error.message);
-                //     });
-                // }
+              //  if(firsttime){
+                  //  db.transaction(function(tx){
+                  //       tx.executeSql("INSERT INTO USER VALUES (?,?,?,?)", ['junaowu@live.unc.edu','Wja673581429','TRUE',"421"]);
+                  //   }  , function(error){
+                  //     alert("Transaction Error: "+error.message);
+                  //   });
+                 //}
             });    
         }, function(error){
             alert("Transaction Error: "+error.message);
