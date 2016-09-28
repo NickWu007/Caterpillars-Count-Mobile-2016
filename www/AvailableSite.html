@@ -32,30 +32,22 @@
     </div>
 </nav>
 
-<div class="header navbar-default navbar-fixed-bottom">
-    <!--<div class="container-fluid" align="center" id="NewSurvey">-->
-    <div class="newsite" align = center>Add New Site</div>
-</div>
+
 
 <div class = "background">
+    <select id="site">
+		<option value ="default" selected disabled hidden>Please select a site</option>
+	</select>
+    <div class="newsite" align="center">
+        Add New Site
+    </div>
+    <div id="reset">Clear All(develop use only)</div>
     <div class= "left-align section">
-
+        
         <div class = "green-text"><h3>Available Site</h3></div>
-<ul class = "survey_list">
-                <li class="survey_item1">
-                    <h5>Site: BBS-27-041-11</h5>
-                    <h5>Location: NC</h5>
-                    <div class="survey_delete text-center white-text">
-                        <div class = delete1>Delete this Site</div>
-                    </div>
-                </li> 
-                <hr>
-                <li class="survey_item2">
-                    <h5>Site: BBS-27-041-11</h5>
-                    <h5>Location: VA</h5>
-                    <div class="survey_delete text-center white-text">
-                        <div class = delete2>Delete this Site</div>
-                    </div>
-                </li>  
+        <ul class = "survey_list" id="permissionList"></ul>
+    </div>
+</div>
+      
 </body>
 </html>
