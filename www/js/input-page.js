@@ -479,17 +479,19 @@ var submit = function( ) {
 		navigator.notification.alert("Please select a site");
 		return;
 	}
-
-	//var showPasswordCheckboxIsChecked = document.getElementById("show-password").checked;
-	//if(showPasswordCheckboxIsChecked){
-	//	sitePassword = $("#visible-password").val();
-	//}else{
-	//	sitePassword = $("#hidden-password").val();
-	//}
-	//if(!sitePassword){
-	//	navigator.notification.alert("Please enter the site password");
-	//	return;
-	//}
+        var online = navigator.onLine;
+	if(oneline == true){
+	 var showPasswordCheckboxIsChecked = document.getElementById("show-password").checked;
+	 if(showPasswordCheckboxIsChecked){
+		sitePassword = $("#visible-password").val();
+	 }else{
+		sitePassword = $("#hidden-password").val();
+	 }
+	 if(!sitePassword){
+		navigator.notification.alert("Please enter the site password");
+		return;
+	 }
+	}
 
 
 	surveyType = $(".survey-type option:selected").val();
@@ -559,7 +561,7 @@ var submit = function( ) {
 	//Attempt to submit survey if password is valid
 	//navigator.notification.alert("SiteID: " + siteID +
 	//	"\nSite password: " +sitePassword);
-	var online = navigator.onLine;
+	//var online = navigator.onLine;
 	if(online == false){
 		db.transaction(function(tx){
                         tx.executeSql("INSERT INTO SURVEY VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", ['survey',siteID,getURLParameter("userID"),getURLParameter("password"),circle,survey,dateTime,temperatures[temperature].min,temperatures[temperature].max,$(".notes").val(),plantSpecies,herbivoryValue,surveyType,parseInt(leafCount),"Mobile"]);
