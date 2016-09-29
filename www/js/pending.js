@@ -23,12 +23,13 @@ function onDeviceReady(){
     }
 
     db.transaction(function(tx){
-        tx.executeSql('INSERT INTO SURVEY VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', 
-        ['survey', 'BBS-27-041-11', 'palmour', 'shadow', "2", 'A', '2016-Sep-27 1:03PM', "60","70", ' ', ' ', ' ',' ', ' ', 'Mobile']);
+        //tx.executeSql('INSERT INTO SURVEY VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', 
+        //['survey', 'BBS-27-041-11', 'palmour', 'shadow', "2", 'A', '2016-Sep-27 1:03PM', "60","70", ' ', ' ', ' ',' ', ' ', 'Mobile']);
         tx.executeSql('select distinct siteID, circle, survey, timeStart from SURVEY', [], function(tx, rs){
             if(rs.rows.length>0) {survey_result=rs.rows;}
             else{alert("survey database empty");}
         });
+
     }, function(error){
         alert("Transaction error: "+error.message);
     }, function(){
@@ -50,6 +51,7 @@ function onDeviceReady(){
 
 $(document).ready(function(){
     numSurveys();
+    
 });
 
 function numSurveys(){
