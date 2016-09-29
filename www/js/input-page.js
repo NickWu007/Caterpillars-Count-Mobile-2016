@@ -128,7 +128,6 @@ $( document ).ready(function() {
 		}
 	});
 	//Populate site list on page load
-	retrieveSiteList();
 	//Set initial value of time and date fields
 	setDateAndTime();
 	//Updates time every second
