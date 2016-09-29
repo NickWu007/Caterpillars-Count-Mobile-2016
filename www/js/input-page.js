@@ -479,7 +479,7 @@ var submit = function( ) {
 		return;
 	}
 
-	var showPasswordCheckboxIsChecked = document.getElementById("show-password").checked;
+	//var showPasswordCheckboxIsChecked = document.getElementById("show-password").checked;
 	//if(showPasswordCheckboxIsChecked){
 	//	sitePassword = $("#visible-password").val();
 	//}else{
@@ -497,10 +497,10 @@ var submit = function( ) {
 	}
 
 	circle = $("#circle option:selected").val();
-	//if(circle.localeCompare("default")===0){
-	//	navigator.notification.alert("Please select a circle.");
-	//	return;
-	//}
+	if(circle.localeCompare("default")===0){
+		navigator.notification.alert("Please select a circle.");
+		return;
+	}
 
 	survey = $("#survey option:selected").val();
 	if(survey.localeCompare("default")===0){
