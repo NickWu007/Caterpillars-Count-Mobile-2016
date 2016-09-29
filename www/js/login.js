@@ -33,9 +33,6 @@ function onDeviceReady(){
         }, function(error){
             alert("Transaction Error: "+error.message);
         }, function() {
-            alert("successfully retrieved cached user info.");
-            //alert("successful get" +rs.rows.item(0).usrID);
-
             if (stored_user_info !== null) {
                 alert("successfully retrieved cached user info.");
                 var $email = $($('.email')[0]);

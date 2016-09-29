@@ -9,7 +9,7 @@ function onDeviceReady(){
     document.addEventListener("backbutton", function(e){
         db.close();
         e.preventDefault();
-        window.location.assign("StartScreen.html");
+        window.location.assign("homepage.html");
     }, false);
 
     db=window.sqlitePlugin.openDatabase(
@@ -51,7 +51,6 @@ function onDeviceReady(){
 
 $(document).ready(function(){
     numSurveys();
-    
 });
 
 function numSurveys(){
