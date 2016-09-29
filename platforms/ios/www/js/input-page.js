@@ -70,10 +70,27 @@ var ddData = [
 		imageSrc: "pictures/heavy.png"
 	}
 ];
-
+var db;
 document.addEventListener("deviceready", onDeviceReady, false);
 //Return to start screen if android back button is pressed
 function onDeviceReady(){
+
+	db=window.sqlitePlugin.openDatabase(
+        {name: 'app.db', location: 'default'}, 
+        DBSuccessCB(), 
+        function(error){alert("Error Open Database:"+JSON.stringify(error));}
+    );
+    function DBSuccessCB(){
+        //alert("DB open OK");
+            //retrive site data from server
+        
+        //retrive sites with permission
+        
+    };
+	//alert("begin wait");
+	setInterval(retrieveSiteList(),500);
+
+
 	document.addEventListener("backbutton", function(e){
 		e.preventDefault();
 		//If displaying arthropod screen, return to main select screen
@@ -113,42 +130,38 @@ $( document ).ready(function() {
 		}
 	});
 	//Populate site list on page load
-	retrieveSiteList();
 	//Set initial value of time and date fields
 	setDateAndTime();
 	//Updates time every second
 	window.setInterval(setDateAndTime, 1000);
 });
 
+
+var site_list;
 //Gets the list of all sites
 var retrieveSiteList = function(){
-	$.ajax({
-		url: DOMAIN + "/api/sites.php",
-		type : "POST",
-		crossDomain: true,
-		dataType: 'json',
-		data: JSON.stringify({
-			"action" : "getAllSiteState"
-		}),
-		success: function(siteResult){
-			populateSiteList(siteResult);
-		},
-		error : function(){
-			navigator.notification.alert("Unexpected error retrieving site list.");
-		}
-	});
+	//alert("2");
+	    db.transaction(function(tx){
+            tx.executeSql('select siteId, siteName, circle, state from SITE', [], function(tx, rs){
+                site_list=rs.rows;    
+            });
+        }, function(error){
+            alert("Transaction Error: "+error.message);
+        }, function(){
+                if(site_list.length>0){
+					var siteList = document.getElementById("site");
+                	for(var i=0; i<site_list.length; i++){
+                        var siteOption = document.createElement("option");
+						siteOption.text = site_list.item(i).siteName+"("+site_list.item(i).state+")";
+						siteOption.value = site_list.item(i).siteId;
+						siteList.add(siteOption);
+                	}
+                }else{
+                    alert("You do not have permission for any Site.");
+                }
+        });
 };
 
-//Populates the site dropdown list
-var populateSiteList = function(siteResult){
-	var siteList = document.getElementById("site");
-	for(var i = 0; i < siteResult.length; i++){
-		var siteOption = document.createElement("option");
-		siteOption.text = siteResult[i].siteName;
-		siteOption.value = siteResult[i].siteID;
-		siteList.add(siteOption);
-	}
-};
 
 //Alerts if user attempts to select a circle before selecting a site and populating the circle list
 var checkIfCirclesRetrieved = function(){
@@ -159,27 +172,24 @@ var checkIfCirclesRetrieved = function(){
 
 //Retrieves the circle count for the newly selected site
 var retrieveCircleCount = function(){
+	//alert("1");
+	var circleNum;
 	var siteID = $("#site option:selected").val();
 	//Clear circle list to prevent circles from different site from being selected.
 	clearCircleList();
 	document.getElementById("circle").selectedIndex = 0;
-	$.ajax({
-		url: DOMAIN + "/api/sites.php",
-		type : "POST",
-		crossDomain: true,
-		dataType: 'json',
-		data: JSON.stringify({
-			"action" : "getOneByID",
-			"siteID" : siteID
-		}),
-		success: function(circleResult){
-			circleCountRetrieved = true;
-			populateCircleList(circleResult.numCircles);
-		},
-		error : function(){
-			navigator.notification.alert("Unexpected error retrieving number of circles.");
-		}
-	});
+	db.transaction(function(tx){
+            tx.executeSql('select circle from SITE where siteId=?', [siteID], function(tx, rs){
+                circleNum=rs.rows.item(0).circle;    
+            });
+        }, function(error){
+            alert("Transaction Error: "+error.message);
+        }, function(){
+                	
+							populateCircleList(circleNum);
+
+        });
+	circleCountRetrieved=true;
 };
 
 //Populates circle list with number of circles from newly selected site
@@ -465,12 +475,12 @@ var submit = function( ) {
 
 	siteID = $("#site option:selected").val();
 
-	//if(siteID.localeCompare("default") === 0){
-	//	navigator.notification.alert("Please select a site");
-	//	return;
-	//}
+	if(siteID.localeCompare("default") === 0){
+		navigator.notification.alert("Please select a site");
+		return;
+	}
 
-	var showPasswordCheckboxIsChecked = document.getElementById("show-password").checked;
+	//var showPasswordCheckboxIsChecked = document.getElementById("show-password").checked;
 	//if(showPasswordCheckboxIsChecked){
 	//	sitePassword = $("#visible-password").val();
 	//}else{
@@ -489,10 +499,10 @@ var submit = function( ) {
 	}
 
 	circle = $("#circle option:selected").val();
-	//if(circle.localeCompare("default")===0){
-	//	navigator.notification.alert("Please select a circle.");
-	//	return;
-	//}
+	if(circle.localeCompare("default")===0){
+		navigator.notification.alert("Please select a circle.");
+		return;
+	}
 
 	survey = $("#survey option:selected").val();
 	if(survey.localeCompare("default")===0){
@@ -551,11 +561,8 @@ var submit = function( ) {
 	//	"\nSite password: " +sitePassword);
 	var online = navigator.onLine;
 	if(online == false){
-		alert("Insdie of submit Survey function");
 		db.transaction(function(tx){
-			            alert("hello");
                         tx.executeSql("INSERT INTO SURVEY VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", ['survey',siteID,getURLParameter("userID"),getURLParameter("password"),circle,survey,dateTime,temperatures[temperature].min,temperatures[temperature].max,$(".notes").val(),plantSpecies,herbivoryValue,surveyType,parseInt(leafCount),"Mobile"]);
-						alert("I am here");
                     }  , function(error){
                         alert("Transaction Error: "+error.message);
                     },function(){
