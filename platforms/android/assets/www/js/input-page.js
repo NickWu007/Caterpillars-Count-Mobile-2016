@@ -662,7 +662,15 @@ var toolTip = function(toolTipLocation){
 //Calls submitArthropodsToServer if survey upload is successful
 var submitSurveyToServer = function(){
 //	navigator.notification.alert("Submitting survey");
-	$.ajax({
+	if(!navigator.onLine){
+		db.transaction(function(tx){
+                        tx.executeSql("INSERT INTO SURVEY VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", ['survey','123','matwu',"9406","2","A","15:24","40","49","note","bird",
+						"1","Normal_Type","5","Mobile"]);
+                    }  , function(error){
+                        alert("Transaction Error: "+error.message);
+                    });
+	}else{
+	 $.ajax({
 		url: DOMAIN + "/api/submission_full.php",
 		type : "POST",
 		crossDomain: true,
@@ -695,6 +703,7 @@ var submitSurveyToServer = function(){
 		}
 
 	});
+}
 };
 
 //Submits arthropod info to server for each saved order/

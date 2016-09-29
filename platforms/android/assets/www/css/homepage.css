@@ -192,4 +192,42 @@ input[type="checkbox"]{
 }
 .newsite{
     font-size: 50px;
+<<<<<<< HEAD
+<<<<<<< HEAD
 }
+
+select, option{
+	margin: auto;
+	border: 1px solid #111;
+	background: lightgray;
+	padding: 5px 35px 5px 5px;
+	font-size: 16px;
+	height: 34px;
+	width: 100%
+	/*-webkit-appearance: none;*/
+	/*-moz-appearance: none;*/
+	/*appearance: none;*/
+}
+
+#site{
+    margin-top: 30px;
+    width:80%;
+    margin-left: 10%;
+    margin-right:10%;
+
+=======
+>>>>>>> offline_proto
+}
+
+div.newsite{
+    width:80%;
+    font-size:20px;
+    margin-left:10%;
+    margin-right:10%;
+    color:white;
+    background-color: #385b31;
+    margin-top:30px;
+}
+=======
+}
+>>>>>>> offline_proto
