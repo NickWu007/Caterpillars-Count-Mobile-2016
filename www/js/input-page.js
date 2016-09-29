@@ -1,4 +1,4 @@
-var DOMAIN = "http://master-caterpillars.vipapps.unc.edu";
+var DOMAIN = "http://develop-caterpillars.vipapps.unc.edu";
 
 var leafPhotoTaken = false;
 
