@@ -81,7 +81,7 @@ function onDeviceReady(){
         function(error){alert("Error Open Database:"+JSON.stringify(error));}
     );
     function DBSuccessCB(){
-        //alert("DB open OK");
+        alert("DB open OK");
             //retrive site data from server
         
         //retrive sites with permission
@@ -116,8 +116,6 @@ function onConfirmQuit(button){
 }
 
 
-
-//Initializes the main survey screen
 $( document ).ready(function() {
 	$('#herbivory-select').ddslick({
 		data: ddData,
@@ -493,7 +491,6 @@ var submit = function( ) {
 	 }
 	}
 
-
 	surveyType = $(".survey-type option:selected").val();
 	if(surveyType.localeCompare("default")===0){
 		navigator.notification.alert("Please select a survey type.");
@@ -563,6 +560,7 @@ var submit = function( ) {
 	//	"\nSite password: " +sitePassword);
 	//var online = navigator.onLine;
 	if(online == false){
+
 		db.transaction(function(tx){
                         tx.executeSql("INSERT INTO SURVEY VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", ['survey',siteID,getURLParameter("userID"),getURLParameter("password"),circle,survey,dateTime,temperatures[temperature].min,temperatures[temperature].max,$(".notes").val(),plantSpecies,herbivoryValue,surveyType,parseInt(leafCount),"Mobile"]);
                     }  , function(error){
@@ -676,7 +674,7 @@ var toolTip = function(toolTipLocation){
 //Calls submitArthropodsToServer if survey upload is successful
 var submitSurveyToServer = function(){
 //	navigator.notification.alert("Submitting survey");
-	$.ajax({
+	 $.ajax({
 		url: DOMAIN + "/api/submission_full.php",
 		type : "POST",
 		crossDomain: true,

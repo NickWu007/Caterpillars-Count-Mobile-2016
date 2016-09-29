@@ -1,4 +1,4 @@
-var DOMAIN = "http://master-caterpillars.vipapps.unc.edu";
+var DOMAIN = "http://develop-caterpillars.vipapps.unc.edu";
 
 var leafPhotoTaken = false;
 
@@ -81,7 +81,7 @@ function onDeviceReady(){
         function(error){alert("Error Open Database:"+JSON.stringify(error));}
     );
     function DBSuccessCB(){
-        //alert("DB open OK");
+        alert("DB open OK");
             //retrive site data from server
         
         //retrive sites with permission
@@ -116,8 +116,6 @@ function onConfirmQuit(button){
 }
 
 
-
-//Initializes the main survey screen
 $( document ).ready(function() {
 	$('#herbivory-select').ddslick({
 		data: ddData,
@@ -130,6 +128,7 @@ $( document ).ready(function() {
 		}
 	});
 	//Populate site list on page load
+	retrieveSiteList();
 	//Set initial value of time and date fields
 	setDateAndTime();
 	//Updates time every second
@@ -491,7 +490,6 @@ var submit = function( ) {
 	//	return;
 	//}
 
-
 	surveyType = $(".survey-type option:selected").val();
 	if(surveyType.localeCompare("default")===0){
 		navigator.notification.alert("Please select a survey type.");
@@ -561,6 +559,7 @@ var submit = function( ) {
 	//	"\nSite password: " +sitePassword);
 	var online = navigator.onLine;
 	if(online == false){
+
 		db.transaction(function(tx){
                         tx.executeSql("INSERT INTO SURVEY VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", ['survey',siteID,getURLParameter("userID"),getURLParameter("password"),circle,survey,dateTime,temperatures[temperature].min,temperatures[temperature].max,$(".notes").val(),plantSpecies,herbivoryValue,surveyType,parseInt(leafCount),"Mobile"]);
                     }  , function(error){
@@ -674,7 +673,7 @@ var toolTip = function(toolTipLocation){
 //Calls submitArthropodsToServer if survey upload is successful
 var submitSurveyToServer = function(){
 //	navigator.notification.alert("Submitting survey");
-	$.ajax({
+	 $.ajax({
 		url: DOMAIN + "/api/submission_full.php",
 		type : "POST",
 		crossDomain: true,

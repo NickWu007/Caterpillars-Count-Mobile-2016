@@ -2,72 +2,58 @@
  * Created by palmour on 9/20/16
 */
 var db;
-var DOMAIN = "http://develop-caterpillars.vipapps.unc.edu";
+var survey_result;
 document.addEventListener("deviceready", onDeviceReady, false);
-
-$(document).ready(function(){
-
+function onDeviceReady(){
     
-    var $list_length = $(".survey_item").length; //computes number of items in the survey list
-        $(".survey-count").html("Total Stored Survey: " + $list_length); //updates survey-count
-
-    function  closeDB(){
-        db.close(function(){
-            alert("DB closed");
-        }, function(error){
-            alert("DB Closing Error:"+error.message);
-        });
-    }
-});
-    
-function onDeviceReady() {
-    document.addEventListener("backbutton", function (e) {
+    document.addEventListener("backbutton", function(e){
+        db.close();
         e.preventDefault();
-        closeDB();
-        navigator.app.exitApp();
+        window.location.assign("homepage.html");
     }, false);
 
-    window.sqlitePlugin.echoTest(function(){
-        console.log("echo test ok");
-    });
+    db=window.sqlitePlugin.openDatabase(
+        {name: 'app.db', location: 'default'}, 
+        DBSuccessCB(), 
+        function(error){alert("Error Open Database:"+JSON.stringify(error));}
+    );
+    function DBSuccessCB(){
+        alert("DB open OK");
 
-    window.sqlitePlugin.selfTest(function(){
-        console.log("self test ok");
-    });
-
-    function DBsuccess(){
-        alert("DB open ok, Create Table etc");
     }
 
-    var resultset;
-    var db = window.sqlitePlugin.openDatabase({name: 'app.db', location: 'default'},
-        DBsuccess(),
-        function(error){
-            alert("Error Open Database:"+JSON.stringify(error));
+    db.transaction(function(tx){
+        //tx.executeSql('INSERT INTO SURVEY VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', 
+        //['survey', 'BBS-27-041-11', 'palmour', 'shadow', "2", 'A', '2016-Sep-27 1:03PM', "60","70", ' ', ' ', ' ',' ', ' ', 'Mobile']);
+        tx.executeSql('select distinct siteID, circle, survey, timeStart from SURVEY', [], function(tx, rs){
+            if(rs.rows.length>0) {survey_result=rs.rows;}
+            else{alert("survey database empty");}
+        });
+
+    }, function(error){
+        alert("Transaction error: "+error.message);
+    }, function(){
+        alert("successfully retrieved pending surveys");
+        var list_content="";
+        for(var i=0; i<survey_result.length; i++){
+            var row = survey_result.item(i);
+            var new_list_item = '<li class="survey_item"><h5>Site: '+row.siteID+'</h5><h5>Circle: '+row.circle+
+            '</h5><h5>Survey: '+row.survey+'</h5><h5>Time: '+row.timeStart+'<h5>id: </h5>'+
+            '<div class="survey_delete text-center white-text"> Delete this Survey</div></li><hr>';
+
+            list_content += new_list_item;
         }
-    );
-        
+
+        $(".survey_list").html(list_content);
+        numSurveys();
+    });
 }
 
-var retrievePendingSurveys = function(){
-    $.ajax({
-        url : DOMAIN + "/api/surveys.php", //name probably not correct. verify when testing.
-        type: "POST",
-        crossDomain: true,
-        dataType: 'json',
-        data: JSON.stringify({
-            "action" :"getAllSiteState" //parameters probably incorrect. verify.
-        }), 
-        success: function(survey_result){
-            populateSurveyList(site_result);
-        }, 
-        error : function(){
-            navigator.notification.alert("Unexpected error retrieving pending surveys.");
-        }
-    });
-};
+$(document).ready(function(){
+    numSurveys();
+});
 
-var populateSurveyList = function(survey_result){
-
-};
-
+function numSurveys(){
+    var $list_length = $(".survey_item").length; //computes number of items in the survey list
+    $(".survey-count").html("Total Stored Survey: " + $list_length); //updates survey-count
+}
