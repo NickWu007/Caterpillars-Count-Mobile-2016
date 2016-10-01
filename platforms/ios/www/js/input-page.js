@@ -478,18 +478,18 @@ var submit = function( ) {
 		return;
 	}
         var online = navigator.onLine;
-	if(oneline == true){
-	 var showPasswordCheckboxIsChecked = document.getElementById("show-password").checked;
-	 if(showPasswordCheckboxIsChecked){
-		sitePassword = $("#visible-password").val();
-	 }else{
-		sitePassword = $("#hidden-password").val();
-	 }
-	 if(!sitePassword){
-		navigator.notification.alert("Please enter the site password");
-		return;
-	 }
-	}
+	//if(oneline == true){
+	 //var showPasswordCheckboxIsChecked = document.getElementById("show-password").checked;
+	 //if(showPasswordCheckboxIsChecked){
+	//	sitePassword = $("#visible-password").val();
+	 //}else{
+	//	sitePassword = $("#hidden-password").val();
+	 //}
+	 //if(!sitePassword){
+	//	navigator.notification.alert("Please enter the site password");
+	//	return;
+	 //}
+	//}
 
 	surveyType = $(".survey-type option:selected").val();
 	if(surveyType.localeCompare("default")===0){
