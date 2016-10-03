@@ -81,7 +81,7 @@ function onDeviceReady(){
         function(error){alert("Error Open Database:"+JSON.stringify(error));}
     );
     function DBSuccessCB(){
-        alert("DB open OK");
+        // alert("DB open OK");
             //retrive site data from server
         
         //retrive sites with permission
@@ -443,7 +443,7 @@ var saveArthropod = function( ) {
 
 
 function getURLParameter(name) {
-  return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null
+  return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null;
 }
 
 
@@ -477,19 +477,19 @@ var submit = function( ) {
 		navigator.notification.alert("Please select a site");
 		return;
 	}
-        var online = navigator.onLine;
-	if(oneline == true){
-	 var showPasswordCheckboxIsChecked = document.getElementById("show-password").checked;
-	 if(showPasswordCheckboxIsChecked){
-		sitePassword = $("#visible-password").val();
-	 }else{
-		sitePassword = $("#hidden-password").val();
-	 }
-	 if(!sitePassword){
-		navigator.notification.alert("Please enter the site password");
-		return;
-	 }
-	}
+    var online = navigator.onLine;
+	// if(oneline == true){
+	//  var showPasswordCheckboxIsChecked = document.getElementById("show-password").checked;
+	//  if(showPasswordCheckboxIsChecked){
+	// 	sitePassword = $("#visible-password").val();
+	//  }else{
+	// 	sitePassword = $("#hidden-password").val();
+	//  }
+	//  if(!sitePassword){
+	// 	navigator.notification.alert("Please enter the site password");
+	// 	return;
+	//  }
+	// }
 
 	surveyType = $(".survey-type option:selected").val();
 	if(surveyType.localeCompare("default")===0){
@@ -559,7 +559,17 @@ var submit = function( ) {
 	//navigator.notification.alert("SiteID: " + siteID +
 	//	"\nSite password: " +sitePassword);
 	//var online = navigator.onLine;
-	if(online == false){
+	if(navigator.onLine === false){
+
+		alert("userID= " + userID);
+		alert("password= " + password);
+		alert("temperatureMin= " + temperatures[temperature].min);
+		alert("temperatureMax= " + temperatures[temperature].max);
+		alert("notes= " + $(".notes").val());
+		alert("plantSpecies= " + plantSpecies);
+		alert("herbivoryValue= " + herbivoryValue);
+		alert("surveyType= " + surveyType);
+		alert("leafCount= " + parseInt(leafCount));
 
 		db.transaction(function(tx){
                         tx.executeSql("INSERT INTO SURVEY VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", ['survey',siteID,getURLParameter("userID"),getURLParameter("password"),circle,survey,dateTime,temperatures[temperature].min,temperatures[temperature].max,$(".notes").val(),plantSpecies,herbivoryValue,surveyType,parseInt(leafCount),"Mobile"]);

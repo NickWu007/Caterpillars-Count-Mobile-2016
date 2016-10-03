@@ -3,6 +3,7 @@
 */
 var db;
 var survey_result;
+var DOMAIN = "http://master-caterpillars.vipapps.unc.edu";
 document.addEventListener("deviceready", onDeviceReady, false);
 function onDeviceReady(){
     
@@ -51,9 +52,77 @@ function onDeviceReady(){
 
 $(document).ready(function(){
     numSurveys();
+
+    var $submitButton = $(".upload-button");
+    $submitButton.click(function() {
+    var ask = window.confirm("Ready to upload?");
+    if (ask) {
+        for(var i = 0; i< survey_result.length; i++){
+            var survey = survey_result.item(i);
+            alert("trying to submit " + survey.siteID);
+            submitSurveyToServer(survey);
+            alert("finish submitting #" + i);
+        }
+    }else{
+        window.alert("Upload unsuccessfully");
+    }   
+   });
+
 });
 
 function numSurveys(){
     var $list_length = $(".survey_item").length; //computes number of items in the survey list
     $(".survey-count").html("Total Stored Survey: " + $list_length); //updates survey-count
+}
+
+function submitSurveyToServer(survey) {
+    var survey_data = JSON.stringify({
+            "type" : "survey",
+            "siteID" : survey.siteID,
+            "userID" : survey.userID,
+            "password" : survey.password,
+            //survey
+            "circle" : survey.circle,
+            "survey" :  survey.survey,
+            "timeStart" :  survey.timeStart,
+            "temperatureMin" : survey.temperatureMin,
+            "temperatureMax" : survey.temperatureMax,
+            "siteNotes" :  survey.siteNotes,
+            "plantSpecies" : survey.plantSpecies,
+            "herbivory" : survey.herbivory,
+            "surveyType" :  survey.surveyType,
+            "leafCount" : parseInt(survey.leafCount),
+            "source" : "Mobile"
+        });
+    alert(survey_data);
+    $.ajax({
+        url: DOMAIN + "/api/submission_full.php",
+        type : "POST",
+        crossDomain: true,
+        dataType: 'json',
+        data: JSON.stringify({
+            "type" : "survey",
+            "siteID" : survey.siteID,
+            "userID" : survey.userID,
+            "password" : survey.password,
+            //survey
+            "circle" : survey.circle,
+            "survey" :  survey.survey,
+            "timeStart" :  survey.timeStart,
+            "temperatureMin" : survey.temperatureMin,
+            "temperatureMax" : survey.temperatureMax,
+            "siteNotes" :  survey.siteNotes,
+            "plantSpecies" : survey.plantSpecies,
+            "herbivory" : survey.herbivory,
+            "surveyType" :  survey.surveyType,
+            "leafCount" : parseInt(survey.leafCount),
+            "source" : "Mobile"
+        }),
+    success: function(result){
+        alert("Survey #" + i + "is submitted successfully.");
+        $(".survey_item")[i].css({border: 'green solid thin'});
+    },
+    error : function(){
+        navigator.notification.alert("Unexpected error submitting survey #" + i + ".");
+    }});
 }

@@ -22,12 +22,12 @@ $(document).ready(function(){
         function(error){alert("Error Open Database:"+JSON.stringify(error));}
         );
         function DBSuccessCB(){
-            alert("DB open OK");
+            // alert("DB open OK");
         }
 
         db.transaction(function(tx){
             tx.executeSql('SELECT name from USER_INFO',[], function(tx, rs){
-                alert("#lines in db:"+rs.rows.length);
+                // alert("#lines in db:"+rs.rows.length);
                 if(rs.rows.length > 0){
                     alert("logged in as: " + rs.rows.item(0).name);
                 }
