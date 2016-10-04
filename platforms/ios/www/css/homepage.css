@@ -220,3 +220,9 @@ div.newsite{
     background-color: #385b31;
     margin-top:30px;
 }
+
+p.message{
+    color: red;
+    text-align: left;  
+    width: 75%;
+}
