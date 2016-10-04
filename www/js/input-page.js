@@ -71,6 +71,7 @@ var ddData = [
 	}
 ];
 var db;
+var stored_user_info;
 document.addEventListener("deviceready", onDeviceReady, false);
 //Return to start screen if android back button is pressed
 function onDeviceReady(){
@@ -83,10 +84,20 @@ function onDeviceReady(){
     function DBSuccessCB(){
         // alert("DB open OK");
             //retrive site data from server
-        
         //retrive sites with permission
         
-    };
+    }
+    stored_user_info = null;
+    // If there's a stored user info, pre-populate it to login fileds.
+    db.transaction(function(tx){
+        tx.executeSql('select name, password, userId from USER_INFO', [], function(tx, rs){
+            if (rs.rows.length > 0) stored_user_info=rs.rows.item(0);
+        });
+        }, function(error){
+            alert("Transaction Error: "+error.message);
+        }, function() {
+    });
+
 	//alert("begin wait");
 	setInterval(retrieveSiteList(),500);
 
@@ -455,6 +466,7 @@ var submit = function( ) {
 		navigator.notification.alert("Please select a temperature range");
 		return;
 	}
+	alert("1");
 
 	//Check that date and time have been entered
 	time = document.getElementById("time").value;
@@ -467,18 +479,20 @@ var submit = function( ) {
 		navigator.notification.alert("Please enter a date.");
 		return;
 	}
-
+	alert("2");
 
 	dateTime = date + " " + time;//Default seconds value to 00
-
+	alert("3");
 	siteID = $("#site option:selected").val();
-
+	alert("4");
 	if(siteID.localeCompare("default") === 0){
 		navigator.notification.alert("Please select a site");
 		return;
 	}
+	alert("5");
     var online = navigator.onLine;
-	// if(oneline == true){
+	alert("6");
+	// if(online === true){
 	//  var showPasswordCheckboxIsChecked = document.getElementById("show-password").checked;
 	//  if(showPasswordCheckboxIsChecked){
 	// 	sitePassword = $("#visible-password").val();
@@ -559,20 +573,21 @@ var submit = function( ) {
 	//navigator.notification.alert("SiteID: " + siteID +
 	//	"\nSite password: " +sitePassword);
 	//var online = navigator.onLine;
-	if(navigator.onLine === false){
+	// alert("siteId= " + siteId);
+	// alert("userId= " + stored_user_info.userId);
+	// alert("pw= " + stored_user_info.password);
+	// alert("temperatureMin= " + temperatures[temperature].min);
+	// alert("temperatureMax= " + temperatures[temperature].max);
+	// alert("notes= " + $(".notes").val());
+	// alert("plantSpecies= " + plantSpecies);
+	// alert("herbivoryValue= " + herbivoryValue);
+	// alert("surveyType= " + surveyType);
+	// alert("leafCount= " + parseInt(leafCount));
 
-		alert("userID= " + userID);
-		alert("password= " + password);
-		alert("temperatureMin= " + temperatures[temperature].min);
-		alert("temperatureMax= " + temperatures[temperature].max);
-		alert("notes= " + $(".notes").val());
-		alert("plantSpecies= " + plantSpecies);
-		alert("herbivoryValue= " + herbivoryValue);
-		alert("surveyType= " + surveyType);
-		alert("leafCount= " + parseInt(leafCount));
+	if(online === false){
 
 		db.transaction(function(tx){
-                        tx.executeSql("INSERT INTO SURVEY VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", ['survey',siteID,getURLParameter("userID"),getURLParameter("password"),circle,survey,dateTime,temperatures[temperature].min,temperatures[temperature].max,$(".notes").val(),plantSpecies,herbivoryValue,surveyType,parseInt(leafCount),"Mobile"]);
+                        tx.executeSql("INSERT INTO SURVEY VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", ['survey',siteID,stored_user_info.userId,stored_user_info.password,circle,survey,dateTime,temperatures[temperature].min,temperatures[temperature].max,$(".notes").val(),plantSpecies,herbivoryValue,surveyType,parseInt(leafCount),"Mobile"]);
                     }  , function(error){
                         alert("Transaction Error: "+error.message);
                     },function(){
