@@ -4,7 +4,9 @@
 var db;
 var survey_result;
 var DOMAIN = "http://master-caterpillars.vipapps.unc.edu";
+
 document.addEventListener("deviceready", onDeviceReady, false);
+
 function onDeviceReady(){
     
     document.addEventListener("backbutton", function(e){
@@ -54,13 +56,14 @@ $(document).ready(function(){
     numSurveys();
 
     var $submitButton = $(".upload-button");
-    $submitButton.click(function() {
+    $submitButton.click(function(e) {
+        e.preventDefault();
         var ask = window.confirm("Ready to upload?");
         if (ask) {
             for (var i = 0; i< survey_result.length; i++){
                 var survey = survey_result.item(i);
                 alert("trying to submit " + survey.siteID);
-                submitSurveyToServer(survey);
+                submitSurveyToServer(i, survey);
                 alert("finish submitting #" + i);
             }
     }else{
@@ -75,7 +78,7 @@ function numSurveys(){
     $(".survey-count").html("Total Stored Survey: " + $list_length); //updates survey-count
 }
 
-function submitSurveyToServer(survey) {
+function submitSurveyToServer(i, survey) {
     $.ajax({
         url: DOMAIN + "/api/submission_full.php",
         type : "POST",
@@ -99,11 +102,11 @@ function submitSurveyToServer(survey) {
             "leafCount" : parseInt(survey.leafCount),
             "source" : "Mobile"
         }),
-    success: function(result){
-        alert("Survey #" + i + "is submitted successfully.");
-        $(".survey_item")[i].css({border: 'green solid thin'});
-    },
-    error : function(){
-        navigator.notification.alert("Unexpected error submitting survey #" + i + ".");
+        success: function(response, textStatus, jqXHR){
+            alert("Survey #" + i + "is submitted successfully.");
+            // deleteSurvey(survey, i);
+        },
+        error : function(message){
+            navigator.notification.alert("Unexpected error submitting survey #" + i + ".");
     }});
 }

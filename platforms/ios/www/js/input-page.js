@@ -76,7 +76,7 @@ document.addEventListener("deviceready", onDeviceReady, false);
 //Return to start screen if android back button is pressed
 function onDeviceReady(){
 
-	db=window.sqlitePlugin.openDatabase(
+	db = window.sqlitePlugin.openDatabase(
         {name: 'app.db', location: 'default'}, 
         DBSuccessCB(), 
         function(error){alert("Error Open Database:"+JSON.stringify(error));}
@@ -88,14 +88,18 @@ function onDeviceReady(){
         
     }
     stored_user_info = null;
-    // If there's a stored user info, pre-populate it to login fileds.
+
     db.transaction(function(tx){
-        tx.executeSql('select name, password, userId from USER_INFO', [], function(tx, rs){
-            if (rs.rows.length > 0) stored_user_info=rs.rows.item(0);
-        });
-        }, function(error){
-            alert("Transaction Error: "+error.message);
-        }, function() {
+        tx.executeSql('SELECT name, password, userId from USER_INFO',[], function(tx, rs){
+        if(rs.rows.length > 0){
+        	alert("has user");
+            stored_user_info = rs.rows.item(0);
+        }
+        });    
+    }, function(error){
+        alert("Transaction Error: "+error.message);
+    }, function(){
+        console.log("Transaction OK.");
     });
 
 	//alert("begin wait");
@@ -466,7 +470,6 @@ var submit = function( ) {
 		navigator.notification.alert("Please select a temperature range");
 		return;
 	}
-	alert("1");
 
 	//Check that date and time have been entered
 	time = document.getElementById("time").value;
@@ -479,19 +482,17 @@ var submit = function( ) {
 		navigator.notification.alert("Please enter a date.");
 		return;
 	}
-	alert("2");
 
 	dateTime = date + " " + time;//Default seconds value to 00
-	alert("3");
+	
 	siteID = $("#site option:selected").val();
-	alert("4");
+	
 	if(siteID.localeCompare("default") === 0){
 		navigator.notification.alert("Please select a site");
 		return;
 	}
-	alert("5");
+	
     var online = navigator.onLine;
-	alert("6");
 	// if(online === true){
 	//  var showPasswordCheckboxIsChecked = document.getElementById("show-password").checked;
 	//  if(showPasswordCheckboxIsChecked){
