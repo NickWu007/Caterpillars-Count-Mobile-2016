@@ -223,6 +223,7 @@ div.newsite{
 
 p.message{
     color: red;
-    text-align: left;  
+    text-align: left; 
+    padding-left: 20px;
     width: 75%;
 }
