@@ -99,14 +99,6 @@ function onDeviceReady(){
 			returnToMainSelectScreen();
 		}
 		//Otherwise ask if the user wants to exit the app
-		else{
-			navigator.notification.confirm(
-					'Do you want to quit?',
-					onConfirmQuit,
-					'Quit Caterpillars Count?',
-					'OK,Cancel'
-			);
-		}
 	}, false);
 }
 //Function called if the user confirms to exit the app
@@ -135,14 +127,6 @@ $( document ).ready(function() {
 	window.setInterval(setDateAndTime, 1000);
 	populateCircleList(12);
 });
-
-
-//Alerts if user attempts to select a circle before selecting a site and populating the circle list
-var checkIfCirclesRetrieved = function(){
-	//if(!circleCountRetrieved){
-	//	navigator.notification.alert("Please select a site first.");
-	//}
-};
 
 //Populates circle list with number of circles from newly selected site
 var populateCircleList = function(numCircles){
@@ -394,12 +378,6 @@ var saveArthropod = function( ) {
 
 	}
 };
-
-
-function getURLParameter(name) {
-  return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null
-}
-
 
 var submit = function( ) {
 	//Check that a temperature has been selected

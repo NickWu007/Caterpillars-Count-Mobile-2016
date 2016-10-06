@@ -16,11 +16,12 @@ $(document).ready(function(){
             window.location.assign("StartScreen.html");
         }, false);
         
-        db=window.sqlitePlugin.openDatabase(
+        //we may not need to open db at this page. 
+        /*db=window.sqlitePlugin.openDatabase(
         {name: 'app.db', location: 'default'}, 
         DBSuccessCB(), 
         function(error){alert("Error Open Database:"+JSON.stringify(error));}
-        );
+        ); */
         function DBSuccessCB(){
             alert("DB open OK");
         }
