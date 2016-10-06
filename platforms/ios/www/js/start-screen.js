@@ -41,6 +41,38 @@ $(document).ready(function() {
                 alert("Error Open Database:"+JSON.stringify(error));
             }
         );
+
+        alert("started");
+        var online = navigator.onLine;
+        var register_button = "<a href = 'register.html'>"+
+                                    "<div class='header-footer footer text-center green-text'>"+
+                                        "<div class = 'button'><h4>Register</h4></div>"+
+                                    "</div>"+
+                                "</a>";
+
+        var login_button = "<a href='login.html'>"+
+                                        "<div class='header-footer footer text-center green-text'>"+
+                                            "<div class = 'button'><h4>Login</h4></div>"+
+                                            "</div>"+
+                                    "</a>";
+
+        var amode_button = "<a href='homepage-anon.html'>"+
+                                        "<div class='header-footer footer text-center green-text'>"+
+                                        "<div class = 'button'><h4>Anonymous Mode</h4></div>"+
+                                        "</div>"+
+                                    "</a>"; 
+
+        if(online){
+            $("#top_button").html(register_button);
+            $("#bottom_button").html(login_buton);
+        }
+        else{
+            $("#top_button").html(login_button);
+            $("#bottom_button").html(amode_button);
+        }
+        alert("finished");
+
+
         var firsttime=true;
         db.transaction(function(tx){
             tx.executeSql("CREATE TABLE IF NOT EXISTS USER_INFO (name, password, userId)");
@@ -60,6 +92,7 @@ $(document).ready(function() {
                   //     alert("Transaction Error: "+error.message);
                   //   });
                  //}
+                 
             });    
         }, function(error){
             alert("Transaction Error: "+error.message);
