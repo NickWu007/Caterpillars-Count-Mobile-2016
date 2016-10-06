@@ -92,7 +92,6 @@ function onDeviceReady(){
 	//alert("begin wait");
 	setInterval(retrieveSiteList(),500);
 
-
 	document.addEventListener("backbutton", function(e){
 		e.preventDefault();
 		//If displaying arthropod screen, return to main select screen
@@ -134,33 +133,8 @@ $( document ).ready(function() {
 	setDateAndTime();
 	//Updates time every second
 	window.setInterval(setDateAndTime, 1000);
+	populateCircleList(12);
 });
-
-
-var site_list;
-//Gets the list of all sites
-var retrieveSiteList = function(){
-	//alert("2");
-	    db.transaction(function(tx){
-            tx.executeSql('select siteId, siteName, circle, state from SITE', [], function(tx, rs){
-                site_list=rs.rows;    
-            });
-        }, function(error){
-            alert("Transaction Error: "+error.message);
-        }, function(){
-                if(site_list.length>0){
-					var siteList = document.getElementById("site");
-                	for(var i=0; i<site_list.length; i++){
-                        var siteOption = document.createElement("option");
-						siteOption.text = site_list.item(i).siteName+"("+site_list.item(i).state+")";
-						siteOption.value = site_list.item(i).siteId;
-						siteList.add(siteOption);
-                	}
-                }else{
-                    alert("You do not have permission for any Site.");
-                }
-        });
-};
 
 
 //Alerts if user attempts to select a circle before selecting a site and populating the circle list
@@ -168,28 +142,6 @@ var checkIfCirclesRetrieved = function(){
 	//if(!circleCountRetrieved){
 	//	navigator.notification.alert("Please select a site first.");
 	//}
-};
-
-//Retrieves the circle count for the newly selected site
-var retrieveCircleCount = function(){
-	//alert("1");
-	var circleNum;
-	var siteID = $("#site option:selected").val();
-	//Clear circle list to prevent circles from different site from being selected.
-	clearCircleList();
-	document.getElementById("circle").selectedIndex = 0;
-	db.transaction(function(tx){
-            tx.executeSql('select circle from SITE where siteId=?', [siteID], function(tx, rs){
-                circleNum=rs.rows.item(0).circle;    
-            });
-        }, function(error){
-            alert("Transaction Error: "+error.message);
-        }, function(){
-                	
-							populateCircleList(circleNum);
-
-        });
-	circleCountRetrieved=true;
 };
 
 //Populates circle list with number of circles from newly selected site

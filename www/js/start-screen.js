@@ -42,7 +42,6 @@ $(document).ready(function() {
             }
         );
 
-        alert("started");
         var online = navigator.onLine;
         var register_button = "<a href = 'register.html'>"+
                                     "<div class='header-footer footer text-center green-text'>"+
@@ -70,8 +69,6 @@ $(document).ready(function() {
             $("#top_button").html(login_button);
             $("#bottom_button").html(amode_button);
         }
-        alert("finished");
-
 
         var firsttime=true;
         db.transaction(function(tx){
