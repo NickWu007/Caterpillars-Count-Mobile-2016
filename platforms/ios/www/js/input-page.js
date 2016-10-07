@@ -92,7 +92,6 @@ function onDeviceReady(){
     db.transaction(function(tx){
         tx.executeSql('SELECT name, password, userId from USER_INFO',[], function(tx, rs){
         if(rs.rows.length > 0){
-        	alert("has user");
             stored_user_info = rs.rows.item(0);
         }
         });    
@@ -464,7 +463,7 @@ function getURLParameter(name) {
 
 var submit = function( ) {
 	//Check that a temperature has been selected
-	alert("temp");
+	// alert("temp");
 	temperature = $("#temperature option:selected").val();
 	if(temperature.localeCompare("default") === 0){
 		navigator.notification.alert("Please select a temperature range");
