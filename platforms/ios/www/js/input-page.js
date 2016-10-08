@@ -71,22 +71,36 @@ var ddData = [
 	}
 ];
 var db;
+var stored_user_info;
 document.addEventListener("deviceready", onDeviceReady, false);
 //Return to start screen if android back button is pressed
 function onDeviceReady(){
 
-	db=window.sqlitePlugin.openDatabase(
+	db = window.sqlitePlugin.openDatabase(
         {name: 'app.db', location: 'default'}, 
         DBSuccessCB(), 
         function(error){alert("Error Open Database:"+JSON.stringify(error));}
     );
     function DBSuccessCB(){
-        alert("DB open OK");
+        // alert("DB open OK");
             //retrive site data from server
-        
         //retrive sites with permission
         
-    };
+    }
+    stored_user_info = null;
+
+    db.transaction(function(tx){
+        tx.executeSql('SELECT name, password, userId from USER_INFO',[], function(tx, rs){
+        if(rs.rows.length > 0){
+            stored_user_info = rs.rows.item(0);
+        }
+        });    
+    }, function(error){
+        alert("Transaction Error: "+error.message);
+    }, function(){
+        console.log("Transaction OK.");
+    });
+
 	//alert("begin wait");
 	setInterval(retrieveSiteList(),500);
 
@@ -128,7 +142,6 @@ $( document ).ready(function() {
 		}
 	});
 	//Populate site list on page load
-	retrieveSiteList();
 	//Set initial value of time and date fields
 	setDateAndTime();
 	//Updates time every second
@@ -444,13 +457,13 @@ var saveArthropod = function( ) {
 
 
 function getURLParameter(name) {
-  return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null
+  return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null;
 }
 
 
 var submit = function( ) {
 	//Check that a temperature has been selected
-	alert("temp");
+	// alert("temp");
 	temperature = $("#temperature option:selected").val();
 	if(temperature.localeCompare("default") === 0){
 		navigator.notification.alert("Please select a temperature range");
@@ -469,26 +482,28 @@ var submit = function( ) {
 		return;
 	}
 
-
 	dateTime = date + " " + time;//Default seconds value to 00
-
+	
 	siteID = $("#site option:selected").val();
-
+	
 	if(siteID.localeCompare("default") === 0){
 		navigator.notification.alert("Please select a site");
 		return;
 	}
-
-	//var showPasswordCheckboxIsChecked = document.getElementById("show-password").checked;
-	//if(showPasswordCheckboxIsChecked){
-	//	sitePassword = $("#visible-password").val();
-	//}else{
-	//	sitePassword = $("#hidden-password").val();
-	//}
-	//if(!sitePassword){
-	//	navigator.notification.alert("Please enter the site password");
-	//	return;
-	//}
+	
+    var online = navigator.onLine;
+	// if(online === true){
+	//  var showPasswordCheckboxIsChecked = document.getElementById("show-password").checked;
+	//  if(showPasswordCheckboxIsChecked){
+	// 	sitePassword = $("#visible-password").val();
+	//  }else{
+	// 	sitePassword = $("#hidden-password").val();
+	//  }
+	//  if(!sitePassword){
+	// 	navigator.notification.alert("Please enter the site password");
+	// 	return;
+	//  }
+	// }
 
 	surveyType = $(".survey-type option:selected").val();
 	if(surveyType.localeCompare("default")===0){
@@ -557,46 +572,36 @@ var submit = function( ) {
 	//Attempt to submit survey if password is valid
 	//navigator.notification.alert("SiteID: " + siteID +
 	//	"\nSite password: " +sitePassword);
-	var online = navigator.onLine;
-	if(online == false){
+	//var online = navigator.onLine;
 
+	if(online === false){
 		db.transaction(function(tx){
-                        tx.executeSql("INSERT INTO SURVEY VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", ['survey',siteID,getURLParameter("userID"),getURLParameter("password"),circle,survey,dateTime,temperatures[temperature].min,temperatures[temperature].max,$(".notes").val(),plantSpecies,herbivoryValue,surveyType,parseInt(leafCount),"Mobile"]);
+                        tx.executeSql("INSERT INTO SURVEY VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", 
+                        	['survey',
+                        	siteID,
+                        	stored_user_info.userId,
+                        	stored_user_info.password,
+                        	circle,
+                        	survey,
+                        	dateTime,
+                        	temperatures[temperature].min,
+                        	temperatures[temperature].max,
+                        	$(".notes").val(),
+                        	plantSpecies,
+                        	herbivoryValue,
+                        	surveyType,
+                        	parseInt(leafCount),
+                        	"Mobile"]);
                     }  , function(error){
                         alert("Transaction Error: "+error.message);
                     },function(){
 						alert("This page was successfully stored");
 						window.location = "homepage.html";
 
-					}
-					);
+		});
 			
 	}else{
-	$.ajax({
-		url: DOMAIN + "/api/sites.php",
-		type : "POST",
-		crossDomain: true,
-		dataType: 'json',
-		data: JSON.stringify({
-			"action": "checkSitePassword",
-			"siteID": siteID,
-			"sitePasswordCheck": sitePassword
-		}),
-		success: function(passwordCheckResult){
-			//navigator.notification.alert(passwordCheckResult.validSitePassword);
-			//If site password is correct, submit survey
-			if(passwordCheckResult.validSitePassword == 1){
-				//navigator.notification.alert("Site password correct");
-				submitSurveyToServer();
-			}
-			else{
-				navigator.notification.alert("Site password is incorrect.");
-			}
-		},
-		error : function(){
-			navigator.notification.alert("Unexpected error checking site password.");
-		}
-	});
+		submitSurveyToServer();	
 	}
 
 };
