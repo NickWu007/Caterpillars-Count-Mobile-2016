@@ -573,56 +573,35 @@ var submit = function( ) {
 	//navigator.notification.alert("SiteID: " + siteID +
 	//	"\nSite password: " +sitePassword);
 	//var online = navigator.onLine;
-	// alert("siteId= " + siteId);
-	// alert("userId= " + stored_user_info.userId);
-	// alert("pw= " + stored_user_info.password);
-	// alert("temperatureMin= " + temperatures[temperature].min);
-	// alert("temperatureMax= " + temperatures[temperature].max);
-	// alert("notes= " + $(".notes").val());
-	// alert("plantSpecies= " + plantSpecies);
-	// alert("herbivoryValue= " + herbivoryValue);
-	// alert("surveyType= " + surveyType);
-	// alert("leafCount= " + parseInt(leafCount));
 
 	if(online === false){
-
 		db.transaction(function(tx){
-                        tx.executeSql("INSERT INTO SURVEY VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", ['survey',siteID,stored_user_info.userId,stored_user_info.password,circle,survey,dateTime,temperatures[temperature].min,temperatures[temperature].max,$(".notes").val(),plantSpecies,herbivoryValue,surveyType,parseInt(leafCount),"Mobile"]);
+                        tx.executeSql("INSERT INTO SURVEY VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", 
+                        	['survey',
+                        	siteID,
+                        	stored_user_info.userId,
+                        	stored_user_info.password,
+                        	circle,
+                        	survey,
+                        	dateTime,
+                        	temperatures[temperature].min,
+                        	temperatures[temperature].max,
+                        	$(".notes").val(),
+                        	plantSpecies,
+                        	herbivoryValue,
+                        	surveyType,
+                        	parseInt(leafCount),
+                        	"Mobile"]);
                     }  , function(error){
                         alert("Transaction Error: "+error.message);
                     },function(){
 						alert("This page was successfully stored");
 						window.location = "homepage.html";
 
-					}
-					);
+		});
 			
 	}else{
-	$.ajax({
-		url: DOMAIN + "/api/sites.php",
-		type : "POST",
-		crossDomain: true,
-		dataType: 'json',
-		data: JSON.stringify({
-			"action": "checkSitePassword",
-			"siteID": siteID,
-			"sitePasswordCheck": sitePassword
-		}),
-		success: function(passwordCheckResult){
-			//navigator.notification.alert(passwordCheckResult.validSitePassword);
-			//If site password is correct, submit survey
-			if(passwordCheckResult.validSitePassword == 1){
-				//navigator.notification.alert("Site password correct");
-				submitSurveyToServer();
-			}
-			else{
-				navigator.notification.alert("Site password is incorrect.");
-			}
-		},
-		error : function(){
-			navigator.notification.alert("Unexpected error checking site password.");
-		}
-	});
+		submitSurveyToServer();	
 	}
 
 };
