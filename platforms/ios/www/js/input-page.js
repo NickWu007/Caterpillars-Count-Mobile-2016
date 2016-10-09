@@ -581,7 +581,7 @@ var submit = function( ) {
 	//var online = navigator.onLine;
 	if(online === false){
 		db.transaction(function(tx){ //last field for error handle 0 is default which is no error
-                        tx.executeSql("INSERT INTO SURVEY VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", 
+                        tx.executeSql("INSERT INTO SURVEY VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", 
                         	['survey',
                         	siteID,
                         	stored_user_info.userId,
@@ -604,6 +604,7 @@ var submit = function( ) {
 							hairyOrSpinyVal,
 							leafRollVal,
 							silkTentVal,
+				                        leafImageURI,
 							0]);
                     }  , function(error){
                         alert("Transaction Error: "+error.message);
