@@ -21,7 +21,13 @@ var survey;
 var plantSpecies;
 var leafCount;
 var herbivoryValue;
-
+var selectedOrderText;
+var length;
+var count;
+var notes;
+var hairyOrSpinyVal;
+var leafRollVal;
+var silkTentVal;
 var leafImageURI;
 var numberOfArthropodsToSubmit;
 var numberOfArthropodsSubmitted;
@@ -324,23 +330,23 @@ var returnToMainSelectScreen = function( ) {
 var saveArthropod = function( ) {
 
 	var selectedOrder = $(".order-selection").val( );
-	var selectedOrderText = $(".order-selection option:selected").text();
+	 selectedOrderText = $(".order-selection option:selected").text();
 	//if ( selectedOrder === "trueBugs" || selectedOrder === "other" || selectedOrder === "unidentified" ) {
 	if (selectedOrder === "other" || selectedOrder === "unidentified" ) {
 		selectedOrder = "empty";
 	}
 
-	var length = $("[name='Length']").val( );
-	var count = $("[name='Count']").val( );
-	var notes = $("[name='Notes']").val( );
+	 length = $("[name='Length']").val( );
+	 count = $("[name='Count']").val( );
+	 notes = $("[name='Notes']").val( );
 
-	var hairyOrSpiny = $('input[name="hairyOrSpiny"]:checked');
-	var leafRoll = $('input[name="leafRoll"]:checked');
-	var silkTent = $('input[name="silkTent"]:checked');
+	 var hairyOrSpiny = $('input[name="hairyOrSpiny"]:checked');
+	 var leafRoll = $('input[name="leafRoll"]:checked');
+	 var silkTent = $('input[name="silkTent"]:checked');
 
-	var hairyOrSpinyVal = parseInt(hairyOrSpiny.val());
-	var leafRollVal = parseInt(leafRoll.val());
-	var silkTentVal = parseInt(silkTent.val());
+	 hairyOrSpinyVal = parseInt(hairyOrSpiny.val());
+	 leafRollVal = parseInt(leafRoll.val());
+	 silkTentVal = parseInt(silkTent.val());
 
 	var imageSrc;
 	if(arthropodPhotoTaken){
@@ -544,9 +550,33 @@ var submit = function( ) {
 	//	"\nSite password: " +sitePassword);
 	//var online = navigator.onLine;
 	if(online == false){
-
+        //last field for error handler 0 is default
 		db.transaction(function(tx){
-                        tx.executeSql("INSERT INTO SURVEY VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", ['survey',siteID,getURLParameter("userID"),getURLParameter("password"),circle,survey,dateTime,temperatures[temperature].min,temperatures[temperature].max,$(".notes").val(),plantSpecies,herbivoryValue,surveyType,parseInt(leafCount),"Mobile"]);
+                        tx.executeSql("INSERT INTO SURVEY VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", 
+                        	['survey',
+                        	siteID,
+                        	stored_user_info.userId,
+                        	stored_user_info.password,
+                        	circle,
+                        	survey,
+                        	dateTime,
+                        	temperatures[temperature].min,
+                        	temperatures[temperature].max,
+                        	$(".notes").val(),
+                        	plantSpecies,
+                        	herbivoryValue,
+                        	surveyType,
+                        	parseInt(leafCount),
+                        	"Mobile",
+							selectedOrderText,
+							legnth,
+							count,
+							notes,
+							hairyOrSpinyVal,
+							leafRollVal,
+							silkTentVal,
+							leafImageURI,
+							0]);
                     }  , function(error){
                         alert("Transaction Error: "+error.message);
                     },function(){
