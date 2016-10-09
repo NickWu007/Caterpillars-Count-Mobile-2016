@@ -163,16 +163,12 @@ input[type="checkbox"]{
     margin-left: 10%;
 }
 
-.survey_item1 {
+.survey_item {
     padding: 10px;
     background: #ddd;
     border-radius: 10px;
 }
-.survey_item2 {
-    padding: 10px;
-    background: #ddd;
-    border-radius: 10px;
-}
+
 
 .upload-button{
     font-size: 16px;
@@ -192,8 +188,6 @@ input[type="checkbox"]{
 }
 .newsite{
     font-size: 50px;
-<<<<<<< HEAD
-<<<<<<< HEAD
 }
 
 select, option{
@@ -215,8 +209,6 @@ select, option{
     margin-left: 10%;
     margin-right:10%;
 
-=======
->>>>>>> offline_proto
 }
 
 div.newsite{
@@ -228,6 +220,3 @@ div.newsite{
     background-color: #385b31;
     margin-top:30px;
 }
-=======
-}
->>>>>>> offline_proto
