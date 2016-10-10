@@ -12,44 +12,35 @@
     <script src="cordova.js"></script>
 
     <script src="./js/jquery-1.11.3.min.js"></script>
-    <script src="./js/homepage.js"></script>
+    <script src="./js/homepage-anon.js"></script>
     <script src="./js/upload.js"></script>
 
 </head>
 <body>
 <nav class="header navbar-default navbar-fixed-top">
     <div class="container-fluid" align="right">
-        <a href="setting.html" class="navlink">
-        Setting
-        <span class="setting-icon glyphicon glyphicon-cog"></span>
-        <span class="icon glyphicon glyphicon-menu-right"></span>
-        </a>
+        
     </div>
 </nav>
 
 <div class = "outer-wrapper">
-    
-    <nav class="left-align nav-section button">
-        <div class= "header-footer footer text-center white-text">
-            <a href="pending.html">
-            <div class= "navlink" align="center">Pending Surveys</div></a> 
-        </div>
-    </nav> 
 
     <nav class="left-align nav-section">
         <div class="header-footer footer text-center white-text">
-        <a href="survey.html">
+        <a href="survey_anon.html">
             <div class="navlink" align="center">Create New Survey</div></a>
         </div>
-    </nav>
-    
-    <nav class= "left-align nav-section">
+    </nav> 
+
+    <nav class="left-align nav-section button">
         <div class="header-footer footer text-center white-text">
-        <a href="AvailableSite.html">
-            <div class="navlink" align="center">Add New Sites</div></a>
+            <a href="StartScreen.html">
+                <div class="navlink" align="center">*Exit Anonymous Mode</div></a>
         </div>
-    </nav>
-               
+    </nav> 
+    <div>
+        <p class="message">*You are currently using anonymous mode. Exit anonymous mode to log in and submit surveys.</p>
+    </div>           
 </div>
 
 </body>

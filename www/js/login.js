@@ -182,6 +182,11 @@ $(document).ready(function(){
                 }
         });   
     });
+
+    var $amodeButton = $(".amode-button");
+    $amodeButton.click(function(e){
+        window.location.assign("homepage-anon.html");
+    });
 });
 
 //Toggles visiblity of password

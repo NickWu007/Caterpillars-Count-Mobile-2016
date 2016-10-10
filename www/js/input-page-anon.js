@@ -1,3 +1,5 @@
+/*This file includes all logic for populating SURVEY table. It does not include any logic for survey sumbission */
+
 var DOMAIN = "http://develop-caterpillars.vipapps.unc.edu";
 
 var leafPhotoTaken = false;
@@ -90,7 +92,6 @@ function onDeviceReady(){
 	//alert("begin wait");
 	setInterval(retrieveSiteList(),500);
 
-
 	document.addEventListener("backbutton", function(e){
 		e.preventDefault();
 		//If displaying arthropod screen, return to main select screen
@@ -98,14 +99,6 @@ function onDeviceReady(){
 			returnToMainSelectScreen();
 		}
 		//Otherwise ask if the user wants to exit the app
-		else{
-			navigator.notification.confirm(
-					'Do you want to quit?',
-					onConfirmQuit,
-					'Quit Caterpillars Count?',
-					'OK,Cancel'
-			);
-		}
 	}, false);
 }
 //Function called if the user confirms to exit the app
@@ -132,63 +125,8 @@ $( document ).ready(function() {
 	setDateAndTime();
 	//Updates time every second
 	window.setInterval(setDateAndTime, 1000);
+	populateCircleList(12);
 });
-
-
-var site_list;
-//Gets the list of all sites
-var retrieveSiteList = function(){
-	//alert("2");
-	    db.transaction(function(tx){
-            tx.executeSql('select siteId, siteName, circle, state from SITE', [], function(tx, rs){
-                site_list=rs.rows;    
-            });
-        }, function(error){
-            alert("Transaction Error: "+error.message);
-        }, function(){
-                if(site_list.length>0){
-					var siteList = document.getElementById("site");
-                	for(var i=0; i<site_list.length; i++){
-                        var siteOption = document.createElement("option");
-						siteOption.text = site_list.item(i).siteName+"("+site_list.item(i).state+")";
-						siteOption.value = site_list.item(i).siteId;
-						siteList.add(siteOption);
-                	}
-                }else{
-                    alert("You do not have permission for any Site.");
-                }
-        });
-};
-
-
-//Alerts if user attempts to select a circle before selecting a site and populating the circle list
-var checkIfCirclesRetrieved = function(){
-	//if(!circleCountRetrieved){
-	//	navigator.notification.alert("Please select a site first.");
-	//}
-};
-
-//Retrieves the circle count for the newly selected site
-var retrieveCircleCount = function(){
-	//alert("1");
-	var circleNum;
-	var siteID = $("#site option:selected").val();
-	//Clear circle list to prevent circles from different site from being selected.
-	clearCircleList();
-	document.getElementById("circle").selectedIndex = 0;
-	db.transaction(function(tx){
-            tx.executeSql('select circle from SITE where siteId=?', [siteID], function(tx, rs){
-                circleNum=rs.rows.item(0).circle;    
-            });
-        }, function(error){
-            alert("Transaction Error: "+error.message);
-        }, function(){
-                	
-							populateCircleList(circleNum);
-
-        });
-	circleCountRetrieved=true;
-};
 
 //Populates circle list with number of circles from newly selected site
 var populateCircleList = function(numCircles){
@@ -441,12 +379,6 @@ var saveArthropod = function( ) {
 	}
 };
 
-
-function getURLParameter(name) {
-  return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null
-}
-
-
 var submit = function( ) {
 	//Check that a temperature has been selected
 	alert("temp");
@@ -477,7 +409,6 @@ var submit = function( ) {
 		navigator.notification.alert("Please select a site");
 		return;
 	}
-        var online = navigator.onLine;
 	//if(oneline == true){
 	 //var showPasswordCheckboxIsChecked = document.getElementById("show-password").checked;
 	 //if(showPasswordCheckboxIsChecked){
@@ -559,46 +490,22 @@ var submit = function( ) {
 	//navigator.notification.alert("SiteID: " + siteID +
 	//	"\nSite password: " +sitePassword);
 	//var online = navigator.onLine;
-	if(online == false){
+	
 
-		db.transaction(function(tx){
-                        tx.executeSql("INSERT INTO SURVEY VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", ['survey',siteID,getURLParameter("userID"),getURLParameter("password"),circle,survey,dateTime,temperatures[temperature].min,temperatures[temperature].max,$(".notes").val(),plantSpecies,herbivoryValue,surveyType,parseInt(leafCount),"Mobile"]);
-                    }  , function(error){
-                        alert("Transaction Error: "+error.message);
-                    },function(){
-						alert("This page was successfully stored");
-						window.location = "homepage.html";
+	db.transaction(function(tx){
+        tx.executeSql("INSERT INTO SURVEY VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", ['survey',siteID, 0, "",circle,survey,dateTime,temperatures[temperature].min,temperatures[temperature].max,$(".notes").val(),plantSpecies,herbivoryValue,surveyType,parseInt(leafCount),"Mobile"]);
+		//userId and password are hardcoded to 0 and "" respectively.
+		//there are no userId or password parameters for this page in anonymous mode.
+            },function(error){
+                    alert("Transaction Error: "+error.message);
+            },function(){
+			    alert("This page was successfully stored");
+				window.location = "homepage-anon.html";
 
-					}
-					);
+			}
+	);
 			
-	}else{
-	$.ajax({
-		url: DOMAIN + "/api/sites.php",
-		type : "POST",
-		crossDomain: true,
-		dataType: 'json',
-		data: JSON.stringify({
-			"action": "checkSitePassword",
-			"siteID": siteID,
-			"sitePasswordCheck": sitePassword
-		}),
-		success: function(passwordCheckResult){
-			//navigator.notification.alert(passwordCheckResult.validSitePassword);
-			//If site password is correct, submit survey
-			if(passwordCheckResult.validSitePassword == 1){
-				//navigator.notification.alert("Site password correct");
-				submitSurveyToServer();
-			}
-			else{
-				navigator.notification.alert("Site password is incorrect.");
-			}
-		},
-		error : function(){
-			navigator.notification.alert("Unexpected error checking site password.");
-		}
-	});
-	}
+	
 
 };
 
@@ -668,133 +575,6 @@ var toolTip = function(toolTipLocation){
 			}
 		});
 	}
-};
-
-//Submits basic survey info and leaf photo to server
-//Calls submitArthropodsToServer if survey upload is successful
-var submitSurveyToServer = function(){
-//	navigator.notification.alert("Submitting survey");
-	 $.ajax({
-		url: DOMAIN + "/api/submission_full.php",
-		type : "POST",
-		crossDomain: true,
-		dataType: 'json',
-		data: JSON.stringify({
-			"type" : "survey",
-			"siteID" : siteID,
-			"userID" : getURLParameter("userID"),
-			"password" : getURLParameter("password"),
-			//survey
-			"circle" : circle,
-			"survey" :  survey,
-			"timeStart" :  dateTime,
-			"temperatureMin" : temperatures[temperature].min,
-			"temperatureMax" : temperatures[temperature].max,
-			"siteNotes" :  $(".notes").val(),
-			"plantSpecies" : plantSpecies,
-			"herbivory" : herbivoryValue,
-			"surveyType" :  surveyType,
-			"leafCount" : parseInt(leafCount),
-			"source" : "Mobile"
-		}),
-		success: function(result){
-			//Upload leaf photo
-			uploadPhoto(leafImageURI, "leaf-photo", result.surveyID);
-			submitArthropodsToServer(result);
-		},
-		error : function(){
-			navigator.notification.alert("Unexpected error submitting survey.");
-		}
-
-	});
-};
-
-//Submits arthropod info to server for each saved order/
-//Calls uploadPhoto with orderPhoto (if a photo was taken)
-//upon each successful arthropod submission upload
-var submitArthropodsToServer = function(result){
-	var arthropodInputs = $(".arthropod-input");
-	numberOfArthropodsToSubmit = arthropodInputs.length;
-	numberOfArthropodsSubmitted = 0;
-	if(numberOfArthropodsToSubmit > 0) {
-		arthropodInputs.each(function () {
-
-			//Get values of caterpillar checklist
-			var hairyOrSpiny, leafRoll, silkTent;
-			if ($(".hairy-or-spiny", this).text().localeCompare("true") == 0) {
-				hairyOrSpiny = 1;
-			}
-			else {
-				hairyOrSpiny = 0;
-			}
-			if ($(".leaf-roll", this).text().localeCompare("true") == 0) {
-				leafRoll = 1;
-			}
-			else {
-				leafRoll = 0;
-			}
-			if ($(".silk-tent", this).text().localeCompare("true") == 0) {
-				silkTent = 1;
-			}
-			else {
-				silkTent = 0;
-			}
-
-			var arthropodImageURI = $(".saved-arthropod-image", this).prop("src");
-			//navigator.notification.alert("Arthropod image uri: " + arthropodImageURI);
-			$.ajax({
-				url: DOMAIN + "/api/submission_full.php",
-				type: "POST",
-				crossDomain: true,
-				dataType: 'json',
-//			async: false,
-				data: JSON.stringify({
-					"type": "order",
-					"surveyID": result.surveyID,
-					"userID": getURLParameter("userID"),
-					"password": getURLParameter("password"),
-					//order
-					"orderArthropod": $("h4", this).text(),
-					"orderLength": parseInt($(".arthropod-length", this).text()),
-					"orderNotes": $(".arthropod-notes", this).text(),
-					"orderCount": parseInt($(".arthropod-count", this).text()),
-					//Caterpillar features
-					"hairyOrSpiny": hairyOrSpiny,
-					"leafRoll": leafRoll,
-					"silkTent": silkTent
-				}),
-				success: function (arthropodResult) {
-					//navigator.notification.alert("arthropod info submitted");
-					//If arthropod successfully submitted to database, attempt photo upload
-					//Upload arthropod photo if one exists
-					if (arthropodImageURI !== null && arthropodImageURI !== undefined) {
-						//navigator.notification.alert("Uploading order photo");
-						uploadPhoto(arthropodImageURI, "arthropod-photo", arthropodResult.orderID);
-					}
-					else {
-						//Increment number of arthropods submitted here when no photo to upload
-						//to prevent duplicate success alerts
-						numberOfArthropodsSubmitted++;
-						if (numberOfArthropodsSubmitted == numberOfArthropodsToSubmit) {
-							var successMessage = confirm("Successfully submitted survey data!\n\n" +
-									"Clear form fields?");
-							if (successMessage == true) {
-								clearFields();
-							}
-						}
-					}
-				},
-				error: function () {
-					navigator.notification.alert("Unexpected error submitting " + $("h4", this).text() + " data.");
-				}
-			});
-		});
-	}
-	else{
-		navigator.notification.alert("Successfully submitted survey data!");
-		clearFields();
-	}
-
 };
 
 //databaseID = surveyID if leaf photo, orderID if arthropod photo

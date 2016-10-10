@@ -112,14 +112,6 @@ function onDeviceReady(){
 			returnToMainSelectScreen();
 		}
 		//Otherwise ask if the user wants to exit the app
-		else{
-			navigator.notification.confirm(
-					'Do you want to quit?',
-					onConfirmQuit,
-					'Quit Caterpillars Count?',
-					'OK,Cancel'
-			);
-		}
 	}, false);
 }
 //Function called if the user confirms to exit the app
@@ -172,14 +164,6 @@ var retrieveSiteList = function(){
                     alert("You do not have permission for any Site.");
                 }
         });
-};
-
-
-//Alerts if user attempts to select a circle before selecting a site and populating the circle list
-var checkIfCirclesRetrieved = function(){
-	//if(!circleCountRetrieved){
-	//	navigator.notification.alert("Please select a site first.");
-	//}
 };
 
 //Retrieves the circle count for the newly selected site
@@ -490,6 +474,7 @@ var submit = function( ) {
 		navigator.notification.alert("Please select a site");
 		return;
 	}
+<<<<<<< HEAD
 	
     var online = navigator.onLine;
 	// if(online === true){
@@ -504,6 +489,21 @@ var submit = function( ) {
 	// 	return;
 	//  }
 	// }
+=======
+        var online = navigator.onLine;
+	//if(oneline == true){
+	 //var showPasswordCheckboxIsChecked = document.getElementById("show-password").checked;
+	 //if(showPasswordCheckboxIsChecked){
+	//	sitePassword = $("#visible-password").val();
+	 //}else{
+	//	sitePassword = $("#hidden-password").val();
+	 //}
+	 //if(!sitePassword){
+	//	navigator.notification.alert("Please enter the site password");
+	//	return;
+	 //}
+	//}
+>>>>>>> offline_proto
 
 	surveyType = $(".survey-type option:selected").val();
 	if(surveyType.localeCompare("default")===0){
