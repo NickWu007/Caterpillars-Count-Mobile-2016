@@ -20,7 +20,7 @@ function onDeviceReady(){
         function(error){alert("Error Open Database:"+JSON.stringify(error));}
     );
     function DBSuccessCB(){
-        // alert("DB open OK");
+        alert("DB open OK");
     }
 
     stored_user_info = null;
