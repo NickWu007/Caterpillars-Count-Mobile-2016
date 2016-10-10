@@ -459,7 +459,15 @@ function getURLParameter(name) {
 var submit = function( ) {
 	//Check that a temperature has been selected
 	alert("temp");
-	alert(count);
+	alert(selectedOrderText);
+    alert(length);
+    alert(count);
+    alert(notes);
+    alert(hairyOrSpinyVal);
+    alert(leafRollVal);
+    alert(silkTentVal);
+    alert(leafImageURI);
+    alert(ArthropodsImageURI);
 	temperature = $("#temperature option:selected").val();
 	if(temperature.localeCompare("default") === 0){
 		navigator.notification.alert("Please select a temperature range");
