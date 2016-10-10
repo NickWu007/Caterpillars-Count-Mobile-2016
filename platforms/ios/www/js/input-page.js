@@ -105,14 +105,6 @@ function onDeviceReady(){
 			returnToMainSelectScreen();
 		}
 		//Otherwise ask if the user wants to exit the app
-		else{
-			navigator.notification.confirm(
-					'Do you want to quit?',
-					onConfirmQuit,
-					'Quit Caterpillars Count?',
-					'OK,Cancel'
-			);
-		}
 	}, false);
 }
 //Function called if the user confirms to exit the app
@@ -165,14 +157,6 @@ var retrieveSiteList = function(){
                     alert("You do not have permission for any Site.");
                 }
         });
-};
-
-
-//Alerts if user attempts to select a circle before selecting a site and populating the circle list
-var checkIfCirclesRetrieved = function(){
-	//if(!circleCountRetrieved){
-	//	navigator.notification.alert("Please select a site first.");
-	//}
 };
 
 //Retrieves the circle count for the newly selected site
@@ -458,7 +442,7 @@ function getURLParameter(name) {
 
 var submit = function( ) {
 	//Check that a temperature has been selected
-	alert("temp");
+	/*alert("temp");
 	alert(selectedOrderText);
     alert(length);
     alert(count);
@@ -467,7 +451,7 @@ var submit = function( ) {
     alert(leafRollVal);
     alert(silkTentVal);
     alert(leafImageURI);
-    alert(ArthropodsImageURI);
+    alert(ArthropodsImageURI);*/
 	temperature = $("#temperature option:selected").val();
 	if(temperature.localeCompare("default") === 0){
 		navigator.notification.alert("Please select a temperature range");
@@ -496,7 +480,11 @@ var submit = function( ) {
 		return;
 	}
         var online = navigator.onLine;
+<<<<<<< HEAD
 	//if(online == true){
+=======
+	//if(oneline == true){
+>>>>>>> offline_proto
 	 //var showPasswordCheckboxIsChecked = document.getElementById("show-password").checked;
 	 //if(showPasswordCheckboxIsChecked){
 	//	sitePassword = $("#visible-password").val();
