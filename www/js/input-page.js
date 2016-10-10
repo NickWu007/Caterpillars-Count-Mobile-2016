@@ -29,6 +29,7 @@ var hairyOrSpinyVal;
 var leafRollVal;
 var silkTentVal;
 var leafImageURI;
+var ArthropodsImageURI;
 var numberOfArthropodsToSubmit;
 var numberOfArthropodsSubmitted;
 //Tracks which screen is currently being displayed
@@ -243,6 +244,7 @@ var onSuccessArthropod = function(imageData) {
 	$("#arthropod-photo").attr("src", imageData);
 	console.log(imageData);
 	arthropodPhotoTaken = true;
+	ArthropodsImageURI = imageData;
 };
 
 //Function called when a leaf photo is successfully taken
@@ -253,6 +255,7 @@ var onSuccessLeaf = function(imageData) {
 	$("#leaf-photo").attr("src", imageData);
 	console.log(imageData);
 	leafPhotoTaken = true;
+	leafImageURI = imageData;
 };
 
 //Function called when arthropod capture button is clicked
@@ -456,6 +459,7 @@ function getURLParameter(name) {
 var submit = function( ) {
 	//Check that a temperature has been selected
 	alert("temp");
+	alert(count);
 	temperature = $("#temperature option:selected").val();
 	if(temperature.localeCompare("default") === 0){
 		navigator.notification.alert("Please select a temperature range");
@@ -484,18 +488,18 @@ var submit = function( ) {
 		return;
 	}
         var online = navigator.onLine;
-	if(oneline == true){
-	 var showPasswordCheckboxIsChecked = document.getElementById("show-password").checked;
-	 if(showPasswordCheckboxIsChecked){
-		sitePassword = $("#visible-password").val();
-	 }else{
-		sitePassword = $("#hidden-password").val();
-	 }
-	 if(!sitePassword){
-		navigator.notification.alert("Please enter the site password");
-		return;
-	 }
-	}
+	//if(online == true){
+	 //var showPasswordCheckboxIsChecked = document.getElementById("show-password").checked;
+	 //if(showPasswordCheckboxIsChecked){
+	//	sitePassword = $("#visible-password").val();
+	 //}else{
+	//	sitePassword = $("#hidden-password").val();
+	 //}
+	 //if(!sitePassword){
+	//	navigator.notification.alert("Please enter the site password");
+	//	return;
+	 //}
+	//}
 
 	surveyType = $(".survey-type option:selected").val();
 	if(surveyType.localeCompare("default")===0){
@@ -568,11 +572,11 @@ var submit = function( ) {
 	if(online == false){
         //last field for error handler 0 is default
 		db.transaction(function(tx){
-                        tx.executeSql("INSERT INTO SURVEY VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", 
+                        tx.executeSql("INSERT INTO SURVEY VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", 
                         	['survey',
                         	siteID,
-                        	stored_user_info.userId,
-                        	stored_user_info.password,
+                        	getURLParameter("userID"),
+                        	getURLParameter("password"),
                         	circle,
                         	survey,
                         	dateTime,
@@ -585,13 +589,14 @@ var submit = function( ) {
                         	parseInt(leafCount),
                         	"Mobile",
 							selectedOrderText,
-							legnth,
+							length,
 							count,
 							notes,
 							hairyOrSpinyVal,
 							leafRollVal,
 							silkTentVal,
 							leafImageURI,
+							ArthropodsImageURI,
 							0]);
                     }  , function(error){
                         alert("Transaction Error: "+error.message);
