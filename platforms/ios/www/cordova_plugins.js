@@ -65,14 +65,6 @@ module.exports = [
         ]
     },
     {
-        "id": "cordova-sqlite-storage.SQLitePlugin",
-        "file": "plugins/cordova-sqlite-storage/www/SQLitePlugin.js",
-        "pluginId": "cordova-sqlite-storage",
-        "clobbers": [
-            "SQLitePlugin"
-        ]
-    },
-    {
         "id": "cordova-plugin-file.DirectoryEntry",
         "file": "plugins/cordova-plugin-file/www/DirectoryEntry.js",
         "pluginId": "cordova-plugin-file",
@@ -238,6 +230,14 @@ module.exports = [
             "cordova"
         ],
         "runs": true
+    },
+    {
+        "id": "cordova-sqlite-storage.SQLitePlugin",
+        "file": "plugins/cordova-sqlite-storage/www/SQLitePlugin.js",
+        "pluginId": "cordova-sqlite-storage",
+        "clobbers": [
+            "SQLitePlugin"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -248,9 +248,9 @@ module.exports.metadata =
     "cordova-plugin-file-transfer": "1.3.0",
     "cordova-plugin-statusbar": "1.0.1",
     "cordova-plugin-whitelist": "1.0.0",
-    "cordova-sqlite-storage": "1.4.7",
     "cordova-plugin-compat": "1.0.0",
-    "cordova-plugin-file": "3.0.0"
+    "cordova-plugin-file": "3.0.0",
+    "cordova-sqlite-storage": "1.4.7"
 };
 // BOTTOM OF METADATA
 });
