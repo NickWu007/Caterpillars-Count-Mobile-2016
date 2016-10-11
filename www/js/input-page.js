@@ -480,11 +480,7 @@ var submit = function( ) {
 		return;
 	}
         var online = navigator.onLine;
-<<<<<<< HEAD
 	//if(online == true){
-=======
-	//if(oneline == true){
->>>>>>> offline_proto
 	 //var showPasswordCheckboxIsChecked = document.getElementById("show-password").checked;
 	 //if(showPasswordCheckboxIsChecked){
 	//	sitePassword = $("#visible-password").val();
