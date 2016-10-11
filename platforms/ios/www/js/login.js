@@ -27,7 +27,7 @@ function onDeviceReady(){
     // If there's a stored user info, pre-populate it to login fileds.
     db.transaction(function(tx){
         tx.executeSql('select name, password, userId from USER_INFO', [], function(tx, rs){
-            alert("# of entries: " + rs.rows.length);
+            // alert("# of entries: " + rs.rows.length);
             if (rs.rows.length > 0) stored_user_info=rs.rows.item(0);
         });
         }, function(error){
