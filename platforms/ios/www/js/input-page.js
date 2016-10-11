@@ -21,8 +21,15 @@ var survey;
 var plantSpecies;
 var leafCount;
 var herbivoryValue;
-
+var selectedOrderText;
+var length;
+var count;
+var notes;
+var hairyOrSpinyVal;
+var leafRollVal;
+var silkTentVal;
 var leafImageURI;
+var ArthropodsImageURI;
 var numberOfArthropodsToSubmit;
 var numberOfArthropodsSubmitted;
 //Tracks which screen is currently being displayed
@@ -235,6 +242,7 @@ var onSuccessArthropod = function(imageData) {
 	$("#arthropod-photo").attr("src", imageData);
 	console.log(imageData);
 	arthropodPhotoTaken = true;
+	ArthropodsImageURI = imageData;
 };
 
 //Function called when a leaf photo is successfully taken
@@ -245,6 +253,7 @@ var onSuccessLeaf = function(imageData) {
 	$("#leaf-photo").attr("src", imageData);
 	console.log(imageData);
 	leafPhotoTaken = true;
+	leafImageURI = imageData;
 };
 
 //Function called when arthropod capture button is clicked
@@ -338,23 +347,23 @@ var returnToMainSelectScreen = function( ) {
 var saveArthropod = function( ) {
 
 	var selectedOrder = $(".order-selection").val( );
-	var selectedOrderText = $(".order-selection option:selected").text();
+	 selectedOrderText = $(".order-selection option:selected").text();
 	//if ( selectedOrder === "trueBugs" || selectedOrder === "other" || selectedOrder === "unidentified" ) {
 	if (selectedOrder === "other" || selectedOrder === "unidentified" ) {
 		selectedOrder = "empty";
 	}
 
-	var length = $("[name='Length']").val( );
-	var count = $("[name='Count']").val( );
-	var notes = $("[name='Notes']").val( );
+	 length = $("[name='Length']").val( );
+	 count = $("[name='Count']").val( );
+	 notes = $("[name='Notes']").val( );
 
-	var hairyOrSpiny = $('input[name="hairyOrSpiny"]:checked');
-	var leafRoll = $('input[name="leafRoll"]:checked');
-	var silkTent = $('input[name="silkTent"]:checked');
+	 var hairyOrSpiny = $('input[name="hairyOrSpiny"]:checked');
+	 var leafRoll = $('input[name="leafRoll"]:checked');
+	 var silkTent = $('input[name="silkTent"]:checked');
 
-	var hairyOrSpinyVal = parseInt(hairyOrSpiny.val());
-	var leafRollVal = parseInt(leafRoll.val());
-	var silkTentVal = parseInt(silkTent.val());
+	 hairyOrSpinyVal = parseInt(hairyOrSpiny.val());
+	 leafRollVal = parseInt(leafRoll.val());
+	 silkTentVal = parseInt(silkTent.val());
 
 	var imageSrc;
 	if(arthropodPhotoTaken){
@@ -447,7 +456,20 @@ function getURLParameter(name) {
 
 var submit = function( ) {
 	//Check that a temperature has been selected
+<<<<<<< HEAD
 	// alert("temp");
+=======
+	/*alert("temp");
+	alert(selectedOrderText);
+    alert(length);
+    alert(count);
+    alert(notes);
+    alert(hairyOrSpinyVal);
+    alert(leafRollVal);
+    alert(silkTentVal);
+    alert(leafImageURI);
+    alert(ArthropodsImageURI);*/
+>>>>>>> offline_proto
 	temperature = $("#temperature option:selected").val();
 	if(temperature.localeCompare("default") === 0){
 		navigator.notification.alert("Please select a temperature range");
@@ -474,6 +496,7 @@ var submit = function( ) {
 		navigator.notification.alert("Please select a site");
 		return;
 	}
+<<<<<<< HEAD
 	
     var online = navigator.onLine;
 	// if(online === true){
@@ -488,6 +511,25 @@ var submit = function( ) {
 	// 	return;
 	//  }
 	// }
+=======
+        var online = navigator.onLine;
+<<<<<<< HEAD
+	//if(online == true){
+=======
+	//if(oneline == true){
+>>>>>>> offline_proto
+	 //var showPasswordCheckboxIsChecked = document.getElementById("show-password").checked;
+	 //if(showPasswordCheckboxIsChecked){
+	//	sitePassword = $("#visible-password").val();
+	 //}else{
+	//	sitePassword = $("#hidden-password").val();
+	 //}
+	 //if(!sitePassword){
+	//	navigator.notification.alert("Please enter the site password");
+	//	return;
+	 //}
+	//}
+>>>>>>> offline_proto
 
 	surveyType = $(".survey-type option:selected").val();
 	if(surveyType.localeCompare("default")===0){
@@ -557,6 +599,7 @@ var submit = function( ) {
 	//navigator.notification.alert("SiteID: " + siteID +
 	//	"\nSite password: " +sitePassword);
 	//var online = navigator.onLine;
+<<<<<<< HEAD
 
 	if(online === false){
 		db.transaction(function(tx){
@@ -565,6 +608,16 @@ var submit = function( ) {
                         	siteID,
                         	stored_user_info.userId,
                         	stored_user_info.password,
+=======
+	if(online == false){
+        //last field for error handler 0 is default
+		db.transaction(function(tx){
+                        tx.executeSql("INSERT INTO SURVEY VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", 
+                        	['survey',
+                        	siteID,
+                        	getURLParameter("userID"),
+                        	getURLParameter("password"),
+>>>>>>> offline_proto
                         	circle,
                         	survey,
                         	dateTime,
@@ -575,7 +628,21 @@ var submit = function( ) {
                         	herbivoryValue,
                         	surveyType,
                         	parseInt(leafCount),
+<<<<<<< HEAD
                         	"Mobile"]);
+=======
+                        	"Mobile",
+							selectedOrderText,
+							length,
+							count,
+							notes,
+							hairyOrSpinyVal,
+							leafRollVal,
+							silkTentVal,
+							leafImageURI,
+							ArthropodsImageURI,
+							0]);
+>>>>>>> offline_proto
                     }  , function(error){
                         alert("Transaction Error: "+error.message);
                     },function(){
