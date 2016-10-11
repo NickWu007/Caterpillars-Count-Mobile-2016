@@ -21,8 +21,15 @@ var survey;
 var plantSpecies;
 var leafCount;
 var herbivoryValue;
-
+var selectedOrderText;
+var length;
+var count;
+var notes;
+var hairyOrSpinyVal;
+var leafRollVal;
+var silkTentVal;
 var leafImageURI;
+var ArthropodsImageURI;
 var numberOfArthropodsToSubmit;
 var numberOfArthropodsSubmitted;
 //Tracks which screen is currently being displayed
@@ -98,14 +105,6 @@ function onDeviceReady(){
 			returnToMainSelectScreen();
 		}
 		//Otherwise ask if the user wants to exit the app
-		else{
-			navigator.notification.confirm(
-					'Do you want to quit?',
-					onConfirmQuit,
-					'Quit Caterpillars Count?',
-					'OK,Cancel'
-			);
-		}
 	}, false);
 }
 //Function called if the user confirms to exit the app
@@ -158,14 +157,6 @@ var retrieveSiteList = function(){
                     alert("You do not have permission for any Site.");
                 }
         });
-};
-
-
-//Alerts if user attempts to select a circle before selecting a site and populating the circle list
-var checkIfCirclesRetrieved = function(){
-	//if(!circleCountRetrieved){
-	//	navigator.notification.alert("Please select a site first.");
-	//}
 };
 
 //Retrieves the circle count for the newly selected site
@@ -237,6 +228,7 @@ var onSuccessArthropod = function(imageData) {
 	$("#arthropod-photo").attr("src", imageData);
 	console.log(imageData);
 	arthropodPhotoTaken = true;
+	ArthropodsImageURI = imageData;
 };
 
 //Function called when a leaf photo is successfully taken
@@ -247,6 +239,7 @@ var onSuccessLeaf = function(imageData) {
 	$("#leaf-photo").attr("src", imageData);
 	console.log(imageData);
 	leafPhotoTaken = true;
+	leafImageURI = imageData;
 };
 
 //Function called when arthropod capture button is clicked
@@ -340,23 +333,23 @@ var returnToMainSelectScreen = function( ) {
 var saveArthropod = function( ) {
 
 	var selectedOrder = $(".order-selection").val( );
-	var selectedOrderText = $(".order-selection option:selected").text();
+	 selectedOrderText = $(".order-selection option:selected").text();
 	//if ( selectedOrder === "trueBugs" || selectedOrder === "other" || selectedOrder === "unidentified" ) {
 	if (selectedOrder === "other" || selectedOrder === "unidentified" ) {
 		selectedOrder = "empty";
 	}
 
-	var length = $("[name='Length']").val( );
-	var count = $("[name='Count']").val( );
-	var notes = $("[name='Notes']").val( );
+	 length = $("[name='Length']").val( );
+	 count = $("[name='Count']").val( );
+	 notes = $("[name='Notes']").val( );
 
-	var hairyOrSpiny = $('input[name="hairyOrSpiny"]:checked');
-	var leafRoll = $('input[name="leafRoll"]:checked');
-	var silkTent = $('input[name="silkTent"]:checked');
+	 var hairyOrSpiny = $('input[name="hairyOrSpiny"]:checked');
+	 var leafRoll = $('input[name="leafRoll"]:checked');
+	 var silkTent = $('input[name="silkTent"]:checked');
 
-	var hairyOrSpinyVal = parseInt(hairyOrSpiny.val());
-	var leafRollVal = parseInt(leafRoll.val());
-	var silkTentVal = parseInt(silkTent.val());
+	 hairyOrSpinyVal = parseInt(hairyOrSpiny.val());
+	 leafRollVal = parseInt(leafRoll.val());
+	 silkTentVal = parseInt(silkTent.val());
 
 	var imageSrc;
 	if(arthropodPhotoTaken){
@@ -449,7 +442,16 @@ function getURLParameter(name) {
 
 var submit = function( ) {
 	//Check that a temperature has been selected
-	alert("temp");
+	/*alert("temp");
+	alert(selectedOrderText);
+    alert(length);
+    alert(count);
+    alert(notes);
+    alert(hairyOrSpinyVal);
+    alert(leafRollVal);
+    alert(silkTentVal);
+    alert(leafImageURI);
+    alert(ArthropodsImageURI);*/
 	temperature = $("#temperature option:selected").val();
 	if(temperature.localeCompare("default") === 0){
 		navigator.notification.alert("Please select a temperature range");
@@ -478,7 +480,11 @@ var submit = function( ) {
 		return;
 	}
         var online = navigator.onLine;
+<<<<<<< HEAD
+	//if(online == true){
+=======
 	//if(oneline == true){
+>>>>>>> offline_proto
 	 //var showPasswordCheckboxIsChecked = document.getElementById("show-password").checked;
 	 //if(showPasswordCheckboxIsChecked){
 	//	sitePassword = $("#visible-password").val();
@@ -560,9 +566,34 @@ var submit = function( ) {
 	//	"\nSite password: " +sitePassword);
 	//var online = navigator.onLine;
 	if(online == false){
-
+        //last field for error handler 0 is default
 		db.transaction(function(tx){
-                        tx.executeSql("INSERT INTO SURVEY VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", ['survey',siteID,getURLParameter("userID"),getURLParameter("password"),circle,survey,dateTime,temperatures[temperature].min,temperatures[temperature].max,$(".notes").val(),plantSpecies,herbivoryValue,surveyType,parseInt(leafCount),"Mobile"]);
+                        tx.executeSql("INSERT INTO SURVEY VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", 
+                        	['survey',
+                        	siteID,
+                        	getURLParameter("userID"),
+                        	getURLParameter("password"),
+                        	circle,
+                        	survey,
+                        	dateTime,
+                        	temperatures[temperature].min,
+                        	temperatures[temperature].max,
+                        	$(".notes").val(),
+                        	plantSpecies,
+                        	herbivoryValue,
+                        	surveyType,
+                        	parseInt(leafCount),
+                        	"Mobile",
+							selectedOrderText,
+							length,
+							count,
+							notes,
+							hairyOrSpinyVal,
+							leafRollVal,
+							silkTentVal,
+							leafImageURI,
+							ArthropodsImageURI,
+							0]);
                     }  , function(error){
                         alert("Transaction Error: "+error.message);
                     },function(){
