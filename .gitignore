@@ -3,6 +3,14 @@ platforms/android/assets/www
 platforms/android/bin/
 platforms/android/gen/
 platforms/android/res/xml/config.xml
+platforms/android/local.properties
+platforms/android/ant-build
+platforms/android/ant-gen
+platforms/android/CordovaLib/ant-build
+platforms/android/CordovaLib/ant-gen
+platforms/android/CordovaLib/bin
+platforms/android/CordovaLib/gen
+platforms/android/CordovaLib/local.properties
 
 # iOS
 platforms/ios/build/
@@ -10,6 +18,16 @@ platforms/ios/CordovaLib/build/
 platforms/ios/www
 platforms/ios/MyPace/config.xml
 platforms/ios/.staging
+platforms/ios/cordova/console.log
+*.xcuserdatad
 
 # Emulator logs
 platforms/ios/cordova/console.log
+
+# Mac
+.DS_Store
+
+#
+*.lock
+*.bin
+#now newline at end of file

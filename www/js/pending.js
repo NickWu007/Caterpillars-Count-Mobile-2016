@@ -4,7 +4,7 @@
 var db;
 var survey_result;
 var DOMAIN = "http://master-caterpillars.vipapps.unc.edu";
-
+var $list_length;
 document.addEventListener("deviceready", onDeviceReady, false);
 
 function onDeviceReady(){
@@ -25,43 +25,88 @@ function onDeviceReady(){
 
     }
 
-    populateSurveyList();
+    renderSurvey();
 }
 
-function populateSurveyList() {
+function renderSurvey(){
     db.transaction(function(tx){
-        tx.executeSql('select * from SURVEY', [], function(tx, rs){
-            if(rs.rows.length>0) {
-                survey_result = rs.rows;
-            } else {
-                // alert("survey database empty");
-                survey_result = [];
-            }
+        tx.executeSql('select distinct siteID, circle, survey, timeStart, errorCode from SURVEY', [], function(tx, rs){
+            if(rs.rows.length>0) {survey_result=rs.rows;}
+            else{alert("survey database empty");}
         });
 
     }, function(error){
         alert("Transaction error: "+error.message);
     }, function(){
-        // alert("successfully retrieved pending surveys");
+        //alert("successfully retrieved pending surveys");
         var list_content="";
+        $list_length=survey_result.length;
         for(var i=0; i<survey_result.length; i++){
             var row = survey_result.item(i);
-            var new_list_item = '<li class="survey_item"><h5>Site: '+row.siteID+'</h5><h5>Circle: '+row.circle+
-            '</h5><h5>Survey: '+row.survey+'</h5><h5>Time: '+row.timeStart+'<h5>id: </h5>'+
-            '<div class="survey_delete text-center white-text"> Delete this Survey</div></li><hr>';
+            var new_list_item;
+            if(row.errorCode==0){
+                if(row.siteID===-1){
+                     new_list_item= '<li class="survey_item_Pending" id="'+row.timeStart+'"><h5>Click Here to Complete this Survey</h5><h5>Circle: '+row.circle+
+                    '</h5><h5>Survey: '+row.survey+'</h5><h5>Time: '+row.timeStart+
+                    '<br><div class="survey_delete text-center white-text" id="'+row.timeStart+'"> Delete this Survey</div></li><hr>';
+                }else{
+                    new_list_item= '<li class="survey_item" id="'+row.timeStart+'"><h5>Site: '+row.siteID+'</h5><h5>Circle: '+row.circle+
+                    '</h5><h5>Survey: '+row.survey+'</h5><h5>Time: '+row.timeStart+
+                    '<br><div class="survey_delete text-center white-text" id="'+row.timeStart+'"> Delete this Survey</div></li><hr>';
+                }
+
+            }else{
+                new_list_item='<li class="survey_item_error" id="'+row.timeStart+'"">';
+                if(row.errorCode===400){
+                    new_list_item+='<h4>400 Error---Bad Request</h4>'
+                }else if(row.errorCode===401){
+                    new_list_item+='<h4>401 Error---Unauthorized User</h4>'
+                }else if(row.errorCode===500){
+                    new_list_item+='<h4>500 Error---Internal Server Error</h4>'
+                }else{
+
+                }
+
+                new_list_item+='<h5>Site: '+row.siteID+'</h5><h5>Circle: '+row.circle+
+                '</h5><h5>Survey: '+row.survey+'</h5><h5>Time: '+row.timeStart+
+                '<br><div class="survey_delete text-center white-text" id="'+row.timeStart+'"> Delete this Survey</div></li><hr>';
+            }
+            
 
             list_content += new_list_item;
         }
 
         $(".survey_list").html(list_content);
         numSurveys();
+        $(".survey_item_error").click(function(){
+           alert("This survey encontered Error when uploading. Please try again");
+        });
+    
+        $(".survey_item_Pending").click(function(){
+            var time=$(this).attr('id');
+            alert("Will retrive survey created at:"+time);
+            window.location.assign("survey.html?time="+time);
+        });
+
+        $(".survey_delete").click(function(){
+            var time=$(this).attr('id');
+            if (confirm("Do you sure you wanted to delete this survey") == true) {
+                deleteSurvey(time);
+            }
+        });
     });
 }
 
 $(document).ready(function(){
-    numSurveys();
 
     var $submitButton = $(".upload-button");
+    //
+    //
+    //Comment to submit
+    //
+    //Only completed surveys should be submit, that is siteId!=-1
+    //
+    //also I hard writing some survey in start-up.js
     $submitButton.click(function(e) {
         e.preventDefault();
         var ask = window.confirm("Ready to upload?");
@@ -72,34 +117,29 @@ $(document).ready(function(){
                 submitSurveyToServer(i, survey);
                 // alert("finish submitting #" + i);
             }
-    }else{
-        window.alert("Upload unsuccessfully");
-    }   
+        }else{
+            window.alert("Upload unsuccessfully");
+        }   
    });
 
 });
 
 function numSurveys(){
-    var $list_length = $(".survey_item").length; //computes number of items in the survey list
     $(".survey-count").html("Total Stored Survey: " + $list_length); //updates survey-count
 }
-
-function deleteSurvey(survey) {
-    db.transaction(function (tx) {
-
-        var query = "DELETE FROM SURVEY WHERE siteID = ? AND timeStart = ?";
-
-        tx.executeSql(query, [survey.siteID, survey.timeStart], function (tx, res) {
-        },
-        function (tx, error) {
-            alert('DELETE error: ' + error.message);
+function deleteSurvey(timeStart, siteId){
+    if(timeStart==null||timeStart==""||timeStart===undefined){
+        alert("Did not fetch correct Parameter to delete a row");
+    }else{
+        db.transaction(function(tx){
+            tx.executeSql("DELETE from SURVEY where timeStart=? and siteID=?", [timeStart, siteID]);
+        },  function(error){
+            alert("Transaction error: "+error.message);
+        }, function(){
+            alert("Successfully delete this survey")
         });
-    }, function (error) {
-        alert('transaction error: ' + error.message);
-    }, function () {
-        // alert("deleted survey " + survey.siteID);
-        populateSurveyList();
-    });
+    }
+    renderSurvey();
 }
 
 function submitSurveyToServer(i, survey) {
@@ -128,7 +168,7 @@ function submitSurveyToServer(i, survey) {
         }),
         success: function(response, textStatus, jqXHR){
             alert("Survey #" + i + " is submitted successfully.");
-            deleteSurvey(survey);
+            deleteSurvey(survey.timeStart, survey.siteID);
         },
         error : function(message){
             navigator.notification.alert("Unexpected error submitting survey #" + i + ".");
