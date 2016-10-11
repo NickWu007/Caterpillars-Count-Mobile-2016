@@ -580,16 +580,16 @@ var submit = function( ) {
                         	surveyType,
                         	parseInt(leafCount),
                         	"Mobile",
-							selectedOrderText,
-							length,
-							count,
-							notes,
-							hairyOrSpinyVal,
-							leafRollVal,
-							silkTentVal,
-							leafImageURI,
-							ArthropodsImageURI,
-							0]);
+				selectedOrderText,
+				length,
+				count,
+				notes,
+				hairyOrSpinyVal,
+				leafRollVal,
+				silkTentVal,
+				leafImageURI,
+				ArthropodsImageURI,
+				0]);
                     }  , function(error){
                         alert("Transaction Error: "+error.message);
                     },function(){
