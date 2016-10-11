@@ -34,7 +34,8 @@ var numberOfArthropodsToSubmit;
 var numberOfArthropodsSubmitted;
 //Tracks which screen is currently being displayed
 var onArthropodPage = false;
-
+//true mean edit mode, false mean create new mode
+var edit=false;
 var temperatures = {
 	"<30" : {min : - 10, max : 30},
 	"30-39": {min : 30, max : 39},
@@ -120,6 +121,49 @@ function onDeviceReady(){
 		}
 		//Otherwise ask if the user wants to exit the app
 	}, false);
+
+		var timeStart=getURLParameter("time");
+	alert(timeStart);
+	if(!(timeStart===null)){
+		var retrivedRow;
+		db.transaction(function(tx){
+			tx.executeSql('select distinct type, siteID, userID, password, circle, survey, timeStart, temperatureMin, temperatureMax, siteNotes, plantSpecies, herbivory, surveyType, leafCount, source, selectedOrderText, length, count, notes, hairOrSpinyVal, leafRollVal, silkTentVal,leafImageURI '+ 'from SURVEY where timeStart=?', [timeStart], function(tx, rs){
+            	if(rs.rows.length>0) {retrivedRow=rs.rows.item(0);}
+            	else{alert("Did not get indicated survey");}
+        	});
+
+    	}, function(error){
+        	alert("Transaction error: "+error.message);
+    	}, function(){
+			edit=true;
+			populateCircleList(12);
+			var temp_range=retrivedRow.temperatureMin+'-'+retrivedRow.temperatureMax;
+			if(retrivedRow.temperatureMax==30){
+				temp_range='<30';
+			}else if(retrivedRow.temperatureMax==130){
+				temp_range='>109';
+			}
+			$("#temperature").val(temp_range);
+			$("#circle").val(retrivedRow.circle);
+			var dateString=timeStart.split(' ')[0];
+			var timeStart=timeStart.split(' ')[1];
+			$("#date").val(dateString);
+			$("#time").val(timeString);
+			$(".plant-species").val(retrivedRow.plantSpecies);
+			$("#survey").val(retrivedRow.survey);
+			$(".notes").val(retrivedRow.siteNotes);
+			$(".survey-type").val(retrivedRow.surveyType);
+			$(".leaf-count").val(retrivedRow.leafCount);
+		});
+
+	}
+
+	if(!edit){
+		//Set initial value of time and date fields
+		setDateAndTime();
+		//Updates time every second
+		window.setInterval(setDateAndTime, 1000);
+	}
 }
 //Function called if the user confirms to exit the app
 function onConfirmQuit(button){
@@ -141,10 +185,6 @@ $( document ).ready(function() {
 		}
 	});
 	//Populate site list on page load
-	//Set initial value of time and date fields
-	setDateAndTime();
-	//Updates time every second
-	window.setInterval(setDateAndTime, 1000);
 });
 
 
