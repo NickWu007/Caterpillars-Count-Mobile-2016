@@ -88,11 +88,12 @@ function renderSurvey(){
             window.location.assign("survey.html?time="+time);
         });
 
-        $(".survey_delete").click(function(){
+        $(".survey_delete").click(function(e){
             var time=$(this).attr('id');
             if (confirm("Do you sure you wanted to delete this survey") == true) {
                 deleteSurvey(time);
             }
+            e.stopPropagation();
         });
     });
 }
@@ -127,19 +128,20 @@ $(document).ready(function(){
 function numSurveys(){
     $(".survey-count").html("Total Stored Survey: " + $list_length); //updates survey-count
 }
-function deleteSurvey(timeStart, siteId){
+function deleteSurvey(timeStart){
     if(timeStart==null||timeStart==""||timeStart===undefined){
         alert("Did not fetch correct Parameter to delete a row");
     }else{
         db.transaction(function(tx){
-            tx.executeSql("DELETE from SURVEY where timeStart=? and siteID=?", [timeStart, siteID]);
+            tx.executeSql("DELETE from SURVEY where timeStart=?", [timeStart]);
         },  function(error){
             alert("Transaction error: "+error.message);
         }, function(){
-            alert("Successfully delete this survey")
+            alert("Successfully delete this survey");
+            renderSurvey();
         });
     }
-    renderSurvey();
+    
 }
 
 function submitSurveyToServer(i, survey) {
@@ -168,7 +170,7 @@ function submitSurveyToServer(i, survey) {
         }),
         success: function(response, textStatus, jqXHR){
             alert("Survey #" + i + " is submitted successfully.");
-            deleteSurvey(survey.timeStart, survey.siteID);
+            deleteSurvey(survey.timeStart);
         },
         error : function(message){
             navigator.notification.alert("Unexpected error submitting survey #" + i + ".");

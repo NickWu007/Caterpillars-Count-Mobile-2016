@@ -168,8 +168,8 @@ function onDeviceReady() {
                         	39,  
                        	    '$(".notes").val()',  
                          	'plantSpecies',  
-                         	'herbivoryValue',  
-                       	    'surveyType',  
+                         	2,  
+                       	    'Visual',  
                        	    5,  
                         	"Mobile",  
 							'selectedOrderText',  
@@ -179,8 +179,9 @@ function onDeviceReady() {
 							'hairyOrSpinyVal',  
 							'leafRollVal',  
 							'silkTentVal',  
-							'leafImageURI',
-                            'ArthropodsImageURI',   
+							//'file:///storage/emulated/0/Android/data/goldenCompass.caterpillarCount/cache/1476225363533.jpg',
+                            '',
+                            '',   
 							0]);
 
 
