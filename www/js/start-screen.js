@@ -43,10 +43,44 @@ function onDeviceReady() {
     // Create DB schemas.
     db.transaction(function(tx){
         tx.executeSql("CREATE TABLE IF NOT EXISTS USER_INFO (name, password, userId)");
-        //tx.executeSql("DROP TABLE IF EXISTS SURVEY");
+        tx.executeSql("DROP TABLE IF EXISTS SURVEY");
         tx.executeSql("CREATE TABLE IF NOT EXISTS SURVEY(type, siteID, userID, password, circle, survey, timeStart, temperatureMin, temperatureMax, siteNotes, plantSpecies, herbivory, surveyType, leafCount, source, selectedOrderText, length, count, notes, hairOrSpinyVal, leafRollVal, silkTentVal,leafImageURI,ArthropodsImageURI,errorCode)");
         //tx.executeSql("DROP TABLE IF EXISTS SITE");
         tx.executeSql("CREATE TABLE IF NOT EXISTS SITE (siteId, siteName, userId, circle, state)");
+        // tx.executeSql("INSERT INTO SURVEY VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", 
+        //                     ['survey',
+        //                     117,
+        //                     171,
+        //                     "abcd",
+        //                     1,
+        //                     "A",
+        //                     dateTime,
+        //                     temperatures[temperature].min,
+        //                     temperatures[temperature].max,
+        //                     $(".notes").val(),
+        //                     plantSpecies,
+        //                     herbivoryValue,
+        //                     surveyType,
+        //                     parseInt(leafCount),
+        //                     "Mobile",
+        //                     selectedOrderText,
+        //                     length,
+        //                     count,
+        //                     notes,
+        //                     hairyOrSpinyVal,
+        //                     leafRollVal,
+        //                     silkTentVal,
+        //                     leafImageURI,
+        //                     ArthropodsImageURI,
+        //                     0]);
+                    }  , function(error){
+                        alert("Transaction Error: "+error.message);
+                    },function(){
+                        alert("This page was successfully stored");
+                        window.location = "homepage.html";
+
+        });
+
     }, function(error){
         alert("Transaction Error: "+error.message);
     }, function(){

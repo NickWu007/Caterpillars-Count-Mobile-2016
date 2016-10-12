@@ -102,7 +102,24 @@ function deleteSurvey(survey) {
     });
 }
 
+function recordErrorCode(survey, errorCode) {
+    db.transaction(function (tx) {
+        var query = "UPDATE SURVEY SET ErrorCode = ? WHERE siteID = ? AND timeStart = ?";
+
+        tx.executeSql(query, [errorCode, survey.siteID, survey.timeStart], function (tx, res) {
+        },
+        function (tx, error) {
+            alert('UPDATE error: ' + error.message);
+        });
+    }, function (error) {
+        alert('transaction error: ' + error.message);
+    }, function () {
+        alert("update survey " + survey.siteID + "with error status: " + errorCode);
+    });
+}
+
 function submitSurveyToServer(i, survey) {
+    alert(survey.timeStart);
     $.ajax({
         url: DOMAIN + "/api/submission_full.php",
         type : "POST",
@@ -130,7 +147,8 @@ function submitSurveyToServer(i, survey) {
             alert("Survey #" + i + " is submitted successfully.");
             deleteSurvey(survey);
         },
-        error : function(message){
-            navigator.notification.alert("Unexpected error submitting survey #" + i + ".");
+        error : function(xhr, status){
+            navigator.notification.alert("Unexpected error submitting survey #" + i + " with error status: " + xhr.status + ".");
+            recordErrorCode(sruvey, xhr.status);
     }});
 }
