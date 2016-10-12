@@ -3,7 +3,7 @@
 */
 var db;
 var survey_result;
-var DOMAIN = "http://master-caterpillars.vipapps.unc.edu";
+var DOMAIN = "http://develop-caterpillars.vipapps.unc.edu";
 
 document.addEventListener("deviceready", onDeviceReady, false);
 
@@ -24,7 +24,6 @@ function onDeviceReady(){
         // alert("DB open OK");
 
     }
-
     populateSurveyList();
 }
 
@@ -47,7 +46,8 @@ function populateSurveyList() {
         for(var i=0; i<survey_result.length; i++){
             var row = survey_result.item(i);
             var new_list_item = '<li class="survey_item"><h5>Site: '+row.siteID+'</h5><h5>Circle: '+row.circle+
-            '</h5><h5>Survey: '+row.survey+'</h5><h5>Time: '+row.timeStart+'<h5>id: </h5>'+
+            '</h5><h5>Survey: '+row.survey+'</h5><h5>Time: '+row.timeStart+
+            '<h5>ErrorCode: ' + row.errorCode + '</h5>' + 
             '<div class="survey_delete text-center white-text"> Delete this Survey</div></li><hr>';
 
             list_content += new_list_item;
@@ -68,10 +68,9 @@ $(document).ready(function(){
         if (ask) {
             for (var i = 0; i< survey_result.length; i++){
                 var survey = survey_result.item(i);
-                // alert("trying to submit " + survey.siteID);
                 submitSurveyToServer(i, survey);
-                // alert("finish submitting #" + i);
             }
+            populateSurveyList();
     }else{
         window.alert("Upload unsuccessfully");
     }   
@@ -104,7 +103,7 @@ function deleteSurvey(survey) {
 
 function recordErrorCode(survey, errorCode) {
     db.transaction(function (tx) {
-        var query = "UPDATE SURVEY SET ErrorCode = ? WHERE siteID = ? AND timeStart = ?";
+        var query = "UPDATE SURVEY SET errorCode = ? WHERE siteID = ? AND timeStart = ?";
 
         tx.executeSql(query, [errorCode, survey.siteID, survey.timeStart], function (tx, res) {
         },
@@ -114,12 +113,13 @@ function recordErrorCode(survey, errorCode) {
     }, function (error) {
         alert('transaction error: ' + error.message);
     }, function () {
-        alert("update survey " + survey.siteID + "with error status: " + errorCode);
+        // alert("update survey " + survey.siteID + "with error status: " + errorCode);
     });
 }
 
 function submitSurveyToServer(i, survey) {
-    $.ajax({
+    // Use /api/submission_full.php to test fail scenario
+    var xhr = $.ajax({
         url: DOMAIN + "/api/submission_full.php",
         type : "POST",
         crossDomain: true,
@@ -148,6 +148,11 @@ function submitSurveyToServer(i, survey) {
         },
         error : function(xhr, status){
             navigator.notification.alert("Unexpected error submitting survey #" + i + " with error status: " + xhr.status + ".");
-            recordErrorCode(sruvey, xhr.status);
-    }});
+        },
+        complete: function(xhr, textStatus) {
+            if (xhr.status >= 400) {
+                recordErrorCode(survey, xhr.status);
+            }
+        } 
+    });
 }

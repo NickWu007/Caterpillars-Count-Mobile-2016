@@ -47,33 +47,6 @@ function onDeviceReady() {
         tx.executeSql("CREATE TABLE IF NOT EXISTS SURVEY(type, siteID, userID, password, circle, survey, timeStart, temperatureMin, temperatureMax, siteNotes, plantSpecies, herbivory, surveyType, leafCount, source, selectedOrderText, length, count, notes, hairOrSpinyVal, leafRollVal, silkTentVal,leafImageURI,ArthropodsImageURI,errorCode)");
         //tx.executeSql("DROP TABLE IF EXISTS SITE");
         tx.executeSql("CREATE TABLE IF NOT EXISTS SITE (siteId, siteName, userId, circle, state)");
-        tx.executeSql("INSERT INTO SURVEY VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", 
-                            ['survey',
-                            117,
-                            171,
-                            "abcd",
-                            1,
-                            "A",
-                            "2016-10-11 21:57:45",
-                            50,
-                            59,
-                            "",
-                            "Maple",
-                            2,
-                            "Visual Survey",
-                            50,
-                            "Mobile",
-                            "",
-                            "",
-                            "",
-                            "",
-                            "",
-                            "",
-                            "",
-                            "",
-                            "",
-                            0]);
-
     }, function(error){
         alert("Transaction Error: "+error.message);
     }, function(){
