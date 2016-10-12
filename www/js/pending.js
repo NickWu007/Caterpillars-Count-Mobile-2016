@@ -119,7 +119,6 @@ function recordErrorCode(survey, errorCode) {
 }
 
 function submitSurveyToServer(i, survey) {
-    alert(survey.timeStart);
     $.ajax({
         url: DOMAIN + "/api/submission_full.php",
         type : "POST",
