@@ -124,7 +124,7 @@ function onDeviceReady(){
 	}, false);
 
 	timeStart=getURLParameter("time");
-	alert(timeStart);
+	//alert(timeStart);
 	if(!(timeStart===null)){
 		edit=true;
 		var retrivedRow;
@@ -158,9 +158,10 @@ function onDeviceReady(){
 			$(".notes").val(retrivedRow.siteNotes);
 			$(".survey-type").val(retrivedRow.surveyType);
 			$(".leaf-count").val(retrivedRow.leafCount);
-			alert(retrivedRow.herbivory);
+			//alert(retrivedRow.herbivory);
 			$("#herbivory-select").ddslick('select', {index: retrivedRow.herbivory });;
 			if(retrivedRow.leafImageURI!=''){
+				$("#leaf-capture").html("<img onclick = 'leafCapture()' id='leaf-photo' height = '200' width ='200'>");
 				$("#leaf-photo").prop("src", retrivedRow.leafImageURI);
 			}	
 		});
@@ -332,12 +333,15 @@ var arthropodCapture = function(){
 
 //Function called when leaf capture button is clicked
 var leafCapture = function(){
+
 	navigator.camera.getPicture(onSuccessLeaf, onFail, {
 		quality: 50,
 		sourceType: Camera.PictureSourceType.CAMERA,
 		destinationType: Camera.DestinationType.FILE_URI,
 		saveToPhotoAlbum: true
 	});
+
+
 };
 
 //Function called when camera is closed without taking a picture

@@ -184,6 +184,21 @@ input[type="checkbox"]{
     border-radius: 10px;
 }
 
+.survey_item_error{
+    padding: 10px;
+    background: #d51;
+    border-radius: 10px;
+    border-color: red;
+    border-width: 2px;
+    color: white;
+}
+
+.survey_item_Pending{
+    padding: 10px;
+    background: #66ccff;
+    border-radius: 10px;
+    border-color: blue;
+}
 
 .upload-button{
     font-size: 16px;
