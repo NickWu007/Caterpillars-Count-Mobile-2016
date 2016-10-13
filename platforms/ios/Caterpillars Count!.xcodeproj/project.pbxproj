@@ -451,6 +451,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = NO;
+				PRODUCT_NAME = "Caterpillars Count!";
 			};
 			name = Debug;
 		};
@@ -476,6 +477,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = NO;
+				PRODUCT_NAME = "Caterpillars Count!";
 			};
 			name = Release;
 		};

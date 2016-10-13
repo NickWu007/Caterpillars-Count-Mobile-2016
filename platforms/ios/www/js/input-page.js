@@ -456,9 +456,6 @@ function getURLParameter(name) {
 
 var submit = function( ) {
 	//Check that a temperature has been selected
-<<<<<<< HEAD
-	// alert("temp");
-=======
 	/*alert("temp");
 	alert(selectedOrderText);
     alert(length);
@@ -469,7 +466,6 @@ var submit = function( ) {
     alert(silkTentVal);
     alert(leafImageURI);
     alert(ArthropodsImageURI);*/
->>>>>>> offline_proto
 	temperature = $("#temperature option:selected").val();
 	if(temperature.localeCompare("default") === 0){
 		navigator.notification.alert("Please select a temperature range");
@@ -496,7 +492,6 @@ var submit = function( ) {
 		navigator.notification.alert("Please select a site");
 		return;
 	}
-<<<<<<< HEAD
 	
     var online = navigator.onLine;
 	// if(online === true){
@@ -511,25 +506,6 @@ var submit = function( ) {
 	// 	return;
 	//  }
 	// }
-=======
-        var online = navigator.onLine;
-<<<<<<< HEAD
-	//if(online == true){
-=======
-	//if(oneline == true){
->>>>>>> offline_proto
-	 //var showPasswordCheckboxIsChecked = document.getElementById("show-password").checked;
-	 //if(showPasswordCheckboxIsChecked){
-	//	sitePassword = $("#visible-password").val();
-	 //}else{
-	//	sitePassword = $("#hidden-password").val();
-	 //}
-	 //if(!sitePassword){
-	//	navigator.notification.alert("Please enter the site password");
-	//	return;
-	 //}
-	//}
->>>>>>> offline_proto
 
 	surveyType = $(".survey-type option:selected").val();
 	if(surveyType.localeCompare("default")===0){
@@ -599,25 +575,15 @@ var submit = function( ) {
 	//navigator.notification.alert("SiteID: " + siteID +
 	//	"\nSite password: " +sitePassword);
 	//var online = navigator.onLine;
-<<<<<<< HEAD
 
-	if(online === false){
-		db.transaction(function(tx){
-                        tx.executeSql("INSERT INTO SURVEY VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", 
-                        	['survey',
-                        	siteID,
-                        	stored_user_info.userId,
-                        	stored_user_info.password,
-=======
 	if(online == false){
         //last field for error handler 0 is default
 		db.transaction(function(tx){
                         tx.executeSql("INSERT INTO SURVEY VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", 
                         	['survey',
                         	siteID,
-                        	getURLParameter("userID"),
-                        	getURLParameter("password"),
->>>>>>> offline_proto
+                        	stored_user_info.userId,
+                        	stored_user_info.password,
                         	circle,
                         	survey,
                         	dateTime,
@@ -628,9 +594,6 @@ var submit = function( ) {
                         	herbivoryValue,
                         	surveyType,
                         	parseInt(leafCount),
-<<<<<<< HEAD
-                        	"Mobile"]);
-=======
                         	"Mobile",
 							selectedOrderText,
 							length,
@@ -642,7 +605,6 @@ var submit = function( ) {
 							leafImageURI,
 							ArthropodsImageURI,
 							0]);
->>>>>>> offline_proto
                     }  , function(error){
                         alert("Transaction Error: "+error.message);
                     },function(){
