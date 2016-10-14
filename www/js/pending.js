@@ -90,7 +90,7 @@ function renderSurvey(){
 
         $(".survey_delete").click(function(e){
             var time=$(this).attr('id');
-            if (confirm("Do you sure you wanted to delete this survey") == true) {
+            if (confirm("Are you sure you wanted to delete this survey") == true) {
                 deleteSurvey(time);
             }
             e.stopPropagation();
@@ -114,10 +114,11 @@ $(document).ready(function(){
                 }
                
             }
-            renderSurvey();
+           
     }else{
         window.alert("Upload unsuccessfully");
-    }   
+    }  
+    renderSurvey(); 
    });
 
 });

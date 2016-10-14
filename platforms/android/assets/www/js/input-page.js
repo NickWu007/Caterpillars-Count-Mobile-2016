@@ -333,20 +333,14 @@ var arthropodCapture = function(){
 
 //Function called when leaf capture button is clicked
 var leafCapture = function(){
-	/*if(edit){
-		navigator.camera.getPicture(onSuccessLeaf, onFail, {
-		quality: 50,
-		sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
-		destinationType: Camera.DestinationType.FILE_URI,
-		});
-	}else{*/
-		navigator.camera.getPicture(onSuccessLeaf, onFail, {
+
+	navigator.camera.getPicture(onSuccessLeaf, onFail, {
 		quality: 50,
 		sourceType: Camera.PictureSourceType.CAMERA,
 		destinationType: Camera.DestinationType.FILE_URI,
 		saveToPhotoAlbum: true
 	});
-	//}
+
 
 };
 
