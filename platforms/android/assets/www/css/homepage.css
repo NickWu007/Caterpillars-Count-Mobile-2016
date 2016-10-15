@@ -52,11 +52,26 @@ button{
     margin-bottom: 45px;
 }
 
+.top-nav-section{
+    margin-left : 40px;
+    margin-right: 40px;
+    margin-top: 50px;
+    margin-bottom: 45px;
+}
+
+.user-info{
+    color: #416641;
+    margin-left : 40px;
+    margin-right: 40px;
+    margin-top: 40px;
+    margin-bottom: 10px;
+}
+
 .survey_list{
     list-style-type: none;
     padding-top:20px;
     padding-bottom: 30px;
-    padding-left:0;//centers list items
+    padding-left:0; 
     margin-left:auto;
     margin-right:auto;
 }
@@ -163,15 +178,26 @@ input[type="checkbox"]{
     margin-left: 10%;
 }
 
-.survey_item1 {
+.survey_item {
     padding: 10px;
     background: #ddd;
     border-radius: 10px;
 }
-.survey_item2 {
+
+.survey_item_error{
     padding: 10px;
-    background: #ddd;
+    background: #d51;
     border-radius: 10px;
+    border-color: red;
+    border-width: 2px;
+    color: white;
+}
+
+.survey_item_Pending{
+    padding: 10px;
+    background: #66ccff;
+    border-radius: 10px;
+    border-color: blue;
 }
 
 .upload-button{
@@ -192,8 +218,6 @@ input[type="checkbox"]{
 }
 .newsite{
     font-size: 50px;
-<<<<<<< HEAD
-<<<<<<< HEAD
 }
 
 select, option{
@@ -215,8 +239,6 @@ select, option{
     margin-left: 10%;
     margin-right:10%;
 
-=======
->>>>>>> offline_proto
 }
 
 div.newsite{
@@ -228,6 +250,10 @@ div.newsite{
     background-color: #385b31;
     margin-top:30px;
 }
-=======
+
+p.message{
+    color: red;
+    text-align: left; 
+    padding-left: 20px;
+    width: 75%;
 }
->>>>>>> offline_proto

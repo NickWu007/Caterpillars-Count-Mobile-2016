@@ -27,14 +27,14 @@ function onDeviceReady(){
     // If there's a stored user info, pre-populate it to login fileds.
     db.transaction(function(tx){
         tx.executeSql('select name, password, userId from USER_INFO', [], function(tx, rs){
-            alert("# of entries: " + rs.rows.length);
+            // alert("# of entries: " + rs.rows.length);
             if (rs.rows.length > 0) stored_user_info=rs.rows.item(0);
         });
         }, function(error){
             alert("Transaction Error: "+error.message);
         }, function() {
             if (stored_user_info !== null) {
-                alert("successfully retrieved cached user info.");
+                //alert("successfully retrieved cached user info.");
                 var $email = $($('.email')[0]);
                 $email.val(stored_user_info.name);
                 $email.css("backgroundColor", "yellow");
@@ -181,6 +181,11 @@ $(document).ready(function(){
                     //}
                 }
         });   
+    });
+
+    var $amodeButton = $(".amode-button");
+    $amodeButton.click(function(e){
+        window.location.assign("homepage-anon.html");
     });
 });
 

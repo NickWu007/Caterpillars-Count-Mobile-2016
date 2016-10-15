@@ -20,42 +20,33 @@ function onDeviceReady(){
         function(error){alert("Error Open Database:"+JSON.stringify(error));}
     );
     function DBSuccessCB(){
-        alert("DB open OK");
-
+        // alert("DB open OK");
     }
 
+    stored_user_info = null;
     // If there's a stored user info, pre-populate it to login fileds.
     db.transaction(function(tx){
-        tx.executeSql('select distinct name, password, userId from USER', [], function(tx, rs){
+        tx.executeSql('select name, password, userId from USER_INFO', [], function(tx, rs){
+            // alert("# of entries: " + rs.rows.length);
             if (rs.rows.length > 0) stored_user_info=rs.rows.item(0);
         });
-<<<<<<< HEAD
-        tx.executeSql('select distinct userID, timeStart from SURVEY',[],function(tx,rs){
-                if (rs.rows.length > 0) alert("successful get" +rs.rows.item(0).userID);
-        });
-=======
->>>>>>> offline_proto
         }, function(error){
             alert("Transaction Error: "+error.message);
         }, function() {
-            alert("successfully retrieved cached user info.");
-<<<<<<< HEAD
-            //alert("successful get" +rs.rows.item(0).usrID);
-=======
->>>>>>> offline_proto
             if (stored_user_info !== null) {
-            var $email = $($('.email')[0]);
-            $email.val(stored_user_info.name);
-            $email.css("backgroundColor", "yellow");
-            var $pw;
-            var showPasswordCheckboxIsChecked = document.getElementById("show-password").checked;
-            if(showPasswordCheckboxIsChecked){
-                $pw = $("#visible-password");
-            } else {
-                $pw = $("#hidden-password");
-            }
-            $pw.val(stored_user_info.password);
-            $pw.css("backgroundColor", "yellow");
+                //alert("successfully retrieved cached user info.");
+                var $email = $($('.email')[0]);
+                $email.val(stored_user_info.name);
+                $email.css("backgroundColor", "yellow");
+                var $pw;
+                var showPasswordCheckboxIsChecked = document.getElementById("show-password").checked;
+                if(showPasswordCheckboxIsChecked){
+                    $pw = $("#visible-password");
+                } else {
+                    $pw = $("#hidden-password");
+                }
+                $pw.val(stored_user_info.password);
+                $pw.css("backgroundColor", "yellow");
         }
     });
 }
@@ -107,10 +98,26 @@ $(document).ready(function(){
                 success: function (data, status, xhr) {
                     console.log("success");
                     console.log(data);
-                    //If successfully logged in, display main survey page with userID and password as (hidden) url parameters.
+                    // If successfully logged in, display main survey page with userID 
+                    // and password as (hidden) url parameters. Also store the login info
+                    // for future login.
                     if (data.privilegeLevel >= 0 ) {
-                        db.close();
-                        window.location.assign("homepage.html?userID="+data.userID+"&password="+json_obj.password);
+                        // alert("before sql xact.");
+                        db.transaction(function(tx){
+                            tx.executeSql('delete from USER_INFO');
+                            tx.executeSql('INSERT INTO USER_INFO VALUES (?,?,?)', [json_obj.email, json_obj.password, data.userID], function(tx, resultSet) {
+                                // alert('resultSet.insertId: ' + resultSet.insertId);
+                                // alert('resultSet.rowsAffected: ' + resultSet.rowsAffected);
+                            }, function(tx, error) {
+                                alert('INSERT error: ' + error.message);
+                            });
+                        }, function(error){
+                            alert("Transaction Error: " + error.message);
+                        }, function() {
+                            alert("new user added into database.");
+                            window.location.assign("homepage.html?userID="+data.userID+"&password="+json_obj.password);
+                        });
+                        // alert("after sql xact.");
                     }
                     if (data.validPw === 0) {
                         $pw.val("");
@@ -174,6 +181,11 @@ $(document).ready(function(){
                     //}
                 }
         });   
+    });
+
+    var $amodeButton = $(".amode-button");
+    $amodeButton.click(function(e){
+        window.location.assign("homepage-anon.html");
     });
 });
 

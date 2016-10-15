@@ -19,10 +19,10 @@
         "cordova-plugin-whitelist": {
             "PACKAGE_NAME": "goldenCompass.caterpillarCount"
         },
-        "cordova-plugin-camera": {
+        "cordova-sqlite-storage": {
             "PACKAGE_NAME": "goldenCompass.caterpillarCount"
         },
-        "cordova-sqlite-storage": {
+        "cordova-plugin-camera": {
             "PACKAGE_NAME": "goldenCompass.caterpillarCount"
         }
     },
