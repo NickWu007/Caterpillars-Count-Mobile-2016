@@ -34,6 +34,8 @@ var numberOfArthropodsToSubmit;
 var numberOfArthropodsSubmitted;
 //Tracks which screen is currently being displayed
 var onArthropodPage = false;
+var timeStart;
+var edit= false;
 
 var temperatures = {
 	"<30" : {min : - 10, max : 30},
@@ -109,7 +111,7 @@ function onDeviceReady(){
     });
 
 	//alert("begin wait");
-	setInterval(retrieveSiteList(),500);
+	setTimeout(retrieveSiteList(),800);
 
 
 	document.addEventListener("backbutton", function(e){
@@ -120,7 +122,62 @@ function onDeviceReady(){
 		}
 		//Otherwise ask if the user wants to exit the app
 	}, false);
+
+	timeStart=getURLParameter("time");
+	//alert(timeStart);
+	if(!(timeStart===null)){
+		edit=true;
+		var retrivedRow;
+		db.transaction(function(tx){
+			tx.executeSql('select distinct type, siteID, userID, password, circle, survey, timeStart, '  +
+			'temperatureMin, temperatureMax, siteNotes, plantSpecies, herbivory, surveyType, leafCount,' +
+			'source, selectedOrderText, length, count, notes, hairOrSpinyVal, leafRollVal, silkTentVal,' +
+			'leafImageURI '+ 'from SURVEY where timeStart=?', [timeStart], function(tx, rs){
+            	if(rs.rows.length>0) {retrivedRow=rs.rows.item(0);}
+            	else{alert("Did not get indicated survey");}
+        	});
+
+    	}, function(error){
+        	alert("Transaction error: "+error.message);
+    	}, function(){
+			populateCircleList(12);
+			var temp_range=retrivedRow.temperatureMin+'-'+retrivedRow.temperatureMax;
+			if(retrivedRow.temperatureMax==30){
+				temp_range='<30';
+			}else if(retrivedRow.temperatureMax==130){
+				temp_range='>109';
+			}
+			$("#temperature").val(temp_range);
+			$("#circle").val(retrivedRow.circle);
+			var dateString=timeStart.split(' ')[0];
+			var timeString=timeStart.split(' ')[1];
+			$("#date").val(dateString);
+			$("#time").val(timeString);
+			$(".plant-species").val(retrivedRow.plantSpecies);
+			$("#survey").val(retrivedRow.survey);
+			$(".notes").val(retrivedRow.siteNotes);
+			$(".survey-type").val(retrivedRow.surveyType);
+			$(".leaf-count").val(retrivedRow.leafCount);
+			//alert(retrivedRow.herbivory);
+			$("#herbivory-select").ddslick('select', {index: retrivedRow.herbivory });;
+			if(retrivedRow.leafImageURI!=''){
+				$("#leaf-capture").html("<img onclick = 'leafCapture()' id='leaf-photo' height = '200' width ='200'>");
+				$("#leaf-photo").prop("src", retrivedRow.leafImageURI);
+			}	
+		});
+
+	}else{
+		setTime();
+	}
 }
+
+function setTime(){
+		//Set initial value of time and date fields
+		setDateAndTime();
+		//Updates time every second
+		window.setInterval(setDateAndTime, 1000);
+}
+
 //Function called if the user confirms to exit the app
 function onConfirmQuit(button){
 	if(button == "1"){
@@ -141,10 +198,6 @@ $( document ).ready(function() {
 		}
 	});
 	//Populate site list on page load
-	//Set initial value of time and date fields
-	setDateAndTime();
-	//Updates time every second
-	window.setInterval(setDateAndTime, 1000);
 });
 
 
@@ -176,6 +229,10 @@ var retrieveSiteList = function(){
 //Retrieves the circle count for the newly selected site
 var retrieveCircleCount = function(){
 	//alert("1");
+	var editmode;
+	if(edit){
+		editmode=$("#circle").val();
+	}
 	var circleNum;
 	var siteID = $("#site option:selected").val();
 	//Clear circle list to prevent circles from different site from being selected.
@@ -189,7 +246,14 @@ var retrieveCircleCount = function(){
             alert("Transaction Error: "+error.message);
         }, function(){
                 	
-							populateCircleList(circleNum);
+			populateCircleList(circleNum);
+			if(edit){
+				if(editmode<circleNum){
+					$("#circle").val(editmode);
+				}else{
+					alert("The circle you already choose does not match this site, Please select again");
+				}
+			}
 
         });
 	circleCountRetrieved=true;
@@ -254,6 +318,7 @@ var onSuccessLeaf = function(imageData) {
 	console.log(imageData);
 	leafPhotoTaken = true;
 	leafImageURI = imageData;
+	alert(leafImageURI);
 };
 
 //Function called when arthropod capture button is clicked
@@ -261,17 +326,22 @@ var arthropodCapture = function(){
 	navigator.camera.getPicture(onSuccessArthropod, onFail, {
 		quality: 50,
 		sourceType: Camera.PictureSourceType.CAMERA,
-		destinationType: Camera.DestinationType.FILE_URI
+		destinationType: Camera.DestinationType.FILE_URI,
+		saveToPhotoAlbum: true
 	});
 };
 
 //Function called when leaf capture button is clicked
 var leafCapture = function(){
+
 	navigator.camera.getPicture(onSuccessLeaf, onFail, {
 		quality: 50,
 		sourceType: Camera.PictureSourceType.CAMERA,
-		destinationType: Camera.DestinationType.FILE_URI
+		destinationType: Camera.DestinationType.FILE_URI,
+		saveToPhotoAlbum: true
 	});
+
+
 };
 
 //Function called when camera is closed without taking a picture
@@ -492,21 +562,20 @@ var submit = function( ) {
 		navigator.notification.alert("Please select a site");
 		return;
 	}
-<<<<<<< HEAD
-        var online = navigator.onLine;
-
-	//if(oneline == true){
-	 //var showPasswordCheckboxIsChecked = document.getElementById("show-password").checked;
-	 //if(showPasswordCheckboxIsChecked){
-	//	sitePassword = $("#visible-password").val();
-	 //}else{
-	//	sitePassword = $("#hidden-password").val();
-	 //}
-	 //if(!sitePassword){
-	//	navigator.notification.alert("Please enter the site password");
-	//	return;
-	 //}
-	//}
+	
+    var online = navigator.onLine;
+	// if(online === true){
+	//  var showPasswordCheckboxIsChecked = document.getElementById("show-password").checked;
+	//  if(showPasswordCheckboxIsChecked){
+	// 	sitePassword = $("#visible-password").val();
+	//  }else{
+	// 	sitePassword = $("#hidden-password").val();
+	//  }
+	//  if(!sitePassword){
+	// 	navigator.notification.alert("Please enter the site password");
+	// 	return;
+	//  }
+	// }
 
 	surveyType = $(".survey-type option:selected").val();
 	if(surveyType.localeCompare("default")===0){
@@ -610,6 +679,13 @@ var submit = function( ) {
                         alert("Transaction Error: "+error.message);
                     },function(){
 						alert("This page was successfully stored");
+						db.transaction(function(tx){
+            					tx.executeSql("DELETE from SURVEY where timeStart=?", [timeStart]);
+        				},  function(error){
+            				alert("Transaction error: "+error.message);
+        				}, function(){
+            				//alert("Successfully delete this survey");
+        				});
 						window.location = "homepage.html";
 
 		});
@@ -617,6 +693,7 @@ var submit = function( ) {
 	}else{
 		submitSurveyToServer();	
 	}
+
 
 };
 
@@ -880,6 +957,14 @@ function uploadPhoto(photoURI, photoType, databaseID){
 
 //Clears fields following a successful survey submission
 var clearFields = function(){
+	edit=false;
+	db.transaction(function(tx){
+            tx.executeSql("DELETE from SURVEY where timeStart=?", [timeStart]);
+	},  function(error){
+            alert("Transaction error: "+error.message);
+    }, function(){
+           //alert("Successfully delete this survey");
+    });
 	$(".time-start").val("");
 	$(".notes").val("");
 
