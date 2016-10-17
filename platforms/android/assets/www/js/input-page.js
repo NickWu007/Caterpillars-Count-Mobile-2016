@@ -679,6 +679,13 @@ var submit = function( ) {
                         alert("Transaction Error: "+error.message);
                     },function(){
 						alert("This page was successfully stored");
+						db.transaction(function(tx){
+            					tx.executeSql("DELETE from SURVEY where timeStart=?", [timeStart]);
+        				},  function(error){
+            				alert("Transaction error: "+error.message);
+        				}, function(){
+            				//alert("Successfully delete this survey");
+        				});
 						window.location = "homepage.html";
 
 		});
@@ -686,6 +693,7 @@ var submit = function( ) {
 	}else{
 		submitSurveyToServer();	
 	}
+
 
 };
 
@@ -950,6 +958,13 @@ function uploadPhoto(photoURI, photoType, databaseID){
 //Clears fields following a successful survey submission
 var clearFields = function(){
 	edit=false;
+	db.transaction(function(tx){
+            tx.executeSql("DELETE from SURVEY where timeStart=?", [timeStart]);
+	},  function(error){
+            alert("Transaction error: "+error.message);
+    }, function(){
+           //alert("Successfully delete this survey");
+    });
 	$(".time-start").val("");
 	$(".notes").val("");
 

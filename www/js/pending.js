@@ -44,7 +44,7 @@ function renderSurvey(){
         for(var i=0; i<survey_result.length; i++){
             var row = survey_result.item(i);
             var new_list_item;
-            if(row.errorCode==0){
+            if(row.errorCode===0){
                 if(row.siteID===-1){
                      new_list_item= '<li class="survey_item_Pending" id="'+row.timeStart+'"><h5>Click Here to Complete this Survey</h5><h5>Circle: '+row.circle+
                     '</h5><h5>Survey: '+row.survey+'</h5><h5>Time: '+row.timeStart+
@@ -58,11 +58,11 @@ function renderSurvey(){
             }else{
                 new_list_item='<li class="survey_item_error" id="'+row.timeStart+'"">';
                 if(row.errorCode===400){
-                    new_list_item+='<h4>400 Error---Bad Request</h4>'
+                    new_list_item+='<h4>400 Error---Bad Request</h4>';
                 }else if(row.errorCode===401){
-                    new_list_item+='<h4>401 Error---Unauthorized User</h4>'
+                    new_list_item+='<h4>401 Error---Unauthorized User</h4>';
                 }else if(row.errorCode===500){
-                    new_list_item+='<h4>500 Error---Internal Server Error</h4>'
+                    new_list_item+='<h4>500 Error---Internal Server Error</h4>';
                 }else{
 
                 }
@@ -90,7 +90,7 @@ function renderSurvey(){
 
         $(".survey_delete").click(function(e){
             var time=$(this).attr('id');
-            if (confirm("Are you sure you wanted to delete this survey") == true) {
+            if (confirm("Are you sure you wanted to delete this survey") === true) {
                 deleteSurvey(time);
             }
             e.stopPropagation();
@@ -128,7 +128,7 @@ function numSurveys(){
 }
 
 function deleteSurvey(timeStart){
-    if(timeStart==null||timeStart==""||timeStart===undefined){
+    if(timeStart===null||timeStart===""||timeStart===undefined){
         alert("Did not fetch correct Parameter to delete a row");
     }else{
         db.transaction(function(tx){
@@ -184,8 +184,10 @@ function submitSurveyToServer(i, survey) {
             "leafCount" : parseInt(survey.leafCount),
             "source" : "Mobile"
         }),
-        success: function(response, textStatus, jqXHR){
+        success: function(result){
             alert("Survey #" + i + " is submitted successfully.");
+            // uploadPhoto(leafImageURI, "leaf-photo", result.surveyID);
+            // submitArthropodsToServer(result, survey);
             deleteSurvey(survey.timeStart);
         },
         error : function(xhr, status){
@@ -197,4 +199,117 @@ function submitSurveyToServer(i, survey) {
             }
         } 
     });
+}
+
+//Submits arthropod info to server for each saved order/
+//Calls uploadPhoto with orderPhoto (if a photo was taken)
+//upon each successful arthropod submission upload
+var submitArthropodsToServer = function(result, survey){
+    
+    $.ajax({
+        url: DOMAIN + "/api/submission_full.php",
+        type: "POST",
+        crossDomain: true,
+        dataType: 'json',
+        data: JSON.stringify({
+            "type": "order",
+            "surveyID": result.surveyID,
+            "userID": stored_user_info.userId,
+            "password": stored_user_info.password,
+            //order
+            "orderArthropod": $("h4", this).text(),
+            "orderLength": survey.length,
+            "orderNotes": survey.notes,
+            "orderCount": survey.count,
+            //Caterpillar features
+            "hairyOrSpiny": survey.hairyOrSpiny,
+            "leafRoll": survey.leafRoll,
+            "silkTent": survey.silkTent
+        }),
+        success: function (arthropodResult) {
+            //navigator.notification.alert("arthropod info submitted");
+            //If arthropod successfully submitted to database, attempt photo upload
+            //Upload arthropod photo if one exists
+            if (survey.arthropodImageURI !== null && asurvey.rthropodImageURI !== undefined) {
+                //navigator.notification.alert("Uploading order photo");
+                uploadPhoto(survey.arthropodImageURI, "arthropod-photo", arthropodResult.orderID);
+            }
+            // else {
+            //     //Increment number of arthropods submitted here when no photo to upload
+            //     //to prevent duplicate success alerts
+            //     numberOfArthropodsSubmitted++;
+            //     if (numberOfArthropodsSubmitted == numberOfArthropodsToSubmit) {
+            //         var successMessage = confirm("Successfully submitted survey data!\n\n" +
+            //             "Clear form fields?");
+            //         if (successMessage === true) {
+            //             clearFields();
+            //         }
+            //     }
+            // }
+        },
+        error: function () {
+            navigator.notification.alert("Unexpected error submitting " + $("h4", this).text() + " data.");
+        }
+    });
+};
+
+//databaseID = surveyID if leaf photo, orderID if arthropod photo
+//Form is cleared if final arthropod photo is successfully uploaded
+//Uploads photo using FileTransfer plugin.
+function uploadPhoto(photoURI, photoType, databaseID){
+    // !! Assumes variable fileURL contains a valid URL to a text file on the device,
+    //    for example, cdvfile://localhost/persistent/path/to/file.txt
+
+    var leafSuccess = function (r) {
+        //navigator.notification.alert("leaf photo uploaded");
+        console.log("Code = " + r.responseCode);
+        console.log("Response = " + r.response);
+        console.log("Sent = " + r.bytesSent);
+    };
+
+    var fail = function (error) {
+        navigator.notification.alert("An error has occurred: Code = " + error.code);
+        console.log("upload error source " + error.source);
+        console.log("upload error target " + error.target);
+    };
+
+    var arthropodSuccess = function(r){
+        //navigator.notification.alert("order photo uploaded");
+
+        //Increment number of arthropods submitted
+        //here when there is a photo to upload
+        //to prevent duplicate success alerts
+        console.log("Code = " + r.responseCode);
+        console.log("Response = " + r.response);
+        console.log("Sent = " + r.bytesSent);
+
+        //If this was the last order photo to submit, clear form, submission succeeded
+        // if(numberOfArthropodsSubmitted == numberOfArthropodsToSubmit) {
+        //     navigator.notification.alert("Successfully submitted survey data!");
+        //     clearFields();
+
+        // }
+    };
+
+    var options = new FileUploadOptions();
+    //options.fileKey = "file";
+    //options.fileName = photoURI.substr(photoURI.lastIndexOf('/') + 1);
+
+    //var params = {};
+    //params.value1 = "test";
+    //params.value2 = "param";
+    //
+    //options.params = params;
+
+    var ft = new FileTransfer();
+    //If uploading leaf photo
+    if(photoType.localeCompare("leaf-photo") === 0) {
+        options.fileName = "survey_" + databaseID + "_leaf_photo.jpg";
+        ft.upload(photoURI, encodeURI(DOMAIN + "/api/uploads.php?surveyID=" + databaseID), leafSuccess, fail, options);
+    }
+    //Uploading arthropod photo
+    else if(photoType.localeCompare("arthropod-photo") === 0){
+        options.fileName = "order_" + databaseID + "_arthropod_photo.jpg";
+        ft.upload(photoURI, encodeURI(DOMAIN + "/api/uploads.php?orderID=" + databaseID), arthropodSuccess, fail, options);
+    }
 }
