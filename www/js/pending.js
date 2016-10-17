@@ -4,7 +4,7 @@
 var db;
 var survey_result;
 var $list_length;
-var DOMAIN = "http://develop-caterpillars.vipapps.unc.edu";
+var DOMAIN = "http://master-caterpillars.vipapps.unc.edu";
 
 document.addEventListener("deviceready", onDeviceReady, false);
 
@@ -30,9 +30,15 @@ function onDeviceReady(){
 
 function renderSurvey(){
     db.transaction(function(tx){
-        tx.executeSql('select distinct siteID, circle, survey, timeStart, errorCode from SURVEY', [], function(tx, rs){
-            if(rs.rows.length>0) {survey_result=rs.rows;}
-            else{alert("survey database empty");}
+        tx.executeSql('select * from SURVEY', [], function(tx, rs){
+            if(rs.rows.length>0) {
+                survey_result=rs.rows;
+            } else {
+                // alert("survey database empty");
+                $list_length = 0;
+                $(".survey_list").html("");
+                numSurveys();
+            }
         });
 
     }, function(error){
@@ -58,17 +64,17 @@ function renderSurvey(){
             }else{
                 new_list_item='<li class="survey_item_error" id="'+row.timeStart+'"">';
                 if(row.errorCode===400){
-                    new_list_item+='<h4>400 Error---Bad Request</h4>'
+                    new_list_item+='<h4>400 Error---Bad Request</h4>';
                 }else if(row.errorCode===401){
-                    new_list_item+='<h4>401 Error---Unauthorized User</h4>'
+                    new_list_item+='<h4>401 Error---Unauthorized User</h4>';
                 }else if(row.errorCode===500){
-                    new_list_item+='<h4>500 Error---Internal Server Error</h4>'
+                    new_list_item+='<h4>500 Error---Internal Server Error</h4>';
                 }else{
 
                 }
 
                 new_list_item+='<h5>Site: '+row.siteID+'</h5><h5>Circle: '+row.circle+
-                '</h5><h5>Survey: '+row.survey+'</h5><h5>Time: '+row.timeStart+
+                '</h5><h5>UserID: '+row.userID+'</h5><h5>Survey: '+row.survey+'</h5><h5>Time: '+row.timeStart+
                 '<br><div class="survey_delete text-center white-text" id="'+row.timeStart+'"> Delete this Survey</div></li><hr>';
             }
             
@@ -110,11 +116,12 @@ $(document).ready(function(){
                 var survey = survey_result.item(i);
                 if(survey.siteID>-1){
                     //siteID==-1 mean incomplete survey
-                     submitSurveyToServer(i, survey);
+                    submitSurveyToServer(i, survey);
+                    
                 }
                
             }
-           
+        renderSurvey();
     }else{
         window.alert("Upload unsuccessfully");
     }  
@@ -160,7 +167,7 @@ function recordErrorCode(survey, errorCode) {
 }
 
 function submitSurveyToServer(i, survey) {
-    // Use /api/submission_full.php to test fail scenario
+    // Use /api/submission_full.php to test fail scenario  
     var xhr = $.ajax({
         url: DOMAIN + "/api/submission_full.php",
         type : "POST",
