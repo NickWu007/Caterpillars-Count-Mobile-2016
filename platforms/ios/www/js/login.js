@@ -34,7 +34,7 @@ function onDeviceReady(){
             alert("Transaction Error: "+error.message);
         }, function() {
             if (stored_user_info !== null) {
-                alert("successfully retrieved cached user info.");
+                //alert("successfully retrieved cached user info.");
                 var $email = $($('.email')[0]);
                 $email.val(stored_user_info.name);
                 $email.css("backgroundColor", "yellow");

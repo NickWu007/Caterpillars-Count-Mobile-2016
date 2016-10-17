@@ -14,6 +14,8 @@ function  closeDB(){
 
 function onDeviceReady() {
 
+	createButtons();
+
     //Exit app if android back button is pressed on start screen
     document.addEventListener("backbutton", function (e) {
         e.preventDefault();
@@ -193,7 +195,7 @@ function onDeviceReady() {
 $(document).ready(function() { 
     window.addEventListener("online", createButtons);
     window.addEventListener("offline", createButtons);
-});
+}); 
 
 //Handles device rotation
 window.shouldRotateToOrientation = function() {
