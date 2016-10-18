@@ -15,10 +15,7 @@ function  closeDB(){
 function onDeviceReady() {
 
 	createButtons();
-<<<<<<< HEAD
-=======
 
->>>>>>> db_rework
     //Exit app if android back button is pressed on start screen
     document.addEventListener("backbutton", function (e) {
         e.preventDefault();
