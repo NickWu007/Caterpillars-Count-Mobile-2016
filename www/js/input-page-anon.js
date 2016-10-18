@@ -493,7 +493,32 @@ var submit = function( ) {
 	
 
 	db.transaction(function(tx){
-        tx.executeSql("INSERT INTO SURVEY VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", ['survey',siteID, 0, "",circle,survey,dateTime,temperatures[temperature].min,temperatures[temperature].max,$(".notes").val(),plantSpecies,herbivoryValue,surveyType,parseInt(leafCount),"Mobile"]);
+        tx.executeSql("INSERT INTO SURVEY VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", 
+		['survey',
+		siteID, 
+		0, 
+		"",
+		circle,
+		survey,
+		dateTime,
+		temperatures[temperature].min,
+		temperatures[temperature].max,
+		$(".notes").val(),
+		plantSpecies,
+		herbivoryValue,
+		surveyType,
+		parseInt(leafCount),
+		"Mobile",
+		selectedOrderText,
+		length,
+		count,
+		notes,
+		hairyOrSpinyVal,
+		leafRollVal,
+		silkTentVal,
+		leafImageURI,
+		ArthropodsImageURI,
+		0]);
 		//userId and password are hardcoded to 0 and "" respectively.
 		//there are no userId or password parameters for this page in anonymous mode.
             },function(error){
