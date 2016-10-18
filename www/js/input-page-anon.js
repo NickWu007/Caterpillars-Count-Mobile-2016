@@ -486,7 +486,6 @@ var submit = function( ) {
 		navigator.notification.alert("Please select a circle.");
 		return;
 	} */
-	alert("circle finished");
 
 	survey = $("#survey option:selected").val();
 	alert("survey option retrieved");
@@ -505,14 +504,12 @@ var submit = function( ) {
 	else if(plantSpecies.length > 100){
 		plantSpecies = plantSpecies.substring(0, 100);
 	}
-	alert("plant species finished");
 
 	leafCount = $(".leaf-count").val();
 	if ( leafCount === "" || leafCount < 0 || leafCount > 200){
 		navigator.notification.alert("Please enter a leaf count between 0 and 200");
 		return;
 	}
-	alert("leaf count finished");
 
 	switch ($("#herbivory-select").val()){
 		case "0":
@@ -571,13 +568,13 @@ var submit = function( ) {
 			leafImageURI,
 			0]);
     },function(error){
-    		alert("Line 574 Transaction Error: "+error.message);
+    		alert("Transaction Error: "+error.message);
     },function(){
 		alert("This page was successfully stored");
 		db.transaction(function(tx){
         	tx.executeSql("DELETE from SURVEY where timeStart=?", [timestart]);
         },function(error){
-        	alert("Line 580 Transaction error: "+error.message);
+        	alert("Transaction error: "+error.message);
         },function(){
         	//alert("Successfully delete this survey");
         });

@@ -52,7 +52,10 @@ function renderSurvey(){
             var new_list_item;
             if(row.errorCode==0){
                 if(row.siteID===-1){
-                     new_list_item= '<li class="survey_item_Pending" id="'+row.timeStart+'"><h5>Click Here to Complete this Survey</h5><h5>Circle: '+row.circle+
+                    var circle_text;
+                    if(row.circle === -1){circle_text="Unknown";}
+                    else{circle_text = row.circle}
+                     new_list_item= '<li class="survey_item_Pending" id="'+row.timeStart+'"><h5>Click Here to Complete this Survey</h5><h5>Circle: '+circle_text+
                     '</h5><h5>Survey: '+row.survey+'</h5><h5>Time: '+row.timeStart+
                     '<br><div class="survey_delete text-center white-text" id="'+row.timeStart+'"> Delete this Survey</div></li><hr>';
                 }else{
