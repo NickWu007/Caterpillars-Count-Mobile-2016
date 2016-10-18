@@ -23,12 +23,22 @@ var survey;
 var plantSpecies;
 var leafCount;
 var herbivoryValue;
-
+var selectedOrderText;
+var length;
+var count;
+var notes;
+var hairyOrSpinyVal;
+var leafRollVal;
+var silkTentVal;
 var leafImageURI;
+var ArthropodsImageURI;
 var numberOfArthropodsToSubmit;
 var numberOfArthropodsSubmitted;
+
 //Tracks which screen is currently being displayed
 var onArthropodPage = false;
+var timestart;
+var edit = false;
 
 var temperatures = {
 	"<30" : {min : - 10, max : 30},
@@ -100,6 +110,56 @@ function onDeviceReady(){
 		}
 		//Otherwise ask if the user wants to exit the app
 	}, false);
+
+	timestart = getURLparameter("time");
+	timeStart=getURLParameter("time");
+	//alert(timeStart);
+	if(!(timeStart===null)){
+		edit=true;
+		var retrivedRow;
+		db.transaction(function(tx){
+			tx.executeSql('select distinct type, siteID, userID, password, circle, survey, timeStart, '  +
+			'temperatureMin, temperatureMax, siteNotes, plantSpecies, herbivory, surveyType, leafCount,' +
+			'source, selectedOrderText, length, count, notes, hairOrSpinyVal, leafRollVal, silkTentVal,' +
+			'leafImageURI '+ 'from SURVEY where timeStart=?', [timeStart], function(tx, rs){
+            	if(rs.rows.length>0) {retrivedRow=rs.rows.item(0);}
+            	else{alert("Did not get indicated survey");}
+        	});
+
+    	}, function(error){
+        	alert("Transaction error: "+error.message);
+    	}, function(){
+			populateCircleList(12);
+			var temp_range=retrivedRow.temperatureMin+'-'+retrivedRow.temperatureMax;
+			if(retrivedRow.temperatureMax==30){
+				temp_range='<30';
+			}else if(retrivedRow.temperatureMax==130){
+				temp_range='>109';
+			}
+			$("#temperature").val(temp_range);
+			$("#circle").val(retrivedRow.circle);
+			var dateString=timeStart.split(' ')[0];
+			var timeString=timeStart.split(' ')[1];
+			$("#date").val(dateString);
+			$("#time").val(timeString);
+			$(".plant-species").val(retrivedRow.plantSpecies);
+			$("#survey").val(retrivedRow.survey);
+			$(".notes").val(retrivedRow.siteNotes);
+			$(".survey-type").val(retrivedRow.surveyType);
+			$(".leaf-count").val(retrivedRow.leafCount);
+			//alert(retrivedRow.herbivory);
+			$("#herbivory-select").ddslick('select', {index: retrivedRow.herbivory });;
+			if(retrivedRow.leafImageURI!=''){
+				$("#leaf-capture").html("<img onclick = 'leafCapture()' id='leaf-photo' height = '200' width ='200'>");
+				$("#leaf-photo").prop("src", retrivedRow.leafImageURI);
+			}	
+		});
+
+	}else{
+		setTime();
+	}
+
+
 }
 //Function called if the user confirms to exit the app
 function onConfirmQuit(button){
@@ -278,23 +338,23 @@ var returnToMainSelectScreen = function( ) {
 var saveArthropod = function( ) {
 
 	var selectedOrder = $(".order-selection").val( );
-	var selectedOrderText = $(".order-selection option:selected").text();
+	selectedOrderText = $(".order-selection option:selected").text();
 	//if ( selectedOrder === "trueBugs" || selectedOrder === "other" || selectedOrder === "unidentified" ) {
 	if (selectedOrder === "other" || selectedOrder === "unidentified" ) {
 		selectedOrder = "empty";
 	}
 
-	var length = $("[name='Length']").val( );
-	var count = $("[name='Count']").val( );
-	var notes = $("[name='Notes']").val( );
+	length = $("[name='Length']").val( );
+	count = $("[name='Count']").val( );
+	notes = $("[name='Notes']").val( );
 
 	var hairyOrSpiny = $('input[name="hairyOrSpiny"]:checked');
 	var leafRoll = $('input[name="leafRoll"]:checked');
 	var silkTent = $('input[name="silkTent"]:checked');
 
-	var hairyOrSpinyVal = parseInt(hairyOrSpiny.val());
-	var leafRollVal = parseInt(leafRoll.val());
-	var silkTentVal = parseInt(silkTent.val());
+	hairyOrSpinyVal = parseInt(hairyOrSpiny.val());
+	leafRollVal = parseInt(leafRoll.val());
+	silkTentVal = parseInt(silkTent.val());
 
 	var imageSrc;
 	if(arthropodPhotoTaken){
@@ -493,7 +553,32 @@ var submit = function( ) {
 	
 
 	db.transaction(function(tx){
-        tx.executeSql("INSERT INTO SURVEY VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", ['survey',siteID, 0, "",circle,survey,dateTime,temperatures[temperature].min,temperatures[temperature].max,$(".notes").val(),plantSpecies,herbivoryValue,surveyType,parseInt(leafCount),"Mobile"]);
+        tx.executeSql("INSERT INTO SURVEY VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", 
+		['survey',
+		siteID, 
+		0, 
+		"",
+		circle,
+		survey,
+		dateTime,
+		temperatures[temperature].min,
+		temperatures[temperature].max,
+		$(".notes").val(),
+		plantSpecies,
+		herbivoryValue,
+		surveyType,
+		parseInt(leafCount),
+		"Mobile",
+		selectedOrderText,
+		length,
+		count,
+		notes,
+		hairyOrSpinyVal,
+		leafRollVal,
+		silkTentVal,
+		leafImageURI,
+		ArthropodsImageURI,
+		0]);
 		//userId and password are hardcoded to 0 and "" respectively.
 		//there are no userId or password parameters for this page in anonymous mode.
             },function(error){

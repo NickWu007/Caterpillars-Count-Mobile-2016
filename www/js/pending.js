@@ -123,7 +123,7 @@ $(document).ready(function(){
             }
         renderSurvey();
     }else{
-        window.alert("Upload unsuccessfully");
+        window.alert("Upload unsuccessful");
     }  
     renderSurvey(); 
    });
