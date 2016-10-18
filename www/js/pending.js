@@ -4,7 +4,7 @@
 var db;
 var survey_result;
 var $list_length;
-var DOMAIN = "http://develop-caterpillars.vipapps.unc.edu";
+var DOMAIN = "http://master-caterpillars.vipapps.unc.edu";
 
 document.addEventListener("deviceready", onDeviceReady, false);
 
@@ -30,9 +30,15 @@ function onDeviceReady(){
 
 function renderSurvey(){
     db.transaction(function(tx){
-        tx.executeSql('select distinct siteID, circle, survey, timeStart, errorCode from SURVEY', [], function(tx, rs){
-            if(rs.rows.length>0) {survey_result=rs.rows;}
-            else{alert("survey database empty");}
+        tx.executeSql('select * from SURVEY', [], function(tx, rs){
+            if(rs.rows.length>0) {
+                survey_result=rs.rows;
+            } else {
+                // alert("survey database empty");
+                $list_length = 0;
+                $(".survey_list").html("");
+                numSurveys();
+            }
         });
 
     }, function(error){
@@ -52,6 +58,7 @@ function renderSurvey(){
                 }else{
                     new_list_item= '<li class="survey_item" id="'+row.timeStart+'"><h5>Site: '+row.siteID+'</h5><h5>Circle: '+row.circle+
                     '</h5><h5>Survey: '+row.survey+'</h5><h5>Time: '+row.timeStart+
+                    "</h5><img src='" + row.leafImageURI + "' id='arthropod-photo' height = '200' width ='200'>" + 
                     '<br><div class="survey_delete text-center white-text" id="'+row.timeStart+'"> Delete this Survey</div></li><hr>';
                 }
 
@@ -68,7 +75,8 @@ function renderSurvey(){
                 }
 
                 new_list_item+='<h5>Site: '+row.siteID+'</h5><h5>Circle: '+row.circle+
-                '</h5><h5>Survey: '+row.survey+'</h5><h5>Time: '+row.timeStart+
+                '</h5><h5>UserID: '+row.userID+'</h5><h5>Survey: '+row.survey+'</h5><h5>Time: '+row.timeStart+
+                "<img src='" + row.leafImageURI + "' id='arthropod-photo' height = '200' width ='200'>" + 
                 '<br><div class="survey_delete text-center white-text" id="'+row.timeStart+'"> Delete this Survey</div></li><hr>';
             }
             
@@ -110,17 +118,15 @@ $(document).ready(function(){
                 var survey = survey_result.item(i);
                 if(survey.siteID>-1){
                     //siteID==-1 mean incomplete survey
-                     submitSurveyToServer(i, survey);
+                    submitSurveyToServer(i, survey);
+                    
                 }
                
             }
-           
     }else{
         window.alert("Upload unsuccessfully");
     }  
-    renderSurvey(); 
    });
-
 });
 
 function numSurveys(){
@@ -160,7 +166,7 @@ function recordErrorCode(survey, errorCode) {
 }
 
 function submitSurveyToServer(i, survey) {
-    // Use /api/submission_full.php to test fail scenario
+    // Use /api/submission_full.php to test fail scenario  
     var xhr = $.ajax({
         url: DOMAIN + "/api/submission_full.php",
         type : "POST",
@@ -186,7 +192,7 @@ function submitSurveyToServer(i, survey) {
         }),
         success: function(result){
             alert("Survey #" + i + " is submitted successfully.");
-            // uploadPhoto(leafImageURI, "leaf-photo", result.surveyID);
+            uploadPhoto(survey.leafImageURI, "leaf-photo", result.surveyID);
             // submitArthropodsToServer(result, survey);
             deleteSurvey(survey.timeStart);
         },
@@ -292,14 +298,19 @@ function uploadPhoto(photoURI, photoType, databaseID){
     };
 
     var options = new FileUploadOptions();
-    //options.fileKey = "file";
-    //options.fileName = photoURI.substr(photoURI.lastIndexOf('/') + 1);
+    options.fileKey = "file";
+    options.fileName = photoURI.substr(photoURI.lastIndexOf('/') + 1);
+    options.mimeType="image/jpeg";
+    options.chunkedMode = false;
+    options.headers = {
+        Connection: "close"
+    };
 
-    //var params = {};
-    //params.value1 = "test";
-    //params.value2 = "param";
-    //
-    //options.params = params;
+    // var params = {};
+    // params.fullpath = imageURI;
+    // params.name = options.fileName;
+    
+    // options.params = params;
 
     var ft = new FileTransfer();
     //If uploading leaf photo

@@ -1,4 +1,4 @@
-var DOMAIN = "http://develop-caterpillars.vipapps.unc.edu";
+var DOMAIN = "http://master-caterpillars.vipapps.unc.edu";
 
 var leafPhotoTaken = false;
 
@@ -302,6 +302,9 @@ var togglePassword = function(){
 //Replaces capture "button" with the photo that was taken
 var onSuccessArthropod = function(imageData) {
 	console.log('success');
+	if (imageData.indexOf("assets-library") !== -1) {
+		imageData = imageData.replace("assets-library://", "cdvfile://localhost/assets-library/");
+	}
 	$("#arthropod-capture").html("<img onclick='arthropodCapture()' id='arthropod-photo' height = '200' width ='200'>");
 	$("#arthropod-photo").attr("src", imageData);
 	console.log(imageData);
@@ -313,6 +316,9 @@ var onSuccessArthropod = function(imageData) {
 //Replaces capture "button" with the photo that was taken
 var onSuccessLeaf = function(imageData) {
 	console.log('success');
+	if (imageData.indexOf("assets-library") !== -1) {
+		imageData = imageData.replace("assets-library://", "cdvfile://localhost/assets-library/");
+	}
 	$("#leaf-capture").html("<img onclick = 'leafCapture()' id='leaf-photo' height = '200' width ='200'>");
 	$("#leaf-photo").attr("src", imageData);
 	console.log(imageData);
@@ -326,7 +332,7 @@ var arthropodCapture = function(){
 	navigator.camera.getPicture(onSuccessArthropod, onFail, {
 		quality: 50,
 		sourceType: Camera.PictureSourceType.CAMERA,
-		destinationType: Camera.DestinationType.FILE_URI,
+		destinationType: Camera.DestinationType.NATIVE_URI,
 		saveToPhotoAlbum: true
 	});
 };
@@ -337,7 +343,7 @@ var leafCapture = function(){
 	navigator.camera.getPicture(onSuccessLeaf, onFail, {
 		quality: 50,
 		sourceType: Camera.PictureSourceType.CAMERA,
-		destinationType: Camera.DestinationType.FILE_URI,
+		destinationType: Camera.DestinationType.NATIVE_URI,
 		saveToPhotoAlbum: true
 	});
 
@@ -562,20 +568,6 @@ var submit = function( ) {
 		navigator.notification.alert("Please select a site");
 		return;
 	}
-	
-    var online = navigator.onLine;
-	// if(online === true){
-	//  var showPasswordCheckboxIsChecked = document.getElementById("show-password").checked;
-	//  if(showPasswordCheckboxIsChecked){
-	// 	sitePassword = $("#visible-password").val();
-	//  }else{
-	// 	sitePassword = $("#hidden-password").val();
-	//  }
-	//  if(!sitePassword){
-	// 	navigator.notification.alert("Please enter the site password");
-	// 	return;
-	//  }
-	// }
 
 	surveyType = $(".survey-type option:selected").val();
 	if(surveyType.localeCompare("default")===0){
@@ -646,7 +638,7 @@ var submit = function( ) {
 	//	"\nSite password: " +sitePassword);
 	//var online = navigator.onLine;
 
-	if(online == false){
+	if(navigator.onLine === false){
         //last field for error handler 0 is default
 		db.transaction(function(tx){
                         tx.executeSql("INSERT INTO SURVEY VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", 
@@ -797,8 +789,8 @@ var submitSurveyToServer = function(){
 			uploadPhoto(leafImageURI, "leaf-photo", result.surveyID);
 			submitArthropodsToServer(result);
 		},
-		error : function(){
-			navigator.notification.alert("Unexpected error submitting survey.");
+		error : function(xhr, status){
+			navigator.notification.alert("Unexpected error submitting survey: " + xhr.status);
 		}
 
 	});
