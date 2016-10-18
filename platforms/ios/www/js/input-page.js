@@ -393,7 +393,6 @@ var showArthropodSelectScreen = function( ) {
 //and restores original html.
 var returnToMainSelectScreen = function( ) {
 	onArthropodPage = false;
-	$(".arthropod-order-select-screen").css("display", "none");
 	//Restore inner html of capture button
 	$("#arthropod-capture").html("<div class='capture white-text' onclick='arthropodCapture()'><div class = 'capture-text'>CAPTURE</div></div>");
 
