@@ -132,7 +132,6 @@ function onDeviceReady(){
 			tx.executeSql('select distinct type, siteID, userID, password, circle, survey, timeStart, '  +
 			'temperatureMin, temperatureMax, siteNotes, plantSpecies, herbivory, surveyType, leafCount,' +
 			'source,' +
-
 			'leafImageURI '+ 'from SURVEY where timeStart=?', [timeStart], function(tx, rs){
             	if(rs.rows.length>0) {retrivedRow=rs.rows.item(0);}
             	else{alert("Did not get indicated survey");}
