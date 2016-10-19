@@ -324,7 +324,6 @@ var onSuccessLeaf = function(imageData) {
 	console.log(imageData);
 	leafPhotoTaken = true;
 	leafImageURI = imageData;
-	alert(leafImageURI);
 };
 
 //Function called when arthropod capture button is clicked
