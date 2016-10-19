@@ -852,18 +852,13 @@ var submitArthropodsToDB = function(time){
             				//alert("Successfully delete this survey");
         				});
                      });
-
-
-
 		});
 	}
 	else{
 		navigator.notification.alert("Successfully submitted survey data!");
 		clearFields();
 	}
-
 };
-
 
 //Submits arthropod info to server for each saved order/
 //Calls uploadPhoto with orderPhoto (if a photo was taken)

@@ -707,16 +707,12 @@ var submitArthropodsToDB = function(time){
             				//alert("Successfully delete this survey");
         				});
                      });
-
-
-
 		});
 	}
 	else{
 		navigator.notification.alert("Successfully submitted survey data!");
 		clearFields();
 	}
-
 };
 
 //databaseID = surveyID if leaf photo, orderID if arthropod photo
