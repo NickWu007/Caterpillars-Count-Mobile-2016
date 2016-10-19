@@ -649,8 +649,8 @@ var submit = function( ) {
 
 	if(online == false){
         //last field for error handler 0 is default
-		submitArthropodsToDB(dateTime);
-		alert("I am here");
+		//submitArthropodsToDB(dateTime);
+		//alert("I am here");
 		db.transaction(function(tx){
                         tx.executeSql("INSERT INTO SURVEY VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", 
                         	['survey',
@@ -857,7 +857,7 @@ var submitArthropodsToDB = function(time,selectedOrder,length,count,notes){
 
 
 		navigator.notification.alert("Successfully submitted survey data!");
-		clearFields();
+		//clearFields();
 
 };
 

@@ -649,8 +649,8 @@ var submit = function( ) {
 
 	if(online == false){
         //last field for error handler 0 is default
-		submitArthropodsToDB(dateTime);
-		alert("I am here");
+		//submitArthropodsToDB(dateTime);
+		//alert("I am here");
 		db.transaction(function(tx){
                         tx.executeSql("INSERT INTO SURVEY VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", 
                         	['survey',
@@ -842,10 +842,9 @@ var submitArthropodsToDB = function(time,selectedOrder,length,count,notes){
                     }  , function(error){
                         alert("Transaction Error: "+error.message);
                     },function(){
-						alert("Arthropods information was successfully stored");
-						alert(selectedOrder);
-						alert(length);
-						alert(count);
+						//alert(selectedOrder);
+						//alert(length);
+						//alert(count);
 						db.transaction(function(tx){
             					tx.executeSql("DELETE from SURVEY where timeStart=?", [timeStart]);
         				},  function(error){
@@ -858,7 +857,7 @@ var submitArthropodsToDB = function(time,selectedOrder,length,count,notes){
 
 
 		navigator.notification.alert("Successfully submitted survey data!");
-		clearFields();
+		//clearFields();
 
 };
 
