@@ -649,11 +649,7 @@ var submit = function( ) {
 
 	if(online == false){
         //last field for error handler 0 is default
-<<<<<<< HEAD
-		//submitArthropodsToDB(dateTime);
-=======
-		submitArthropodsToDB(dateTime);
->>>>>>> offline_proto
+
 		//alert("I am here");
 		db.transaction(function(tx){
                         tx.executeSql("INSERT INTO SURVEY VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", 
