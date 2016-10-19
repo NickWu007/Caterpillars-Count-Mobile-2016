@@ -147,9 +147,10 @@ function deleteSurvey(timeStart){
             alert("Transaction error: "+error.message);
         }, function(){
             alert("Successfully delete this survey");
-            renderSurvey();
+            
         });
     }
+    renderSurvey();
     
 }
 
