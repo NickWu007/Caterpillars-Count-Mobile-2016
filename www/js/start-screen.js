@@ -14,15 +14,13 @@ function  closeDB(){
 
 function onDeviceReady() {
 
-	
-
     //Exit app if android back button is pressed on start screen
     document.addEventListener("backbutton", function (e) {
         e.preventDefault();
         closeDB();
         navigator.app.exitApp();
     }, false);
-
+	
     window.sqlitePlugin.echoTest(function(){
         console.log("echo test ok");
     });
@@ -193,12 +191,14 @@ function onDeviceReady() {
         // alert("Transaction OK, database initialized successfully.");
     });
     closeDB();
+	window.addEventListener("online", createButtons);
+    window.addEventListener("offline", createButtons);
 }
 
-$(document).ready(function() { 
+/*$(document).ready(function() { 
     window.addEventListener("online", createButtons);
     window.addEventListener("offline", createButtons);
-}); 
+}); */
 
 //Handles device rotation
 window.shouldRotateToOrientation = function() {
@@ -206,8 +206,7 @@ window.shouldRotateToOrientation = function() {
 };
 
 function createButtons(){
-
-   var online = navigator.onLine;
+    var online = navigator.onLine;
     var register_button = "<a href = 'register.html'>"+
                             "<div class='header-footer footer text-center green-text'>"+
                                 "<div class = 'button'><h4>Register</h4></div>"+
@@ -225,12 +224,18 @@ function createButtons(){
                                 "<div class = 'button'><h4>Anonymous Mode</h4></div>"+
                             "</div>"+
                         "</a>"; 
-
+    
+	alert("before if");
     if (online) {
+		alert("starting online");
         $("#top_button").html(register_button);
+		alert("finished top button");
         $("#bottom_button").html(login_buton);
+		alert("finished bottom button");
     } else {
+		alert("starting offline");
         $("#top_button").html(amode_button);
+		alert("finished top button");
         $("#bottom_button").html(login_button);
     }
 }
