@@ -3,6 +3,7 @@
 */
 var db;
 var survey_result;
+var survey;
 var $list_length;
 var DOMAIN = "http://master-caterpillars.vipapps.unc.edu";
 
@@ -54,7 +55,7 @@ function renderSurvey(){
                 if(row.siteID===-1){
                     var circle_text;
                     if(row.circle === -1){circle_text="Unknown";}
-                    else{circle_text = row.circle}
+                    else{circle_text = row.circle;}
                      new_list_item= '<li class="survey_item_Pending" id="'+row.timeStart+'"><h5>Click Here to Complete this Survey</h5><h5>Circle: '+circle_text+
                     '</h5><h5>Survey: '+row.survey+'</h5><h5>Time: '+row.timeStart+
                     '<br><div class="survey_delete text-center white-text" id="'+row.timeStart+'"> Delete this Survey</div></li><hr>';
@@ -118,7 +119,7 @@ $(document).ready(function(){
         var ask = window.confirm("Ready to upload?");
         if (ask) {
             for (var i = 0; i< survey_result.length; i++){
-                var survey = survey_result.item(i);
+                survey = survey_result.item(i);
                 if(survey.siteID>-1){
                     //siteID==-1 mean incomplete survey
                     submitSurveyToServer(i, survey);
@@ -197,7 +198,7 @@ function submitSurveyToServer(i, survey) {
             alert("Survey #" + i + " is submitted successfully.");
             uploadPhoto(survey.leafImageURI, "leaf-photo", result.surveyID);
             // submitArthropodsToServer(result, survey);
-            deleteSurvey(survey.timeStart);
+            // deleteSurvey(survey.timeStart);
         },
         error : function(xhr, status){
             navigator.notification.alert("Unexpected error submitting survey #" + i + " with error status: " + xhr.status + ".");
@@ -274,6 +275,8 @@ function uploadPhoto(photoURI, photoType, databaseID){
         console.log("Code = " + r.responseCode);
         console.log("Response = " + r.response);
         console.log("Sent = " + r.bytesSent);
+        cosole.log("survey.timeStart = " + survey.timeStart);
+        deleteSurvey(survey.timeStart);
     };
 
     var fail = function (error) {

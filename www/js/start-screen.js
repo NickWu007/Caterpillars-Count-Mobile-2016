@@ -14,7 +14,7 @@ function  closeDB(){
 
 function onDeviceReady() {
 
-	createButtons();
+	
 
     //Exit app if android back button is pressed on start screen
     document.addEventListener("backbutton", function (e) {
@@ -32,7 +32,7 @@ function onDeviceReady() {
     });
 
     function DBsuccess(){
-        alert("DB open ok, Create Table etc");
+        // alert("DB open ok, Create Table etc");
     }
 
     var db = window.sqlitePlugin.openDatabase({name: 'app.db', location: 'default'},
@@ -44,7 +44,7 @@ function onDeviceReady() {
 
     // Create DB schemas.
     db.transaction(function(tx){
-        tx.executeSql("DROP TABLE IF EXISTS USER_INFO");
+        // tx.executeSql("DROP TABLE IF EXISTS USER_INFO");
         tx.executeSql("CREATE TABLE IF NOT EXISTS USER_INFO (name, password, userId)");
         //
         //refresh survey table each time it is started
@@ -190,7 +190,7 @@ function onDeviceReady() {
     }, function(error){
         alert("Transaction Error: "+error.message);
     }, function(){
-        alert("Transaction OK, database initialized successfully.");
+        // alert("Transaction OK, database initialized successfully.");
     });
     closeDB();
 }
