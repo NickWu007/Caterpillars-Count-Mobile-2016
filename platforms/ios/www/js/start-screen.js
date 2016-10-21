@@ -14,15 +14,13 @@ function  closeDB(){
 
 function onDeviceReady() {
 
-	
-
     //Exit app if android back button is pressed on start screen
     document.addEventListener("backbutton", function (e) {
         e.preventDefault();
         closeDB();
         navigator.app.exitApp();
     }, false);
-
+	
     window.sqlitePlugin.echoTest(function(){
         console.log("echo test ok");
     });
@@ -198,6 +196,7 @@ function onDeviceReady() {
 $(document).ready(function() { 
     window.addEventListener("online", createButtons);
     window.addEventListener("offline", createButtons);
+	createButtons();
 }); 
 
 //Handles device rotation
@@ -206,8 +205,7 @@ window.shouldRotateToOrientation = function() {
 };
 
 function createButtons(){
-
-   var online = navigator.onLine;
+    var online = navigator.onLine;
     var register_button = "<a href = 'register.html'>"+
                             "<div class='header-footer footer text-center green-text'>"+
                                 "<div class = 'button'><h4>Register</h4></div>"+
@@ -225,10 +223,10 @@ function createButtons(){
                                 "<div class = 'button'><h4>Anonymous Mode</h4></div>"+
                             "</div>"+
                         "</a>"; 
-
-    if (online) {
+    
+    if (online) {	
         $("#top_button").html(register_button);
-        $("#bottom_button").html(login_buton);
+        $("#bottom_button").html(login_buton)
     } else {
         $("#top_button").html(amode_button);
         $("#bottom_button").html(login_button);

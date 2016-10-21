@@ -191,14 +191,13 @@ function onDeviceReady() {
         // alert("Transaction OK, database initialized successfully.");
     });
     closeDB();
-	window.addEventListener("online", createButtons);
-    window.addEventListener("offline", createButtons);
 }
 
-/*$(document).ready(function() { 
+$(document).ready(function() { 
     window.addEventListener("online", createButtons);
     window.addEventListener("offline", createButtons);
-}); */
+	createButtons();
+}); 
 
 //Handles device rotation
 window.shouldRotateToOrientation = function() {
@@ -225,17 +224,11 @@ function createButtons(){
                             "</div>"+
                         "</a>"; 
     
-	alert("before if");
-    if (online) {
-		alert("starting online");
+    if (online) {	
         $("#top_button").html(register_button);
-		alert("finished top button");
-        $("#bottom_button").html(login_buton);
-		alert("finished bottom button");
+        $("#bottom_button").html(login_buton)
     } else {
-		alert("starting offline");
         $("#top_button").html(amode_button);
-		alert("finished top button");
         $("#bottom_button").html(login_button);
     }
 }
