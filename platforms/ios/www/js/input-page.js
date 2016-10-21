@@ -649,7 +649,6 @@ var submit = function( ) {
 
 	if(online == false){
         //last field for error handler 0 is default
-		//submitArthropodsToDB(dateTime);
 		//alert("I am here");
 		db.transaction(function(tx){
                         tx.executeSql("INSERT INTO SURVEY VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", 
@@ -674,19 +673,21 @@ var submit = function( ) {
                         alert("Transaction Error: "+error.message);
                     },function(){
 						alert("This page was successfully stored");
-						db.transaction(function(tx){
-            					tx.executeSql("DELETE from SURVEY where timeStart=?", [timeStart]);
-        				},  function(error){
-            				alert("Transaction error: "+error.message);
-        				}, function(){
-            				//alert("Successfully delete this survey");
-        				});
 						window.location = "homepage.html";
 
 		});
 			
 	}else{
 		submitSurveyToServer();	
+	}
+	if(edit){
+		db.transaction(function(tx){
+            					tx.executeSql("DELETE from SURVEY where timeStart=?", [timeStart]);
+        				},  function(error){
+            				alert("Transaction error: "+error.message);
+        				}, function(){
+            				//alert("Successfully delete this survey");
+        				});
 	}
 
 
@@ -858,7 +859,7 @@ var submitArthropodsToDB = function(time,selectedOrder,length,count,notes){
 
 		navigator.notification.alert("Successfully submitted survey data!");
 		//clearFields();
-
+	
 };
 
 
