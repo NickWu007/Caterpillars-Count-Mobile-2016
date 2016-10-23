@@ -199,7 +199,12 @@ function onDeviceReady() {
 $(document).ready(function() { 
     window.addEventListener("online", createButtons);
     window.addEventListener("offline", createButtons);
+<<<<<<< HEAD
+	createButtons();
+});
+=======
 }); 
+>>>>>>> origin/offline_proto
 
 //Handles device rotation
 window.shouldRotateToOrientation = function() {
