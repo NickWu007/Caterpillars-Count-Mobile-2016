@@ -2,5 +2,7 @@
     "ImageIO.framework": 2,
     "CoreLocation.framework": 2,
     "AVFoundation.framework": 2,
-    "AudioToolbox.framework": 1
+    "AudioToolbox.framework": 2,
+    "SystemConfiguration.framework": 1,
+    "CoreTelephony.framework": 1
 }

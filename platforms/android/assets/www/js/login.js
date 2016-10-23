@@ -2,15 +2,53 @@
  * Created by skuroda on 10/27/15.
  */
 var DOMAIN = "http://master-caterpillars.vipapps.unc.edu";
-
+var db;
+var stored_user_info;
 
 document.addEventListener("deviceready", onDeviceReady, false);
 //Return to start screen if android back button is pressed
 function onDeviceReady(){
     document.addEventListener("backbutton", function(e){
+        db.close();
         e.preventDefault();
         window.location.assign("StartScreen.html");
     }, false);
+
+    db=window.sqlitePlugin.openDatabase(
+        {name: 'app.db', location: 'default'}, 
+        DBSuccessCB(), 
+        function(error){alert("Error Open Database:"+JSON.stringify(error));}
+    );
+    function DBSuccessCB(){
+        // alert("DB open OK");
+    }
+
+    stored_user_info = null;
+    // If there's a stored user info, pre-populate it to login fileds.
+    db.transaction(function(tx){
+        tx.executeSql('select name, password, userId from USER_INFO', [], function(tx, rs){
+            // alert("# of entries: " + rs.rows.length);
+            if (rs.rows.length > 0) stored_user_info=rs.rows.item(0);
+        });
+        }, function(error){
+            alert("Transaction Error: "+error.message);
+        }, function() {
+            if (stored_user_info !== null) {
+                //alert("successfully retrieved cached user info.");
+                var $email = $($('.email')[0]);
+                $email.val(stored_user_info.name);
+                $email.css("backgroundColor", "yellow");
+                var $pw;
+                var showPasswordCheckboxIsChecked = document.getElementById("show-password").checked;
+                if(showPasswordCheckboxIsChecked){
+                    $pw = $("#visible-password");
+                } else {
+                    $pw = $("#hidden-password");
+                }
+                $pw.val(stored_user_info.password);
+                $pw.css("backgroundColor", "yellow");
+        }
+    });
 }
 
 
@@ -41,6 +79,15 @@ $(document).ready(function(){
             $email.before("<p class = 'error'>Please fill in both fields before submitting!</p>");
             return;
         }
+        
+        // Check if offline. If so, use offline login logic
+        // Offline log in logic, faking for now.
+        if (!navigator.onLine) {
+            db.close();
+            window.location.assign("homepage.html?userID="+ stored_user_info.userId + "&password=" + $pw.val());
+            return;
+        }
+
         //Attempt login
         var json_obj = {email: $email.val(), password: $pw.val()};
         $.ajax(DOMAIN +"/api/login.php",
@@ -51,11 +98,28 @@ $(document).ready(function(){
                 success: function (data, status, xhr) {
                     console.log("success");
                     console.log(data);
-                    //If successfully logged in, display main survey page with userID and password as (hidden) url parameters.
+                    // If successfully logged in, display main survey page with userID 
+                    // and password as (hidden) url parameters. Also store the login info
+                    // for future login.
                     if (data.privilegeLevel >= 0 ) {
-                        window.location.assign("index.html?userID="+data.userID+"&password="+json_obj.password);
+                        // alert("before sql xact.");
+                        db.transaction(function(tx){
+                            tx.executeSql('delete from USER_INFO');
+                            tx.executeSql('INSERT INTO USER_INFO VALUES (?,?,?)', [json_obj.email, json_obj.password, data.userID], function(tx, resultSet) {
+                                // alert('resultSet.insertId: ' + resultSet.insertId);
+                                // alert('resultSet.rowsAffected: ' + resultSet.rowsAffected);
+                            }, function(tx, error) {
+                                alert('INSERT error: ' + error.message);
+                            });
+                        }, function(error){
+                            alert("Transaction Error: " + error.message);
+                        }, function() {
+                            alert("new user added into database.");
+                            window.location.assign("homepage.html?userID="+data.userID+"&password="+json_obj.password);
+                        });
+                        // alert("after sql xact.");
                     }
-                    if (data.validPw == 0) {
+                    if (data.validPw === 0) {
                         $pw.val("");
                         $(".error").remove();
                         //Reset email field styling
@@ -66,19 +130,19 @@ $(document).ready(function(){
                         $hiddenpw.css("border", "1px solid red");
                         $email.before("<p class = 'error'> Password not correct!</p>");
                     }
-                    if (data.active == 0) {
+                    if (data.active === 0) {
                         //$pw.val("");
                         //$email.val("");
                         $(".error").remove();
                         //$email.css("border", "1px solid red");
                         $email.before("<p class = 'error'>User not activated! Please check your email for an activation email.</p>");
                     }
-                    if (data.validUser == 0) {
+                    if (data.validUser === 0) {
                         $pw.val("");
                         $email.val("");
                         $(".error").remove();
                         //$email.css("border", "1px solid red");
-                        $email.before("<p class = 'error'>User has been marked invalid. Please contact an administrator.</p>")
+                        $email.before("<p class = 'error'>User has been marked invalid. Please contact an administrator.</p>");
                     }
                     //If return value for validUser (or any field) is null
                     if(!data.validUser){
@@ -106,8 +170,8 @@ $(document).ready(function(){
                         $hiddenpw.css("border-bottom", "thin solid gray");
 
                         $email.css("border", "1px solid red");
-                        $email.before("<p class = 'error'>User not found!</p>")
-                    }
+                        $email.before("<p class = 'error'>User not found!</p>");
+                    }  
                     //else if (xhr.status == 403) {
                     //    $pw.val("");
                     //    $email.val("");
@@ -116,7 +180,12 @@ $(document).ready(function(){
                     //    $email.after("<p class = 'error'>User is not an administrator!</p>");
                     //}
                 }
-            });
+        });   
+    });
+
+    var $amodeButton = $(".amode-button");
+    $amodeButton.click(function(e){
+        window.location.assign("homepage-anon.html");
     });
 });
 
