@@ -521,6 +521,7 @@ var saveArthropod = function( ) {
 		//);
 
 	}
+	submitArthropodsToDB(time,selectedOrder,length,count,notes);
 };
 
 
@@ -639,7 +640,7 @@ var submit = function( ) {
 
 	if(navigator.onLine === false){
         //last field for error handler 0 is default
-		submitArthropodsToDB(dateTime);
+		//alert("I am here");
 		db.transaction(function(tx){
                         tx.executeSql("INSERT INTO SURVEY VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", 
                         	['survey',
@@ -663,19 +664,21 @@ var submit = function( ) {
                         alert("Transaction Error: "+error.message);
                     },function(){
 						alert("This page was successfully stored");
-						db.transaction(function(tx){
-            					tx.executeSql("DELETE from SURVEY where timeStart=?", [timeStart]);
-        				},  function(error){
-            				alert("Transaction error: "+error.message);
-        				}, function(){
-            				//alert("Successfully delete this survey");
-        				});
 						window.location = "homepage.html";
 
 		});
 			
 	}else{
 		submitSurveyToServer();	
+	}
+	if(edit){
+		db.transaction(function(tx){
+            					tx.executeSql("DELETE from SURVEY where timeStart=?", [timeStart]);
+        				},  function(error){
+            				alert("Transaction error: "+error.message);
+        				}, function(){
+            				//alert("Successfully delete this survey");
+        				});
 	}
 
 
@@ -789,12 +792,10 @@ var submitSurveyToServer = function(){
 };
 
 
-var submitArthropodsToDB = function(time){
+var submitArthropodsToDB = function(time,selectedOrder,length,count,notes){
 	var arthropodInputs = $(".arthropod-input");
 	numberOfArthropodsToSubmit = arthropodInputs.length;
 	numberOfArthropodsSubmitted = 0;
-	if(numberOfArthropodsToSubmit > 0) {
-		arthropodInputs.each(function () {
 
 			//Get values of caterpillar checklist
 			var hairyOrSpiny, leafRoll, silkTent;
@@ -821,10 +822,10 @@ var submitArthropodsToDB = function(time){
 			//navigator.notification.alert("Arthropod image uri: " + arthropodImageURI);
            db.transaction(function(tx){
                         tx.executeSql("INSERT INTO ARTHROPODS VALUES (?,?,?,?,?,?,?,?,?)", 
-                        	[$("h4", this).text(),
-                        	parseInt($(".arthropod-length", this).text()),
-                        	$(".arthropod-notes", this).text(),
-                        	parseInt($(".arthropod-count", this).text()),
+                        	[selectedOrder,
+                        	length,
+                        	notes,
+                        	count,
                         	hairyOrSpiny,
                         	leafRoll,
                         	silkTent,
@@ -833,7 +834,9 @@ var submitArthropodsToDB = function(time){
                     }  , function(error){
                         alert("Transaction Error: "+error.message);
                     },function(){
-						alert("Arthropods information was successfully stored");
+						//alert(selectedOrder);
+						//alert(length);
+						//alert(count);
 						db.transaction(function(tx){
             					tx.executeSql("DELETE from SURVEY where timeStart=?", [timeStart]);
         				},  function(error){
@@ -843,15 +846,8 @@ var submitArthropodsToDB = function(time){
         				});
                      });
 
-
-
-		});
-	}
-	else{
-		// navigator.notification.alert("Successfully submitted survey data!");
-		clearFields();
-	}
-
+		navigator.notification.alert("Successfully submitted survey data!");
+		//clearFields();
 };
 
 

@@ -44,8 +44,9 @@ function onDeviceReady() {
 
     // Create DB schemas.
     db.transaction(function(tx){
-        // tx.executeSql("DROP TABLE IF EXISTS USER_INFO");
+		//tx.executeSql("DROP table if EXISTS USER_INFO");
         tx.executeSql("CREATE TABLE IF NOT EXISTS USER_INFO (name, password, userId)");
+		//tx.executeSql("INSERT INTO USER_INFO VALUES(?, ?, ? )",['mingjunw@live.unc.edu','1','161']);
         //
         //refresh survey table each time it is started
         //

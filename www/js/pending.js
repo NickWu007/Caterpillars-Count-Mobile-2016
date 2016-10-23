@@ -147,9 +147,16 @@ function deleteSurvey(timeStart){
             alert("Transaction error: "+error.message);
         }, function(){
             alert("Successfully delete this survey");
-            renderSurvey();
+            
         });
     }
+    if($list_length==1){
+        $list_length=0;
+    $(".survey_list").html(" ");
+    }else{
+        renderSurvey();
+    }
+    
     
 }
 
@@ -166,6 +173,7 @@ function recordErrorCode(survey, errorCode) {
         alert('transaction error: ' + error.message);
     }, function () {
         // alert("update survey " + survey.siteID + "with error status: " + errorCode);
+        renderSurvey();
     });
 }
 
