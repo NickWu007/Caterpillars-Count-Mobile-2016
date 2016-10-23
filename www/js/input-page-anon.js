@@ -87,6 +87,7 @@ document.addEventListener("deviceready", onDeviceReady, false);
 //Return to start screen if android back button is pressed
 function onDeviceReady(){
 
+	populateCircleList(12);
 	db=window.sqlitePlugin.openDatabase(
         {name: 'app.db', location: 'default'}, 
         DBSuccessCB(), 
@@ -684,7 +685,7 @@ var submitArthropodsToDB = function(time,selectedOrder,length,count,notes){
 			var arthropodImageURI = $(".saved-arthropod-image", this).prop("src");
 			//navigator.notification.alert("Arthropod image uri: " + arthropodImageURI);
            db.transaction(function(tx){
-                        tx.executeSql("INSERT INTO ARTHROPODS VALUES (?,?,?,?,?,?,?,?,?)", 
+                        tx.executeSql("INSERT INTO ARTHROPODS VALUES (?,?,?,?,?,?,?,?,?,?,?)", 
                         	[selectedOrder,
                         	length,
                         	notes,
@@ -693,7 +694,9 @@ var submitArthropodsToDB = function(time,selectedOrder,length,count,notes){
                         	leafRoll,
                         	silkTent,
 							arthropodImageURI,
-							time]);
+							siteID,
+							circle,
+							survey]);
                     }  , function(error){
                         alert("Transaction Error: "+error.message);
                     },function(){
