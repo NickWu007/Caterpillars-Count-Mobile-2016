@@ -193,6 +193,7 @@ function onDeviceReady() {
 $(document).ready(function() { 
     window.addEventListener("online", createButtons);
     window.addEventListener("offline", createButtons);
+	createButtons();
 });
 
 //Handles device rotation
