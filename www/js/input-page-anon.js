@@ -87,6 +87,7 @@ document.addEventListener("deviceready", onDeviceReady, false);
 //Return to start screen if android back button is pressed
 function onDeviceReady(){
 
+	populateCircleList(12);
 	db=window.sqlitePlugin.openDatabase(
         {name: 'app.db', location: 'default'}, 
         DBSuccessCB(), 
