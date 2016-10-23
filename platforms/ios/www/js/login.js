@@ -4,6 +4,7 @@
 var DOMAIN = "http://master-caterpillars.vipapps.unc.edu";
 var db;
 var stored_user_info;
+var rememberMeChecked;
 
 document.addEventListener("deviceready", onDeviceReady, false);
 //Return to start screen if android back button is pressed
@@ -59,8 +60,9 @@ $(document).ready(function(){
         e.preventDefault();
 
         //Use hiddenpw variable to make sure that css is consistent when toggling password visibility
-        var $pw, $hiddenpw;
+        var $pw, $hiddenpw, $rememberme;
         var showPasswordCheckboxIsChecked = document.getElementById("show-password").checked;
+        rememberMeChecked = document.getElementById("remember-me").checked;
         if(showPasswordCheckboxIsChecked){
             $pw = $("#visible-password");
             $hiddenpw = $("#hidden-password");
@@ -68,6 +70,7 @@ $(document).ready(function(){
             $pw = $("#hidden-password");
             $hiddenpw = $("#visible-password");
         }
+
         var $email = $('.email');
         //One of the fields is blank
         if (!$email.val() || !$pw.val()) {
@@ -106,24 +109,33 @@ $(document).ready(function(){
                     // If successfully logged in, display main survey page with userID 
                     // and password as (hidden) url parameters. Also store the login info
                     // for future login.
-                    if (data.privilegeLevel >= 0 ) {
+                    if (data.privilegeLevel >= 0) {
                         // alert("before sql xact.");
                         db.transaction(function(tx){
+                            
                             tx.executeSql('delete from USER_INFO');
-                            tx.executeSql('INSERT INTO USER_INFO VALUES (?,?,?)', [json_obj.email, json_obj.password, data.userID], function(tx, resultSet) {
-                                // alert('resultSet.insertId: ' + resultSet.insertId);
-                                // alert('resultSet.rowsAffected: ' + resultSet.rowsAffected);
-                            }, function(tx, error) {
-                                alert('INSERT error: ' + error.message);
-                            });
+                            if(rememberMeChecked){
+                                tx.executeSql('INSERT INTO USER_INFO VALUES (?,?,?)', [json_obj.email, json_obj.password, data.userID], function(tx, resultSet) {
+                                    // alert('resultSet.insertId: ' + resultSet.insertId);
+                                    // alert('resultSet.rowsAffected: ' + resultSet.rowsAffected);
+                                }, function(tx, error) {
+                                    alert('INSERT error: ' + error.message);
+                                });
+                            }
+                            else{
+                                window.location.assign("homepage.html?userID="+json_obj.email+"&password="+json_obj.password);
+                            }
+                            
                         }, function(error){
                             alert("Transaction Error: " + error.message);
                         }, function() {
-                            alert("new user added into database.");
+                            if(rememberMeChecked){alert("new user added into database.");}
+                            else{alert("new user logged in. User info not cached.")}
                             window.location.assign("homepage.html?userID="+data.userID+"&password="+json_obj.password);
                         });
                         // alert("after sql xact.");
                     }
+                   
                     if (data.validPw === 0) {
                         $pw.val("");
                         $(".error").remove();
