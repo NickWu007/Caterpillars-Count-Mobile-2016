@@ -143,6 +143,7 @@ function deleteSurvey(timeStart){
     }else{
         db.transaction(function(tx){
             tx.executeSql("DELETE from SURVEY where timeStart=?", [timeStart]);
+            tx.executeSql("DELETE from ARTHROPODS where timeStart=?", [timeStart]);
         },  function(error){
             alert("Transaction error: "+error.message);
         }, function(){
@@ -204,8 +205,8 @@ function submitSurveyToServer(i, survey) {
         }),
         success: function(result){
             alert("Survey #" + i + " is submitted successfully.");
-            uploadPhoto(survey.leafImageURI, "leaf-photo", result.surveyID);
-            // submitArthropodsToServer(result, survey);
+            //uploadPhoto(survey.leafImageURI, "leaf-photo", result.surveyID);
+            submitArthropodsToServer(result, survey);
             // deleteSurvey(survey.timeStart);
         },
         error : function(xhr, status){
@@ -223,52 +224,51 @@ function submitSurveyToServer(i, survey) {
 //Calls uploadPhoto with orderPhoto (if a photo was taken)
 //upon each successful arthropod submission upload
 var submitArthropodsToServer = function(result, survey){
-    
-    $.ajax({
-        url: DOMAIN + "/api/submission_full.php",
-        type: "POST",
-        crossDomain: true,
-        dataType: 'json',
-        data: JSON.stringify({
-            "type": "order",
-            "surveyID": result.surveyID,
-            "userID": stored_user_info.userId,
-            "password": stored_user_info.password,
-            //order
-            "orderArthropod": $("h4", this).text(),
-            "orderLength": survey.length,
-            "orderNotes": survey.notes,
-            "orderCount": survey.count,
-            //Caterpillar features
-            "hairyOrSpiny": survey.hairyOrSpiny,
-            "leafRoll": survey.leafRoll,
-            "silkTent": survey.silkTent
-        }),
-        success: function (arthropodResult) {
-            //navigator.notification.alert("arthropod info submitted");
-            //If arthropod successfully submitted to database, attempt photo upload
-            //Upload arthropod photo if one exists
-            if (survey.arthropodImageURI !== null && asurvey.rthropodImageURI !== undefined) {
-                //navigator.notification.alert("Uploading order photo");
-                uploadPhoto(survey.arthropodImageURI, "arthropod-photo", arthropodResult.orderID);
+    db.transaction(function(tx){
+        tx.executeSql('select * from ARTHROPODS', [], function(tx, rs){
+            alert(rs.rows.length+ "bugs");
+            for (var i = 0; i < rs.rows.length; i++) {
+                var arthropod = rs.rows.item(i);
+                alert(arthropod.surveyType);
+                alert(arthropod.timeStart);
+                $.ajax({
+                    url: DOMAIN + "/api/submission_full.php",
+                    type: "POST",
+                    crossDomain: true,
+                    dataType: 'json',
+                    data: JSON.stringify({
+                        "type": "order",
+                        "surveyID": result.surveyID,
+                        "userID": survey.userId,
+                        "password": survey.password,
+                        //order
+                        "orderArthropod": arthropod.surveyType,
+                        "orderLength": arthropod.length,
+                        "orderNotes": arthropod.notes,
+                        "orderCount": arthropod.count,
+                        //Caterpillar features
+                        "hairyOrSpiny": arthropod.hairOrSpinyVal,
+                        "leafRoll": arthropod.leafRollVal,
+                        "silkTent": arthropod.silkTentVal
+                    }),
+                    success: function (arthropodResult) {
+                        navigator.notification.alert("arthropod info submitted");
+                        //If arthropod successfully submitted to database, attempt photo upload
+                        //Upload arthropod photo if one exists
+                        if (arthropod.arthropodImageURI !== null && arthropod.arthropodImageURI !== undefined) {
+                            //navigator.notification.alert("Uploading order photo");
+                            uploadPhoto(arthropod.arthropodImageURI, "arthropod-photo", arthropodResult.orderID);
+                        }
+                    },
+                    error : function(xhr, status){
+                        navigator.notification.alert("Unexpected error submitting arthropod #" + i + " with error status: " + xhr.status + ".");
+                    },
+                });
             }
-            // else {
-            //     //Increment number of arthropods submitted here when no photo to upload
-            //     //to prevent duplicate success alerts
-            //     numberOfArthropodsSubmitted++;
-            //     if (numberOfArthropodsSubmitted == numberOfArthropodsToSubmit) {
-            //         var successMessage = confirm("Successfully submitted survey data!\n\n" +
-            //             "Clear form fields?");
-            //         if (successMessage === true) {
-            //             clearFields();
-            //         }
-            //     }
-            // }
-        },
-        error: function () {
-            navigator.notification.alert("Unexpected error submitting " + $("h4", this).text() + " data.");
-        }
-    });
+        });
+    }, function(error){
+        alert("Transaction error: "+error.message);
+    }); 
 };
 
 //databaseID = surveyID if leaf photo, orderID if arthropod photo
@@ -284,7 +284,7 @@ function uploadPhoto(photoURI, photoType, databaseID){
         console.log("Response = " + r.response);
         console.log("Sent = " + r.bytesSent);
         cosole.log("survey.timeStart = " + survey.timeStart);
-        deleteSurvey(survey.timeStart);
+        // deleteSurvey(survey.timeStart);
     };
 
     var fail = function (error) {

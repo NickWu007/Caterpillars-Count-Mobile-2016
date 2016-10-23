@@ -521,7 +521,20 @@ var saveArthropod = function( ) {
 		//);
 
 	}
-	submitArthropodsToDB(time,selectedOrder,length,count,notes);
+	//Check that date and time have been entered
+	time = document.getElementById("time").value;
+	if(!time){
+		navigator.notification.alert("Please enter a time.");
+		return;
+	}
+	date = document.getElementById("date").value;
+	if(!date){
+		navigator.notification.alert("Please enter a date.");
+		return;
+	}
+
+	dateTime = date + " " + time;//Default seconds value to 00
+	submitArthropodsToDB(dateTime,selectedOrder,length,count,notes);
 };
 
 

@@ -1,4 +1,4 @@
-var DOMAIN = "http://develop-caterpillars.vipapps.unc.edu";
+var DOMAIN = "http://master-caterpillars.vipapps.unc.edu";
 
 var leafPhotoTaken = false;
 
@@ -131,7 +131,7 @@ function onDeviceReady(){
 		db.transaction(function(tx){
 			tx.executeSql('select distinct type, siteID, userID, password, circle, survey, timeStart, '  +
 			'temperatureMin, temperatureMax, siteNotes, plantSpecies, herbivory, surveyType, leafCount,' +
-			'source, selectedOrderText, length, count, notes, hairOrSpinyVal, leafRollVal, silkTentVal,' +
+			'source,' +
 			'leafImageURI '+ 'from SURVEY where timeStart=?', [timeStart], function(tx, rs){
             	if(rs.rows.length>0) {retrivedRow=rs.rows.item(0);}
             	else{alert("Did not get indicated survey");}
@@ -302,6 +302,9 @@ var togglePassword = function(){
 //Replaces capture "button" with the photo that was taken
 var onSuccessArthropod = function(imageData) {
 	console.log('success');
+	if (imageData.indexOf("assets-library") !== -1) {
+		imageData = imageData.replace("assets-library://", "cdvfile://localhost/assets-library/");
+	}
 	$("#arthropod-capture").html("<img onclick='arthropodCapture()' id='arthropod-photo' height = '200' width ='200'>");
 	$("#arthropod-photo").attr("src", imageData);
 	console.log(imageData);
@@ -313,12 +316,14 @@ var onSuccessArthropod = function(imageData) {
 //Replaces capture "button" with the photo that was taken
 var onSuccessLeaf = function(imageData) {
 	console.log('success');
+	if (imageData.indexOf("assets-library") !== -1) {
+		imageData = imageData.replace("assets-library://", "cdvfile://localhost/assets-library/");
+	}
 	$("#leaf-capture").html("<img onclick = 'leafCapture()' id='leaf-photo' height = '200' width ='200'>");
 	$("#leaf-photo").attr("src", imageData);
 	console.log(imageData);
 	leafPhotoTaken = true;
 	leafImageURI = imageData;
-	alert(leafImageURI);
 };
 
 //Function called when arthropod capture button is clicked
@@ -326,7 +331,7 @@ var arthropodCapture = function(){
 	navigator.camera.getPicture(onSuccessArthropod, onFail, {
 		quality: 50,
 		sourceType: Camera.PictureSourceType.CAMERA,
-		destinationType: Camera.DestinationType.FILE_URI,
+		destinationType: Camera.DestinationType.NATIVE_URI,
 		saveToPhotoAlbum: true
 	});
 };
@@ -337,7 +342,7 @@ var leafCapture = function(){
 	navigator.camera.getPicture(onSuccessLeaf, onFail, {
 		quality: 50,
 		sourceType: Camera.PictureSourceType.CAMERA,
-		destinationType: Camera.DestinationType.FILE_URI,
+		destinationType: Camera.DestinationType.NATIVE_URI,
 		saveToPhotoAlbum: true
 	});
 
@@ -516,6 +521,7 @@ var saveArthropod = function( ) {
 		//);
 
 	}
+	submitArthropodsToDB(time,selectedOrder,length,count,notes);
 };
 
 
@@ -562,20 +568,6 @@ var submit = function( ) {
 		navigator.notification.alert("Please select a site");
 		return;
 	}
-	
-    var online = navigator.onLine;
-	// if(online === true){
-	//  var showPasswordCheckboxIsChecked = document.getElementById("show-password").checked;
-	//  if(showPasswordCheckboxIsChecked){
-	// 	sitePassword = $("#visible-password").val();
-	//  }else{
-	// 	sitePassword = $("#hidden-password").val();
-	//  }
-	//  if(!sitePassword){
-	// 	navigator.notification.alert("Please enter the site password");
-	// 	return;
-	//  }
-	// }
 
 	surveyType = $(".survey-type option:selected").val();
 	if(surveyType.localeCompare("default")===0){
@@ -646,10 +638,11 @@ var submit = function( ) {
 	//	"\nSite password: " +sitePassword);
 	//var online = navigator.onLine;
 
-	if(online == false){
+	if(navigator.onLine === false){
         //last field for error handler 0 is default
+		//alert("I am here");
 		db.transaction(function(tx){
-                        tx.executeSql("INSERT INTO SURVEY VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", 
+                        tx.executeSql("INSERT INTO SURVEY VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", 
                         	['survey',
                         	siteID,
                         	stored_user_info.userId,
@@ -665,33 +658,27 @@ var submit = function( ) {
                         	surveyType,
                         	parseInt(leafCount),
                         	"Mobile",
-							selectedOrderText,
-							length,
-							count,
-							notes,
-							hairyOrSpinyVal,
-							leafRollVal,
-							silkTentVal,
 							leafImageURI,
-							ArthropodsImageURI,
 							0]);
                     }  , function(error){
                         alert("Transaction Error: "+error.message);
                     },function(){
 						alert("This page was successfully stored");
-						db.transaction(function(tx){
-            					tx.executeSql("DELETE from SURVEY where timeStart=?", [timeStart]);
-        				},  function(error){
-            				alert("Transaction error: "+error.message);
-        				}, function(){
-            				//alert("Successfully delete this survey");
-        				});
 						window.location = "homepage.html";
 
 		});
 			
 	}else{
 		submitSurveyToServer();	
+	}
+	if(edit){
+		db.transaction(function(tx){
+            					tx.executeSql("DELETE from SURVEY where timeStart=?", [timeStart]);
+        				},  function(error){
+            				alert("Transaction error: "+error.message);
+        				}, function(){
+            				//alert("Successfully delete this survey");
+        				});
 	}
 
 
@@ -797,12 +784,72 @@ var submitSurveyToServer = function(){
 			uploadPhoto(leafImageURI, "leaf-photo", result.surveyID);
 			submitArthropodsToServer(result);
 		},
-		error : function(){
-			navigator.notification.alert("Unexpected error submitting survey.");
+		error : function(xhr, status){
+			navigator.notification.alert("Unexpected error submitting survey: " + xhr.status);
 		}
 
 	});
 };
+
+
+var submitArthropodsToDB = function(time,selectedOrder,length,count,notes){
+	var arthropodInputs = $(".arthropod-input");
+	numberOfArthropodsToSubmit = arthropodInputs.length;
+	numberOfArthropodsSubmitted = 0;
+
+			//Get values of caterpillar checklist
+			var hairyOrSpiny, leafRoll, silkTent;
+			if ($(".hairy-or-spiny", this).text().localeCompare("true") === 0) {
+				hairyOrSpiny = 1;
+			}
+			else {
+				hairyOrSpiny = 0;
+			}
+			if ($(".leaf-roll", this).text().localeCompare("true") === 0) {
+				leafRoll = 1;
+			}
+			else {
+				leafRoll = 0;
+			}
+			if ($(".silk-tent", this).text().localeCompare("true") === 0) {
+				silkTent = 1;
+			}
+			else {
+				silkTent = 0;
+			}
+
+			var arthropodImageURI = $(".saved-arthropod-image", this).prop("src");
+			//navigator.notification.alert("Arthropod image uri: " + arthropodImageURI);
+           db.transaction(function(tx){
+                        tx.executeSql("INSERT INTO ARTHROPODS VALUES (?,?,?,?,?,?,?,?,?)", 
+                        	[selectedOrder,
+                        	length,
+                        	notes,
+                        	count,
+                        	hairyOrSpiny,
+                        	leafRoll,
+                        	silkTent,
+							arthropodImageURI,
+							time]);
+                    }  , function(error){
+                        alert("Transaction Error: "+error.message);
+                    },function(){
+						//alert(selectedOrder);
+						//alert(length);
+						//alert(count);
+						db.transaction(function(tx){
+            					tx.executeSql("DELETE from SURVEY where timeStart=?", [timeStart]);
+        				},  function(error){
+            				alert("Transaction error: "+error.message);
+        				}, function(){
+            				//alert("Successfully delete this survey");
+        				});
+                     });
+
+		navigator.notification.alert("Successfully submitted survey data!");
+		//clearFields();
+};
+
 
 //Submits arthropod info to server for each saved order/
 //Calls uploadPhoto with orderPhoto (if a photo was taken)
