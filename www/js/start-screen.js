@@ -14,7 +14,7 @@ function  closeDB(){
 
 function onDeviceReady() {
 
-	createButtons();
+	
 
     //Exit app if android back button is pressed on start screen
     document.addEventListener("backbutton", function (e) {
@@ -50,10 +50,10 @@ function onDeviceReady() {
         //
         //refresh survey table each time it is started
         //
-        //tx.executeSql("DROP TABLE IF EXISTS SURVEY");
-		//tx.executeSql("DROP TABLE IF EXISTS ARTHROPODS");
+        tx.executeSql("DROP TABLE IF EXISTS SURVEY");
+		tx.executeSql("DROP TABLE IF EXISTS ARTHROPODS");
         tx.executeSql("CREATE TABLE IF NOT EXISTS SURVEY(type, siteID, userID, password, circle, survey, timeStart, temperatureMin, temperatureMax, siteNotes, plantSpecies, herbivory, surveyType, leafCount, source,leafImageURI,errorCode)");
-		tx.executeSql("CREATE TABLE IF NOT EXISTS ARTHROPODS(surveyType, length, notes, count, hairOrSpinyVal, leafRollVal, silkTentVal,ArthropodsImageURI,siteID,circle,survey)");
+		tx.executeSql("CREATE TABLE IF NOT EXISTS ARTHROPODS(surveyType, length, notes, count, hairOrSpinyVal, leafRollVal, silkTentVal,ArthropodsImageURI,timeStart)");
         //tx.executeSql("DROP TABLE IF EXISTS SITE");
         tx.executeSql("CREATE TABLE IF NOT EXISTS SITE (siteId, siteName, userId, circle, state)");
 		/*
@@ -116,7 +116,7 @@ function onDeviceReady() {
     }, function(error){
         alert("Transaction Error: "+error.message);
     }, function(){
-        console.log("Transaction OK, database initialized successfully.");
+        // alert("Transaction OK, database initialized successfully.");
     });
     closeDB();
 }

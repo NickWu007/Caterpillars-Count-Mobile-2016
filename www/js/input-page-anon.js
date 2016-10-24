@@ -533,7 +533,7 @@ var submit = function( ) {
 			navigator.notification.alert("Please select an herbivory score.");
 			return;
 	}
-	alert("herbivory select finished");
+	// alert("herbivory select finished");
 
 	//if(!leafPhotoTaken){
 	//	navigator.notification.alert("Please take a leaf photo.");
@@ -549,7 +549,7 @@ var submit = function( ) {
 	//var online = navigator.onLine;
 	
 	//submitArthropodsToDB(dateTime);
-	alert("I am here");
+	// alert("I am here");
 	db.transaction(function(tx){
     	tx.executeSql("INSERT INTO SURVEY VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", 
         	['survey',
