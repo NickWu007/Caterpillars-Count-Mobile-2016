@@ -229,7 +229,7 @@ function submitSurveyToServer(i, survey) {
             alert("Survey #" + i + " is submitted successfully.");
             //uploadPhoto(survey.leafImageURI, "leaf-photo", result.surveyID);
             submitArthropodsToServer(result, survey);
-            // deleteSurvey(survey.timeStart);
+            deleteSurvey(survey.timeStart);
         },
         error : function(xhr, status){
             navigator.notification.alert("Unexpected error submitting survey #" + i + " with error status: " + xhr.status + ".");

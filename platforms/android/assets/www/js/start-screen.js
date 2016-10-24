@@ -50,13 +50,13 @@ function onDeviceReady() {
         //
         //refresh survey table each time it is started
         //
-        tx.executeSql("DROP TABLE IF EXISTS SURVEY");
-		tx.executeSql("DROP TABLE IF EXISTS ARTHROPODS");
+        //tx.executeSql("DROP TABLE IF EXISTS SURVEY");
+		//tx.executeSql("DROP TABLE IF EXISTS ARTHROPODS");
         tx.executeSql("CREATE TABLE IF NOT EXISTS SURVEY(type, siteID, userID, password, circle, survey, timeStart, temperatureMin, temperatureMax, siteNotes, plantSpecies, herbivory, surveyType, leafCount, source,leafImageURI,errorCode)");
 		tx.executeSql("CREATE TABLE IF NOT EXISTS ARTHROPODS(surveyType, length, notes, count, hairOrSpinyVal, leafRollVal, silkTentVal,ArthropodsImageURI,timeStart)");
         //tx.executeSql("DROP TABLE IF EXISTS SITE");
         tx.executeSql("CREATE TABLE IF NOT EXISTS SITE (siteId, siteName, userId, circle, state)");
-		/*
+		
         tx.executeSql("INSERT INTO SURVEY VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",   
                          	['survey',  
                          	8892356,  
@@ -110,7 +110,7 @@ function onDeviceReady() {
                        	    5,  
                         	"Mobile",   
 							'', 
-							0]);*/
+							0]);
 							
         
     }, function(error){
@@ -152,7 +152,7 @@ function createButtons(){
                                 "<div class = 'button'><h4>Anonymous Mode</h4></div>"+
                             "</div>"+
                         "</a>"; 
-
+                        online=false;
     if (online) {
         $("#top_button").html(register_button);
         $("#bottom_button").html(login_buton);
