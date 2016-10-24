@@ -165,6 +165,18 @@ function onDeviceReady(){
 				$("#leaf-photo").prop("src", retrivedRow.leafImageURI);
 			}	
 		});
+/*
+		db.transaction(function(tx){
+			tx.executeSql('select * from Arthropod where ?=?', [timeStart], function(tx, rs){
+            	if(rs.rows.length>0) {retrivedRow=rs.rows.item(0);}
+            	else{alert("Did not get indicated Arthropod");}
+        	});
+
+    	}, function(error){
+        	alert("Transaction error: "+error.message);
+    	}, function(){
+			//render Arthropod
+		}*/
 
 	}else{
 		setTime();
@@ -669,6 +681,7 @@ var submit = function( ) {
                         	"Mobile",
 							leafImageURI,
 							0]);
+						tx.executeSql("DELETE from SURVEY where timeStart=? and siteID=?", [timeStart,-1]);
                     }  , function(error){
                         alert("Transaction Error: "+error.message);
                     },function(){
@@ -680,17 +693,6 @@ var submit = function( ) {
 	}else{
 		submitSurveyToServer();	
 	}
-	if(edit){
-		db.transaction(function(tx){
-            					tx.executeSql("DELETE from SURVEY where timeStart=?", [timeStart]);
-        				},  function(error){
-            				alert("Transaction error: "+error.message);
-        				}, function(){
-            				//alert("Successfully delete this survey");
-        				});
-	}
-
-
 };
 
 //Toggles whether the caterpillar checklist is visible on the arthropod select screen
@@ -848,18 +850,11 @@ var submitArthropodsToDB = function(time,selectedOrder,length,count,notes){
 						//alert(selectedOrder);
 						//alert(length);
 						//alert(count);
-						db.transaction(function(tx){
-            					tx.executeSql("DELETE from SURVEY where timeStart=?", [timeStart]);
-        				},  function(error){
-            				alert("Transaction error: "+error.message);
-        				}, function(){
-            				//alert("Successfully delete this survey");
-        				});
                      });
 
 
 
-		navigator.notification.alert("Successfully submitted survey data!");
+		navigator.notification.alert("Successfully Stored Arthropod data!");
 		//clearFields();
 	
 };
@@ -1019,13 +1014,6 @@ function uploadPhoto(photoURI, photoType, databaseID){
 //Clears fields following a successful survey submission
 var clearFields = function(){
 	edit=false;
-	db.transaction(function(tx){
-            tx.executeSql("DELETE from SURVEY where timeStart=?", [timeStart]);
-	},  function(error){
-            alert("Transaction error: "+error.message);
-    }, function(){
-           //alert("Successfully delete this survey");
-    });
 	$(".time-start").val("");
 	$(".notes").val("");
 

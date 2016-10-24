@@ -4,7 +4,7 @@
 var db;
 var survey_result;
 var $list_length;
-var DOMAIN = "http://master-caterpillars.vipapps.unc.edu";
+var DOMAIN = "http://develop-caterpillars.vipapps.unc.edu";
 
 document.addEventListener("deviceready", onDeviceReady, false);
 
@@ -46,6 +46,9 @@ function renderSurvey(){
     }, function(){
         //alert("successfully retrieved pending surveys");
         var list_content="";
+        var normal_list="";
+        var incomplete_list="";
+        var error_list="";
         $list_length=survey_result.length;
         for(var i=0; i<survey_result.length; i++){
             var row = survey_result.item(i);
@@ -58,10 +61,12 @@ function renderSurvey(){
                      new_list_item= '<li class="survey_item_Pending" id="'+row.timeStart+'"><h5>Click Here to Complete this Survey</h5><h5>Circle: '+circle_text+
                     '</h5><h5>Survey: '+row.survey+'</h5><h5>Time: '+row.timeStart+
                     '<br><div class="survey_delete text-center white-text" id="'+row.timeStart+'"> Delete this Survey</div></li><hr>';
+                    incomplete_list+=new_list_item;
                 }else{
                     new_list_item= '<li class="survey_item" id="'+row.timeStart+'"><h5>Site: '+row.siteID+'</h5><h5>Circle: '+row.circle+
                     '</h5><h5>Survey: '+row.survey+'</h5><h5>Time: '+row.timeStart+
                     '<br><div class="survey_delete text-center white-text" id="'+row.timeStart+'"> Delete this Survey</div></li><hr>';
+                    normal_list+=new_list_item;
                 }
 
             }else{
@@ -79,12 +84,28 @@ function renderSurvey(){
                 new_list_item+='<h5>Site: '+row.siteID+'</h5><h5>Circle: '+row.circle+
                 '</h5><h5>UserID: '+row.userID+'</h5><h5>Survey: '+row.survey+'</h5><h5>Time: '+row.timeStart+
                 '<br><div class="survey_delete text-center white-text" id="'+row.timeStart+'"> Delete this Survey</div></li><hr>';
+                error_list+=new_list_item;
             }
             
 
-            list_content += new_list_item;
+            //list_content += new_list_item;
         }
-
+        if(normal_list==""){
+            normal_list="=======There is no pending Survey======<br>";
+        }else{
+            normal_list="=======Regular Pending Survey======<br>"+normal_list;
+        }
+        if(error_list==""){
+            error_list="=======There is no Error Survey======<br>";
+        }else{
+            error_list="=======Error Pending Survey======<br>"+error_list;
+        }
+        if(incomplete_list==""){
+            incomplete_list="======There is no incomplete Survey=====<br>";
+        }else{
+            incomplete_list="=======incomplete Pending Survey======<br>"+incomplete_list
+        }
+        list_content=normal_list+incomplete_list+error_list;
         $(".survey_list").html(list_content);
         numSurveys();
         $(".survey_item_error").click(function(){
@@ -152,8 +173,9 @@ function deleteSurvey(timeStart){
         });
     }
     if($list_length==1){
-        $list_length==0;
-    $(".survey_list").html(" ");
+        $list_length=0;
+        $(".survey_list").html(" ");
+        $(".survey-count").html("Total Stored Survey: 0");
     }else{
         renderSurvey();
     }
