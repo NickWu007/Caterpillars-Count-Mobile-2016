@@ -545,16 +545,6 @@ function getURLParameter(name) {
 
 var submit = function( ) {
 	//Check that a temperature has been selected
-	/*alert("temp");
-	alert(selectedOrderText);
-    alert(length);
-    alert(count);
-    alert(notes);
-    alert(hairyOrSpinyVal);
-    alert(leafRollVal);
-    alert(silkTentVal);
-    alert(leafImageURI);
-    alert(ArthropodsImageURI);*/
 	temperature = $("#temperature option:selected").val();
 	if(temperature.localeCompare("default") === 0){
 		navigator.notification.alert("Please select a temperature range");
@@ -810,7 +800,7 @@ var toolTip = function(toolTipLocation){
 //Submits basic survey info and leaf photo to server
 //Calls submitArthropodsToServer if survey upload is successful
 var submitSurveyToServer = function(){
-//	navigator.notification.alert("Submitting survey");
+	navigator.notification.alert("Submitting survey");
 	 $.ajax({
 		url: DOMAIN + "/api/submission_full.php",
 		type : "POST",
