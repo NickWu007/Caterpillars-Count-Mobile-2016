@@ -41,7 +41,6 @@ function renderSurvey(){
                 numSurveys();
             }
         });
-
     }, function(error){
         alert("Transaction error: "+error.message);
     }, function(){
@@ -224,13 +223,11 @@ function submitSurveyToServer(i, survey) {
 //Calls uploadPhoto with orderPhoto (if a photo was taken)
 //upon each successful arthropod submission upload
 var submitArthropodsToServer = function(result, survey){
+
     db.transaction(function(tx){
-        tx.executeSql('select * from ARTHROPODS', [], function(tx, rs){
-            alert(rs.rows.length+ "bugs");
+        tx.executeSql('select * from ARTHROPODS where timeStart = ?', [survey.timeStart], function(tx, rs){
             for (var i = 0; i < rs.rows.length; i++) {
                 var arthropod = rs.rows.item(i);
-                alert(arthropod.surveyType);
-                alert(arthropod.timeStart);
                 $.ajax({
                     url: DOMAIN + "/api/submission_full.php",
                     type: "POST",

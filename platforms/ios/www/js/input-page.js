@@ -534,7 +534,7 @@ var saveArthropod = function( ) {
 	}
 
 	dateTime = date + " " + time;//Default seconds value to 00
-	submitArthropodsToDB(dateTime,selectedOrder,length,count,notes);
+	// submitArthropodsToDB(dateTime,selectedOrder,length,count,notes);
 };
 
 
@@ -673,9 +673,51 @@ var submit = function( ) {
                         	"Mobile",
 							leafImageURI,
 							0]);
-                    }  , function(error){
+
+						var arthropodInputs = $(".arthropod-input");
+						numberOfArthropodsToSubmit = arthropodInputs.length;
+						numberOfArthropodsSubmitted = 0;
+						if(numberOfArthropodsToSubmit > 0) {
+							arthropodInputs.each(function () {
+
+							//Get values of caterpillar checklist
+							var hairyOrSpiny, leafRoll, silkTent;
+							if ($(".hairy-or-spiny", this).text().localeCompare("true") === 0) {
+								hairyOrSpiny = 1;
+							}
+							else {
+								hairyOrSpiny = 0;
+							}
+							if ($(".leaf-roll", this).text().localeCompare("true") === 0) {
+								leafRoll = 1;
+							}
+							else {
+								leafRoll = 0;
+							}
+							if ($(".silk-tent", this).text().localeCompare("true") === 0) {
+								silkTent = 1;
+							}
+							else {
+								silkTent = 0;
+							}
+							var arthropodImageURI = $(".saved-arthropod-image", this).prop("src");
+
+			                tx.executeSql("INSERT INTO ARTHROPODS VALUES (?,?,?,?,?,?,?,?,?)", 
+			                    [$("h4", this).text(),
+			                    parseInt($(".arthropod-length", this).text()),
+			                    $(".arthropod-notes", this).text(),
+			                    parseInt($(".arthropod-count", this).text()),
+			                    hairyOrSpiny,
+			                    leafRoll,
+			                    silkTent,
+								arthropodImageURI,
+								dateTime]);
+			                
+						});
+				}
+					}, function(error){
                         alert("Transaction Error: "+error.message);
-                    },function(){
+                    }, function(){
 						alert("This page was successfully stored");
 						window.location = "homepage.html";
 
@@ -805,65 +847,57 @@ var submitSurveyToServer = function(){
 };
 
 
-var submitArthropodsToDB = function(time,selectedOrder,length,count,notes){
-	var arthropodInputs = $(".arthropod-input");
-	numberOfArthropodsToSubmit = arthropodInputs.length;
-	numberOfArthropodsSubmitted = 0;
+// var submitArthropodsToDB = function(time,selectedOrder,length,count,notes){
+// 	var arthropodInputs = $(".arthropod-input");
+// 	numberOfArthropodsToSubmit = arthropodInputs.length;
+// 	numberOfArthropodsSubmitted = 0;
 
-			//Get values of caterpillar checklist
-			var hairyOrSpiny, leafRoll, silkTent;
-			if ($(".hairy-or-spiny", this).text().localeCompare("true") === 0) {
-				hairyOrSpiny = 1;
-			}
-			else {
-				hairyOrSpiny = 0;
-			}
-			if ($(".leaf-roll", this).text().localeCompare("true") === 0) {
-				leafRoll = 1;
-			}
-			else {
-				leafRoll = 0;
-			}
-			if ($(".silk-tent", this).text().localeCompare("true") === 0) {
-				silkTent = 1;
-			}
-			else {
-				silkTent = 0;
-			}
+// 			//Get values of caterpillar checklist
+// 			var hairyOrSpiny, leafRoll, silkTent;
+// 			if ($(".hairy-or-spiny", this).text().localeCompare("true") === 0) {
+// 				hairyOrSpiny = 1;
+// 			}
+// 			else {
+// 				hairyOrSpiny = 0;
+// 			}
+// 			if ($(".leaf-roll", this).text().localeCompare("true") === 0) {
+// 				leafRoll = 1;
+// 			}
+// 			else {
+// 				leafRoll = 0;
+// 			}
+// 			if ($(".silk-tent", this).text().localeCompare("true") === 0) {
+// 				silkTent = 1;
+// 			}
+// 			else {
+// 				silkTent = 0;
+// 			}
 
-			var arthropodImageURI = $(".saved-arthropod-image", this).prop("src");
-			//navigator.notification.alert("Arthropod image uri: " + arthropodImageURI);
-           db.transaction(function(tx){
-                        tx.executeSql("INSERT INTO ARTHROPODS VALUES (?,?,?,?,?,?,?,?,?,?,?)", 
-                        	[selectedOrder,
-                        	length,
-                        	notes,
-                        	count,
-                        	hairyOrSpiny,
-                        	leafRoll,
-                        	silkTent,
-							arthropodImageURI,
-							siteID,
-							circle,
-							survey]);
-                    }  , function(error){
-                        alert("Transaction Error: "+error.message);
-                    },function(){
-						//alert(selectedOrder);
-						//alert(length);
-						//alert(count);
-						db.transaction(function(tx){
-            					tx.executeSql("DELETE from SURVEY where timeStart=?", [timeStart]);
-        				},  function(error){
-            				alert("Transaction error: "+error.message);
-        				}, function(){
-            				//alert("Successfully delete this survey");
-        				});
-                     });
+// 			var arthropodImageURI = $(".saved-arthropod-image", this).prop("src");
+// 			//navigator.notification.alert("Arthropod image uri: " + arthropodImageURI);
+//            db.transaction(function(tx){
+//                         tx.executeSql("INSERT INTO ARTHROPODS VALUES (?,?,?,?,?,?,?,?,?,?,?)", 
+//                         	[selectedOrder,
+//                         	length,
+//                         	notes,
+//                         	count,
+//                         	hairyOrSpiny,
+//                         	leafRoll,
+//                         	silkTent,
+// 							arthropodImageURI,
+// 							siteID,
+// 							circle,
+// 							survey]);
+//                     }  , function(error){
+//                         alert("Transaction Error: "+error.message);
+//                     },function(){
+// 						//alert(selectedOrder);
+// 						//alert(length);
+// 						//alert(count);
+//                      });
 
-		navigator.notification.alert("Successfully submitted survey data!");
-		//clearFields();
-};
+// 		navigator.notification.alert("Successfully submitted survey data!");
+// };
 
 
 //Submits arthropod info to server for each saved order/
@@ -904,7 +938,6 @@ var submitArthropodsToServer = function(result){
 				type: "POST",
 				crossDomain: true,
 				dataType: 'json',
-//			async: false,
 				data: JSON.stringify({
 					"type": "order",
 					"surveyID": result.surveyID,
