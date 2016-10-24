@@ -44,30 +44,30 @@ function onDeviceReady() {
 
     // Create DB schemas.
     db.transaction(function(tx){
-		//tx.executeSql("DROP table if EXISTS USER_INFO");
+		tx.executeSql("DROP table if EXISTS USER_INFO");
         tx.executeSql("CREATE TABLE IF NOT EXISTS USER_INFO (name, password, userId)");
-		//tx.executeSql("INSERT INTO USER_INFO VALUES(?, ?, ? )",['mingjunw@live.unc.edu','1','161']);
+		tx.executeSql("INSERT INTO USER_INFO VALUES(?, ?, ? )",['leq94@live.unc.edu','leq941116','215']);
         //
         //refresh survey table each time it is started
         //
-        tx.executeSql("DROP TABLE IF EXISTS SURVEY");
+        //tx.executeSql("DROP TABLE IF EXISTS SURVEY");
 		//tx.executeSql("DROP TABLE IF EXISTS ARTHROPODS");
         tx.executeSql("CREATE TABLE IF NOT EXISTS SURVEY(type, siteID, userID, password, circle, survey, timeStart, temperatureMin, temperatureMax, siteNotes, plantSpecies, herbivory, surveyType, leafCount, source,leafImageURI,errorCode)");
 		tx.executeSql("CREATE TABLE IF NOT EXISTS ARTHROPODS(surveyType, length, notes, count, hairOrSpinyVal, leafRollVal, silkTentVal,ArthropodsImageURI,siteID,circle,survey)");
         //tx.executeSql("DROP TABLE IF EXISTS SITE");
         tx.executeSql("CREATE TABLE IF NOT EXISTS SITE (siteId, siteName, userId, circle, state)");
-		
+		/*
         tx.executeSql("INSERT INTO SURVEY VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",   
                          	['survey',  
                          	8892356,  
-                         	159,  
-                        	12345,  
+                         	215,  
+                        	'leq941116',  
                         	6,  
                         	'A',  
                       	    "2016-10-23 23:08:41",  
                        	    30,  
                         	39,  
-                       	    '$(".notes").val()',  
+                       	    'note',  
                          	'plantSpecies',  
                          	'2',  
                        	    'Visual',  
@@ -110,7 +110,7 @@ function onDeviceReady() {
                        	    5,  
                         	"Mobile",   
 							'', 
-							0]);
+							0]);*/
 							
         
     }, function(error){

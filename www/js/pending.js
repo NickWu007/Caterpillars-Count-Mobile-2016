@@ -4,7 +4,7 @@
 var db;
 var survey_result;
 var $list_length;
-var DOMAIN = "http://develop-caterpillars.vipapps.unc.edu";
+var DOMAIN = "http://master-caterpillars.vipapps.unc.edu";
 
 document.addEventListener("deviceready", onDeviceReady, false);
 
@@ -54,7 +54,7 @@ function renderSurvey(){
             var row = survey_result.item(i);
             var new_list_item;
             if(row.errorCode==0){
-                if(row.siteID===-1){
+                if(row.siteID==-1){
                     var circle_text;
                     if(row.circle === -1){circle_text="Unknown";}
                     else{circle_text = row.circle}

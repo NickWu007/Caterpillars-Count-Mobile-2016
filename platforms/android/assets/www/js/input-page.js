@@ -8,7 +8,7 @@ var arthropodPhotoTaken = false;
 
 //Track whether circle count for selected site has been retrieved.
 var circleCountRetrieved = false;
-
+var anon=false;
 var temperature;
 var time;
 var date;
@@ -111,7 +111,7 @@ function onDeviceReady(){
     });
 
 	//alert("begin wait");
-	setTimeout(retrieveSiteList(),800);
+	
 
 
 	document.addEventListener("backbutton", function(e){
@@ -125,6 +125,22 @@ function onDeviceReady(){
 
 	timeStart=getURLParameter("time");
 	//alert(timeStart);
+	if(getURLParameter("anonmyous")==="true"){
+		anon=true;
+		populateCircleList(12);
+		var siteList = document.getElementById("site");
+
+        var siteOption = document.createElement("option");
+		siteOption.text = "Unknown Site";
+		siteOption.value = -1;
+		siteList.add(siteOption);
+		$("#site option:selected").val(-1);
+		stored_user_info={};
+		stored_user_info.userId="";
+        stored_user_info.password="";
+	}else{
+		setTimeout(retrieveSiteList(),800);
+	}
 	if(!(timeStart===null)){
 		edit=true;
 		var retrivedRow;
@@ -247,6 +263,9 @@ var retrieveCircleCount = function(){
 	}
 	var circleNum;
 	var siteID = $("#site option:selected").val();
+	if(siteID==-1){
+		return;
+	}
 	//Clear circle list to prevent circles from different site from being selected.
 	clearCircleList();
 	document.getElementById("circle").selectedIndex = 0;
@@ -658,11 +677,11 @@ var submit = function( ) {
 	//navigator.notification.alert("SiteID: " + siteID +
 	//	"\nSite password: " +sitePassword);
 	//var online = navigator.onLine;
-
-	if(online == false){
+	if(online == false||anon== true){
         //last field for error handler 0 is default
 		//alert("I am here");
 		db.transaction(function(tx){
+						tx.executeSql("DELETE from SURVEY where timeStart=?", [timeStart]);
                         tx.executeSql("INSERT INTO SURVEY VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", 
                         	['survey',
                         	siteID,
@@ -681,30 +700,22 @@ var submit = function( ) {
                         	"Mobile",
 							leafImageURI,
 							0]);
-						tx.executeSql("DELETE from SURVEY where timeStart=? and siteID=?", [timeStart,-1]);
+						
                     }  , function(error){
                         alert("Transaction Error: "+error.message);
                     },function(){
 						alert("This page was successfully stored");
-						window.location = "homepage.html";
+						if(anon){
+							window.location = "homepage-anon.html";
+						}else{
+							window.location = "homepage.html";
+						}			
 
 		});
 			
 	}else{
 		submitSurveyToServer();	
 	}
-	if(edit){
-		alert("Inside Edit Mode +"+timeStart);
-        db.transaction(function(tx){
-            tx.executeSql("DELETE from SURVEY where timeStart=?", [timeStart]);
-        },  function(error){
-            alert("Transaction error: "+error.message);
-        }, function(){
-            alert("Successfully delete this survey");
-        });
-	}
-
-
 };
 
 //Toggles whether the caterpillar checklist is visible on the arthropod select screen
