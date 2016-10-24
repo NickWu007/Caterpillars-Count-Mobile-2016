@@ -45,6 +45,10 @@ button{
     margin-bottom: 45px;
 }
 
+.navlink.big-text {
+    font-size: 24px;
+}
+
 .nav-section{
     margin-left : 40px;
     margin-right: 40px;

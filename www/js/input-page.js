@@ -1,4 +1,4 @@
-var DOMAIN = "http://develop-caterpillars.vipapps.unc.edu";
+var DOMAIN = "http://master-caterpillars.vipapps.unc.edu";
 
 var leafPhotoTaken = false;
 
@@ -302,6 +302,9 @@ var togglePassword = function(){
 //Replaces capture "button" with the photo that was taken
 var onSuccessArthropod = function(imageData) {
 	console.log('success');
+	if (imageData.indexOf("assets-library") !== -1) {
+		imageData = imageData.replace("assets-library://", "cdvfile://localhost/assets-library/");
+	}
 	$("#arthropod-capture").html("<img onclick='arthropodCapture()' id='arthropod-photo' height = '200' width ='200'>");
 	$("#arthropod-photo").attr("src", imageData);
 	console.log(imageData);
@@ -313,12 +316,14 @@ var onSuccessArthropod = function(imageData) {
 //Replaces capture "button" with the photo that was taken
 var onSuccessLeaf = function(imageData) {
 	console.log('success');
+	if (imageData.indexOf("assets-library") !== -1) {
+		imageData = imageData.replace("assets-library://", "cdvfile://localhost/assets-library/");
+	}
 	$("#leaf-capture").html("<img onclick = 'leafCapture()' id='leaf-photo' height = '200' width ='200'>");
 	$("#leaf-photo").attr("src", imageData);
 	console.log(imageData);
 	leafPhotoTaken = true;
 	leafImageURI = imageData;
-	alert(leafImageURI);
 };
 
 //Function called when arthropod capture button is clicked
@@ -326,7 +331,7 @@ var arthropodCapture = function(){
 	navigator.camera.getPicture(onSuccessArthropod, onFail, {
 		quality: 50,
 		sourceType: Camera.PictureSourceType.CAMERA,
-		destinationType: Camera.DestinationType.FILE_URI,
+		destinationType: Camera.DestinationType.NATIVE_URI,
 		saveToPhotoAlbum: true
 	});
 };
@@ -337,7 +342,7 @@ var leafCapture = function(){
 	navigator.camera.getPicture(onSuccessLeaf, onFail, {
 		quality: 50,
 		sourceType: Camera.PictureSourceType.CAMERA,
-		destinationType: Camera.DestinationType.FILE_URI,
+		destinationType: Camera.DestinationType.NATIVE_URI,
 		saveToPhotoAlbum: true
 	});
 
@@ -516,7 +521,20 @@ var saveArthropod = function( ) {
 		//);
 
 	}
-	submitArthropodsToDB(time,selectedOrder,length,count,notes);
+	//Check that date and time have been entered
+	time = document.getElementById("time").value;
+	if(!time){
+		navigator.notification.alert("Please enter a time.");
+		return;
+	}
+	date = document.getElementById("date").value;
+	if(!date){
+		navigator.notification.alert("Please enter a date.");
+		return;
+	}
+
+	dateTime = date + " " + time;//Default seconds value to 00
+	// submitArthropodsToDB(dateTime,selectedOrder,length,count,notes);
 };
 
 
@@ -527,16 +545,6 @@ function getURLParameter(name) {
 
 var submit = function( ) {
 	//Check that a temperature has been selected
-	/*alert("temp");
-	alert(selectedOrderText);
-    alert(length);
-    alert(count);
-    alert(notes);
-    alert(hairyOrSpinyVal);
-    alert(leafRollVal);
-    alert(silkTentVal);
-    alert(leafImageURI);
-    alert(ArthropodsImageURI);*/
 	temperature = $("#temperature option:selected").val();
 	if(temperature.localeCompare("default") === 0){
 		navigator.notification.alert("Please select a temperature range");
@@ -563,20 +571,6 @@ var submit = function( ) {
 		navigator.notification.alert("Please select a site");
 		return;
 	}
-	
-    var online = navigator.onLine;
-	// if(online === true){
-	//  var showPasswordCheckboxIsChecked = document.getElementById("show-password").checked;
-	//  if(showPasswordCheckboxIsChecked){
-	// 	sitePassword = $("#visible-password").val();
-	//  }else{
-	// 	sitePassword = $("#hidden-password").val();
-	//  }
-	//  if(!sitePassword){
-	// 	navigator.notification.alert("Please enter the site password");
-	// 	return;
-	//  }
-	// }
 
 	surveyType = $(".survey-type option:selected").val();
 	if(surveyType.localeCompare("default")===0){
@@ -647,7 +641,7 @@ var submit = function( ) {
 	//	"\nSite password: " +sitePassword);
 	//var online = navigator.onLine;
 
-	if(online == false){
+	if(navigator.onLine === false){
         //last field for error handler 0 is default
 		//alert("I am here");
 		db.transaction(function(tx){
@@ -669,9 +663,51 @@ var submit = function( ) {
                         	"Mobile",
 							leafImageURI,
 							0]);
-                    }  , function(error){
+
+						var arthropodInputs = $(".arthropod-input");
+						numberOfArthropodsToSubmit = arthropodInputs.length;
+						numberOfArthropodsSubmitted = 0;
+						if(numberOfArthropodsToSubmit > 0) {
+							arthropodInputs.each(function () {
+
+							//Get values of caterpillar checklist
+							var hairyOrSpiny, leafRoll, silkTent;
+							if ($(".hairy-or-spiny", this).text().localeCompare("true") === 0) {
+								hairyOrSpiny = 1;
+							}
+							else {
+								hairyOrSpiny = 0;
+							}
+							if ($(".leaf-roll", this).text().localeCompare("true") === 0) {
+								leafRoll = 1;
+							}
+							else {
+								leafRoll = 0;
+							}
+							if ($(".silk-tent", this).text().localeCompare("true") === 0) {
+								silkTent = 1;
+							}
+							else {
+								silkTent = 0;
+							}
+							var arthropodImageURI = $(".saved-arthropod-image", this).prop("src");
+
+			                tx.executeSql("INSERT INTO ARTHROPODS VALUES (?,?,?,?,?,?,?,?,?)", 
+			                    [$("h4", this).text(),
+			                    parseInt($(".arthropod-length", this).text()),
+			                    $(".arthropod-notes", this).text(),
+			                    parseInt($(".arthropod-count", this).text()),
+			                    hairyOrSpiny,
+			                    leafRoll,
+			                    silkTent,
+								arthropodImageURI,
+								dateTime]);
+			                
+						});
+				}
+					}, function(error){
                         alert("Transaction Error: "+error.message);
-                    },function(){
+                    }, function(){
 						alert("This page was successfully stored");
 						window.location = "homepage.html";
 
@@ -764,7 +800,7 @@ var toolTip = function(toolTipLocation){
 //Submits basic survey info and leaf photo to server
 //Calls submitArthropodsToServer if survey upload is successful
 var submitSurveyToServer = function(){
-//	navigator.notification.alert("Submitting survey");
+	navigator.notification.alert("Submitting survey");
 	 $.ajax({
 		url: DOMAIN + "/api/submission_full.php",
 		type : "POST",
@@ -793,76 +829,65 @@ var submitSurveyToServer = function(){
 			uploadPhoto(leafImageURI, "leaf-photo", result.surveyID);
 			submitArthropodsToServer(result);
 		},
-		error : function(){
-			navigator.notification.alert("Unexpected error submitting survey.");
+		error : function(xhr, status){
+			navigator.notification.alert("Unexpected error submitting survey: " + xhr.status);
 		}
 
 	});
 };
 
 
-var submitArthropodsToDB = function(time,selectedOrder,length,count,notes){
-	var arthropodInputs = $(".arthropod-input");
-	numberOfArthropodsToSubmit = arthropodInputs.length;
-	numberOfArthropodsSubmitted = 0;
+// var submitArthropodsToDB = function(time,selectedOrder,length,count,notes){
+// 	var arthropodInputs = $(".arthropod-input");
+// 	numberOfArthropodsToSubmit = arthropodInputs.length;
+// 	numberOfArthropodsSubmitted = 0;
 
-			//Get values of caterpillar checklist
-			var hairyOrSpiny, leafRoll, silkTent;
-			if ($(".hairy-or-spiny", this).text().localeCompare("true") === 0) {
-				hairyOrSpiny = 1;
-			}
-			else {
-				hairyOrSpiny = 0;
-			}
-			if ($(".leaf-roll", this).text().localeCompare("true") === 0) {
-				leafRoll = 1;
-			}
-			else {
-				leafRoll = 0;
-			}
-			if ($(".silk-tent", this).text().localeCompare("true") === 0) {
-				silkTent = 1;
-			}
-			else {
-				silkTent = 0;
-			}
+// 			//Get values of caterpillar checklist
+// 			var hairyOrSpiny, leafRoll, silkTent;
+// 			if ($(".hairy-or-spiny", this).text().localeCompare("true") === 0) {
+// 				hairyOrSpiny = 1;
+// 			}
+// 			else {
+// 				hairyOrSpiny = 0;
+// 			}
+// 			if ($(".leaf-roll", this).text().localeCompare("true") === 0) {
+// 				leafRoll = 1;
+// 			}
+// 			else {
+// 				leafRoll = 0;
+// 			}
+// 			if ($(".silk-tent", this).text().localeCompare("true") === 0) {
+// 				silkTent = 1;
+// 			}
+// 			else {
+// 				silkTent = 0;
+// 			}
 
-			var arthropodImageURI = $(".saved-arthropod-image", this).prop("src");
-			//navigator.notification.alert("Arthropod image uri: " + arthropodImageURI);
-           db.transaction(function(tx){
-                        tx.executeSql("INSERT INTO ARTHROPODS VALUES (?,?,?,?,?,?,?,?,?,?,?)", 
-                        	[selectedOrder,
-                        	length,
-                        	notes,
-                        	count,
-                        	hairyOrSpiny,
-                        	leafRoll,
-                        	silkTent,
-							arthropodImageURI,
-							siteID,
-							circle,
-							survey]);
-                    }  , function(error){
-                        alert("Transaction Error: "+error.message);
-                    },function(){
-						//alert(selectedOrder);
-						//alert(length);
-						//alert(count);
-						db.transaction(function(tx){
-            					tx.executeSql("DELETE from SURVEY where timeStart=?", [timeStart]);
-        				},  function(error){
-            				alert("Transaction error: "+error.message);
-        				}, function(){
-            				//alert("Successfully delete this survey");
-        				});
-                     });
+// 			var arthropodImageURI = $(".saved-arthropod-image", this).prop("src");
+// 			//navigator.notification.alert("Arthropod image uri: " + arthropodImageURI);
+//            db.transaction(function(tx){
+//                         tx.executeSql("INSERT INTO ARTHROPODS VALUES (?,?,?,?,?,?,?,?,?,?,?)", 
+//                         	[selectedOrder,
+//                         	length,
+//                         	notes,
+//                         	count,
+//                         	hairyOrSpiny,
+//                         	leafRoll,
+//                         	silkTent,
+// 							arthropodImageURI,
+// 							siteID,
+// 							circle,
+// 							survey]);
+//                     }  , function(error){
+//                         alert("Transaction Error: "+error.message);
+//                     },function(){
+// 						//alert(selectedOrder);
+// 						//alert(length);
+// 						//alert(count);
+//                      });
 
-
-
-		navigator.notification.alert("Successfully submitted survey data!");
-		//clearFields();
-	
-};
+// 		navigator.notification.alert("Successfully submitted survey data!");
+// };
 
 
 //Submits arthropod info to server for each saved order/
@@ -903,7 +928,6 @@ var submitArthropodsToServer = function(result){
 				type: "POST",
 				crossDomain: true,
 				dataType: 'json',
-//			async: false,
 				data: JSON.stringify({
 					"type": "order",
 					"surveyID": result.surveyID,
