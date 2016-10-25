@@ -671,7 +671,7 @@ var submit = function( ) {
 	//navigator.notification.alert("SiteID: " + siteID +
 	//	"\nSite password: " +sitePassword);
 	//var online = navigator.onLine;
-	if(navigator.online == false||anon== true){
+	if(navigator.onLine == false||anon== true){
         //last field for error handler 0 is default
 		//alert("I am here");
 		db.transaction(function(tx){
@@ -824,7 +824,7 @@ var toolTip = function(toolTipLocation){
 //Submits basic survey info and leaf photo to server
 //Calls submitArthropodsToServer if survey upload is successful
 var submitSurveyToServer = function(){
-	navigator.notification.alert("Submitting survey");
+	// navigator.notification.alert("Submitting survey");
 	 $.ajax({
 		url: DOMAIN + "/api/submission_full.php",
 		type : "POST",

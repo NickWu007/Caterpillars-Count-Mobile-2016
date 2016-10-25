@@ -8,7 +8,7 @@ var arthropodPhotoTaken = false;
 
 //Track whether circle count for selected site has been retrieved.
 var circleCountRetrieved = false;
-
+var anon=false;
 var temperature;
 var time;
 var date;
@@ -111,7 +111,7 @@ function onDeviceReady(){
     });
 
 	//alert("begin wait");
-	setTimeout(retrieveSiteList(),800);
+	
 
 
 	document.addEventListener("backbutton", function(e){
@@ -125,6 +125,22 @@ function onDeviceReady(){
 
 	timeStart=getURLParameter("time");
 	//alert(timeStart);
+	if(getURLParameter("anonmyous")==="true"){
+		anon=true;
+		populateCircleList(12);
+		var siteList = document.getElementById("site");
+
+        var siteOption = document.createElement("option");
+		siteOption.text = "Unknown Site";
+		siteOption.value = -1;
+		siteList.add(siteOption);
+		$("#site option:selected").val(-1);
+		stored_user_info={};
+		stored_user_info.userId="";
+        stored_user_info.password="";
+	}else{
+		setTimeout(retrieveSiteList(),800);
+	}
 	if(!(timeStart===null)){
 		edit=true;
 		var retrivedRow;
@@ -165,6 +181,18 @@ function onDeviceReady(){
 				$("#leaf-photo").prop("src", retrivedRow.leafImageURI);
 			}	
 		});
+/*
+		db.transaction(function(tx){
+			tx.executeSql('select * from Arthropod where ?=?', [timeStart], function(tx, rs){
+            	if(rs.rows.length>0) {retrivedRow=rs.rows.item(0);}
+            	else{alert("Did not get indicated Arthropod");}
+        	});
+
+    	}, function(error){
+        	alert("Transaction error: "+error.message);
+    	}, function(){
+			//render Arthropod
+		}*/
 
 	}else{
 		setTime();
@@ -235,6 +263,9 @@ var retrieveCircleCount = function(){
 	}
 	var circleNum;
 	var siteID = $("#site option:selected").val();
+	if(siteID==-1){
+		return;
+	}
 	//Clear circle list to prevent circles from different site from being selected.
 	clearCircleList();
 	document.getElementById("circle").selectedIndex = 0;
@@ -444,6 +475,7 @@ var saveArthropod = function( ) {
 	if(arthropodPhotoTaken){
 		imageSrc = document.getElementById("arthropod-photo").src;
 	}
+	alert(imageSrc);
 
 	var lengthIntVal = parseInt(length);
 	var countIntVal = parseInt(count);
@@ -640,11 +672,11 @@ var submit = function( ) {
 	//navigator.notification.alert("SiteID: " + siteID +
 	//	"\nSite password: " +sitePassword);
 	//var online = navigator.onLine;
-
-	if(navigator.onLine === false){
+	if(navigator.onLine == false||anon== true){
         //last field for error handler 0 is default
 		//alert("I am here");
 		db.transaction(function(tx){
+						tx.executeSql("DELETE from SURVEY where timeStart=?", [timeStart]);
                         tx.executeSql("INSERT INTO SURVEY VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", 
                         	['survey',
                         	siteID,
@@ -691,6 +723,7 @@ var submit = function( ) {
 								silkTent = 0;
 							}
 							var arthropodImageURI = $(".saved-arthropod-image", this).prop("src");
+							alert("arthropodImageURI: " + arthropodImageURI);
 
 			                tx.executeSql("INSERT INTO ARTHROPODS VALUES (?,?,?,?,?,?,?,?,?)", 
 			                    [$("h4", this).text(),
@@ -709,24 +742,17 @@ var submit = function( ) {
                         alert("Transaction Error: "+error.message);
                     }, function(){
 						alert("This page was successfully stored");
-						window.location = "homepage.html";
+						if(anon){
+							window.location = "homepage-anon.html";
+						}else{
+							window.location = "homepage.html";
+						}			
 
 		});
 			
 	}else{
 		submitSurveyToServer();	
 	}
-	if(edit){
-		db.transaction(function(tx){
-            					tx.executeSql("DELETE from SURVEY where timeStart=?", [timeStart]);
-        				},  function(error){
-            				alert("Transaction error: "+error.message);
-        				}, function(){
-            				//alert("Successfully delete this survey");
-        				});
-	}
-
-
 };
 
 //Toggles whether the caterpillar checklist is visible on the arthropod select screen
@@ -800,7 +826,7 @@ var toolTip = function(toolTipLocation){
 //Submits basic survey info and leaf photo to server
 //Calls submitArthropodsToServer if survey upload is successful
 var submitSurveyToServer = function(){
-	navigator.notification.alert("Submitting survey");
+	// navigator.notification.alert("Submitting survey");
 	 $.ajax({
 		url: DOMAIN + "/api/submission_full.php",
 		type : "POST",
@@ -837,57 +863,6 @@ var submitSurveyToServer = function(){
 };
 
 
-// var submitArthropodsToDB = function(time,selectedOrder,length,count,notes){
-// 	var arthropodInputs = $(".arthropod-input");
-// 	numberOfArthropodsToSubmit = arthropodInputs.length;
-// 	numberOfArthropodsSubmitted = 0;
-
-// 			//Get values of caterpillar checklist
-// 			var hairyOrSpiny, leafRoll, silkTent;
-// 			if ($(".hairy-or-spiny", this).text().localeCompare("true") === 0) {
-// 				hairyOrSpiny = 1;
-// 			}
-// 			else {
-// 				hairyOrSpiny = 0;
-// 			}
-// 			if ($(".leaf-roll", this).text().localeCompare("true") === 0) {
-// 				leafRoll = 1;
-// 			}
-// 			else {
-// 				leafRoll = 0;
-// 			}
-// 			if ($(".silk-tent", this).text().localeCompare("true") === 0) {
-// 				silkTent = 1;
-// 			}
-// 			else {
-// 				silkTent = 0;
-// 			}
-
-// 			var arthropodImageURI = $(".saved-arthropod-image", this).prop("src");
-// 			//navigator.notification.alert("Arthropod image uri: " + arthropodImageURI);
-//            db.transaction(function(tx){
-//                         tx.executeSql("INSERT INTO ARTHROPODS VALUES (?,?,?,?,?,?,?,?,?,?,?)", 
-//                         	[selectedOrder,
-//                         	length,
-//                         	notes,
-//                         	count,
-//                         	hairyOrSpiny,
-//                         	leafRoll,
-//                         	silkTent,
-// 							arthropodImageURI,
-// 							siteID,
-// 							circle,
-// 							survey]);
-//                     }  , function(error){
-//                         alert("Transaction Error: "+error.message);
-//                     },function(){
-// 						//alert(selectedOrder);
-// 						//alert(length);
-// 						//alert(count);
-//                      });
-
-// 		navigator.notification.alert("Successfully submitted survey data!");
-// };
 
 
 //Submits arthropod info to server for each saved order/
@@ -1043,13 +1018,6 @@ function uploadPhoto(photoURI, photoType, databaseID){
 //Clears fields following a successful survey submission
 var clearFields = function(){
 	edit=false;
-	db.transaction(function(tx){
-            tx.executeSql("DELETE from SURVEY where timeStart=?", [timeStart]);
-	},  function(error){
-            alert("Transaction error: "+error.message);
-    }, function(){
-           //alert("Successfully delete this survey");
-    });
 	$(".time-start").val("");
 	$(".notes").val("");
 
