@@ -46,7 +46,7 @@ function onDeviceReady() {
     db.transaction(function(tx){
 		tx.executeSql("DROP table if EXISTS USER_INFO");
         tx.executeSql("CREATE TABLE IF NOT EXISTS USER_INFO (name, password, userId)");
-		tx.executeSql("INSERT INTO USER_INFO VALUES(?, ?, ? )",['leq94@live.unc.edu','leq941116','215']);
+		//tx.executeSql("INSERT INTO USER_INFO VALUES(?, ?, ? )",['leq94@live.unc.edu','leq941116','215']);
         //
         //refresh survey table each time it is started
         //
@@ -152,7 +152,6 @@ function createButtons(){
                                 "<div class = 'button'><h4>Anonymous Mode</h4></div>"+
                             "</div>"+
                         "</a>"; 
-    //online=false;
     if (online) {
         $("#top_button").html(register_button);
         $("#bottom_button").html(login_buton);
