@@ -86,9 +86,14 @@ $(document).ready(function(){
         // Check if offline. If so, use offline login logic
         // Offline log in logic, faking for now.
         if (!navigator.onLine) {
-            db.close();
-            window.location.assign("homepage.html?userID="+ stored_user_info.userId + "&password=" + $pw.val());
-            return;
+            if((stored_user_info===null)||(stored_user_info.name!=$email.val())||(stored_user_info.password!=$pw.val())){
+                  alert("No internet access. Cannot log in.");
+              }
+              else{
+                  db.close();
+                  window.location.assign("homepage.html?userID="+ stored_user_info.userId + "&password=" + $pw.val());
+                  return;
+              }
         }
 
         //Attempt login
