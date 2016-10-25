@@ -252,6 +252,7 @@ var submitArthropodsToServer = function(result, survey){
                         navigator.notification.alert("arthropod info submitted");
                         //If arthropod successfully submitted to database, attempt photo upload
                         //Upload arthropod photo if one exists
+                        alert("arthropod.arthropodImageURI" + arthropodImageURI);
                         if (arthropod.arthropodImageURI !== null && arthropod.arthropodImageURI !== undefined) {
                             //navigator.notification.alert("Uploading order photo");
                             uploadPhoto(arthropod.arthropodImageURI, "arthropod-photo", arthropodResult.orderID);
