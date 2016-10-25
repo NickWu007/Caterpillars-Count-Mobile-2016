@@ -50,8 +50,8 @@ function onDeviceReady() {
         //
         //refresh survey table each time it is started
         //
-        tx.executeSql("DROP TABLE IF EXISTS SURVEY");
-		tx.executeSql("DROP TABLE IF EXISTS ARTHROPODS");
+  //       tx.executeSql("DROP TABLE IF EXISTS SURVEY");
+		// tx.executeSql("DROP TABLE IF EXISTS ARTHROPODS");
         tx.executeSql("CREATE TABLE IF NOT EXISTS SURVEY(type, siteID, userID, password, circle, survey, timeStart, temperatureMin, temperatureMax, siteNotes, plantSpecies, herbivory, surveyType, leafCount, source,leafImageURI,errorCode)");
 		tx.executeSql("CREATE TABLE IF NOT EXISTS ARTHROPODS(surveyType, length, notes, count, hairOrSpinyVal, leafRollVal, silkTentVal,ArthropodsImageURI,timeStart)");
         //tx.executeSql("DROP TABLE IF EXISTS SITE");
