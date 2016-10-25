@@ -854,8 +854,10 @@ var submitSurveyToServer = function(){
 			uploadPhoto(leafImageURI, "leaf-photo", result.surveyID);
 			submitArthropodsToServer(result);
 			alert("online submit successfull.");
+			alert(edit);
 			if (edit) {
 				db.transaction(function(tx){
+					alert(timeStart);
 		            tx.executeSql("DELETE from SURVEY where timeStart=?", [timeStart]);
 		            tx.executeSql("DELETE from ARTHROPODS where timeStart=?", [timeStart]);
 		        },  function(error){
@@ -864,6 +866,7 @@ var submitSurveyToServer = function(){
 		            //alert("Successfully delete this survey");
 		        });
 			}
+			edit=false;
 		},
 		error : function(xhr, status){
 			navigator.notification.alert("Unexpected error submitting survey: " + xhr.status);
@@ -1027,7 +1030,6 @@ function uploadPhoto(photoURI, photoType, databaseID){
 
 //Clears fields following a successful survey submission
 var clearFields = function(){
-	edit=false;
 	$(".time-start").val("");
 	$(".notes").val("");
 
