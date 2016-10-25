@@ -179,6 +179,7 @@ function onDeviceReady(){
 			if(retrivedRow.leafImageURI!=''){
 				$("#leaf-capture").html("<img onclick = 'leafCapture()' id='leaf-photo' height = '200' width ='200'>");
 				$("#leaf-photo").prop("src", retrivedRow.leafImageURI);
+				leafImageURI = retrivedRow.leafImageURI;
 			}	
 		});
 /*
@@ -475,7 +476,6 @@ var saveArthropod = function( ) {
 	if(arthropodPhotoTaken){
 		imageSrc = document.getElementById("arthropod-photo").src;
 	}
-	alert(imageSrc);
 
 	var lengthIntVal = parseInt(length);
 	var countIntVal = parseInt(count);
@@ -723,7 +723,6 @@ var submit = function( ) {
 								silkTent = 0;
 							}
 							var arthropodImageURI = $(".saved-arthropod-image", this).prop("src");
-							alert("arthropodImageURI: " + arthropodImageURI);
 
 			                tx.executeSql("INSERT INTO ARTHROPODS VALUES (?,?,?,?,?,?,?,?,?)", 
 			                    [$("h4", this).text(),
@@ -854,6 +853,17 @@ var submitSurveyToServer = function(){
 			//Upload leaf photo
 			uploadPhoto(leafImageURI, "leaf-photo", result.surveyID);
 			submitArthropodsToServer(result);
+			alert("online submit successfull.");
+			if (edit) {
+				db.transaction(function(tx){
+		            tx.executeSql("DELETE from SURVEY where timeStart=?", [timeStart]);
+		            tx.executeSql("DELETE from ARTHROPODS where timeStart=?", [timeStart]);
+		        },  function(error){
+		            alert("Transaction error: "+error.message);
+		        }, function(){
+		            //alert("Successfully delete this survey");
+		        });
+			}
 		},
 		error : function(xhr, status){
 			navigator.notification.alert("Unexpected error submitting survey: " + xhr.status);
