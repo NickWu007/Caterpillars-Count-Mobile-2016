@@ -44,9 +44,9 @@ function onDeviceReady() {
 
     // Create DB schemas.
     db.transaction(function(tx){
-		//tx.executeSql("DROP table if EXISTS USER_INFO");
+		tx.executeSql("DROP table if EXISTS USER_INFO");
         tx.executeSql("CREATE TABLE IF NOT EXISTS USER_INFO (name, password, userId)");
-		//tx.executeSql("INSERT INTO USER_INFO VALUES(?, ?, ? )",['mingjunw@live.unc.edu','1','161']);
+		tx.executeSql("INSERT INTO USER_INFO VALUES(?, ?, ? )",['leq94@live.unc.edu','leq941116','215']);
         //
         //refresh survey table each time it is started
         //
@@ -56,138 +56,63 @@ function onDeviceReady() {
 		tx.executeSql("CREATE TABLE IF NOT EXISTS ARTHROPODS(surveyType, length, notes, count, hairOrSpinyVal, leafRollVal, silkTentVal,ArthropodsImageURI,timeStart)");
         //tx.executeSql("DROP TABLE IF EXISTS SITE");
         tx.executeSql("CREATE TABLE IF NOT EXISTS SITE (siteId, siteName, userId, circle, state)");
-		/*
-        tx.executeSql("INSERT INTO SURVEY VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",   
+		
+        tx.executeSql("INSERT INTO SURVEY VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",   
                          	['survey',  
                          	8892356,  
-                         	1234,  
-                        	12345,  
+                         	215,  
+                        	'leq941116',  
                         	6,  
                         	'A',  
-                      	    "2016-10-09 22:40:41",  
+                      	    "2016-10-23 23:08:41",  
                        	    30,  
                         	39,  
-                       	    '$(".notes").val()',  
+                       	    'note',  
                          	'plantSpecies',  
-                         	'herbivoryValue',  
-                       	    'surveyType',  
-                       	    5,  
-                        	"Mobile",  
-							'selectedOrderText',  
- 							'legnth',  
- 							'count',  
-							'notes',  
-							'hairyOrSpinyVal',  
-							'leafRollVal',  
-							'silkTentVal',  
-							'leafImageURI', 
-                            'ArthropodsImageURI', 
-							0]);  
-        tx.executeSql("INSERT INTO SURVEY VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",   
-                         	['survey',  
-                         	8892356,  
-                         	1234,  
-                        	12345,  
-                        	6,  
-                        	'A',  
-                      	    "2016-10-09 22:40:42",  
-                       	    30,  
-                        	39,  
-                       	    '$(".notes").val()',  
-                         	'plantSpecies',  
-                         	'herbivoryValue',  
-                       	    'surveyType',  
-                       	    5,  
-                        	"Mobile",  
-							'selectedOrderText',  
- 							'legnth',  
- 							'count',  
-							'notes',  
-							'hairyOrSpinyVal',  
-							'leafRollVal',  
-							'silkTentVal',  
-							'leafImageURI', 
-                            'ArthropodsImageURI',  
-							400]); 
-        tx.executeSql("INSERT INTO SURVEY VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",   
-                         	['survey',  
-                         	8892356,  
-                         	1234,  
-                        	12345,  
-                        	6,  
-                        	'A',  
-                      	    "2016-10-09 22:40:43",  
-                       	    30,  
-                        	39,  
-                       	    '$(".notes").val()',  
-                         	'plantSpecies',  
-                         	'herbivoryValue',  
-                       	    'surveyType',  
-                       	    5,  
-                        	"Mobile",  
-							'selectedOrderText',  
- 							'legnth',  
- 							'count',  
-							'notes',  
-							'hairyOrSpinyVal',  
-							'leafRollVal',  
-							'silkTentVal',  
-							'leafImageURI', 
-                            'ArthropodsImageURI',  
-							401]); 
-        tx.executeSql("INSERT INTO SURVEY VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",   
-                         	['survey',  
-                         	8892356,  
-                         	1234,  
-                        	12345,  
-                        	6,  
-                        	'A',  
-                      	    "2016-10-09 22:40:44",  
-                       	    30,  
-                        	39,  
-                       	    '$(".notes").val()',  
-                         	'plantSpecies',  
-                         	'herbivoryValue',  
-                       	    'surveyType',  
-                       	    5,  
-                        	"Mobile",  
-							'selectedOrderText',  
- 							'legnth',  
- 							'count',  
-							'notes',  
-							'hairyOrSpinyVal',  
-							'leafRollVal',  
-							'silkTentVal',  
-							'leafImageURI',
-                            'ArthropodsImageURI',   
-							500]);
-        tx.executeSql("INSERT INTO SURVEY VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",   
-                         	['survey',  
-                         	-1,  
-                         	'',  
-                        	'',  
-                        	6,  
-                        	'A',  
-                      	    "2016-10-09 22:40:45",  
-                       	    30,  
-                        	39,  
-                       	    '$(".notes").val()',  
-                         	'plantSpecies',  
-                         	2,  
+                         	'2',  
                        	    'Visual',  
                        	    5,  
-                        	"Mobile",  
-							'selectedOrderText',  
- 							'legnth',  
- 							'count',  
-							'notes',  
-							'hairyOrSpinyVal',  
-							'leafRollVal',  
-							'silkTentVal',  
-							'file:///storage/emulated/0/Android/data/goldenCompass.caterpillarCount/cache/1476395800207.jpg',
-                            //'',
-                            '',   
-							0]);*/
+                        	"Mobile",   
+							'', 
+							0]);
+		tx.executeSql("INSERT INTO SURVEY VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",   
+                         	['survey',  
+                         	8892356,  
+                         	159,  
+                        	12345,  
+                        	6,  
+                        	'A',  
+                      	    "2016-10-23 22:08:41",  
+                       	    30,  
+                        	39,  
+                       	    '$(".notes").val()',  
+                         	'plantSpecies',  
+                         	'2',  
+                       	    'surveyType',  
+                       	    5,  
+                        	"Mobile",   
+							'', 
+							0]);
+        tx.executeSql("INSERT INTO SURVEY VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",   
+                         	['survey',  
+                         	-1,  
+                         	159,  
+                        	12345,  
+                        	6,  
+                        	'A',  
+                      	    "2016-10-23 21:08:41",  
+                       	    30,  
+                        	39,  
+                       	    '$(".notes").val()',  
+                         	'plantSpecies',  
+                         	'2',  
+                       	    'Visual',  
+                       	    5,  
+                        	"Mobile",   
+							'', 
+							0]);
+							
+        
     }, function(error){
         alert("Transaction Error: "+error.message);
     }, function(){
@@ -199,7 +124,8 @@ function onDeviceReady() {
 $(document).ready(function() { 
     window.addEventListener("online", createButtons);
     window.addEventListener("offline", createButtons);
-}); 
+	createButtons();
+});
 
 //Handles device rotation
 window.shouldRotateToOrientation = function() {
@@ -226,7 +152,7 @@ function createButtons(){
                                 "<div class = 'button'><h4>Anonymous Mode</h4></div>"+
                             "</div>"+
                         "</a>"; 
-
+                        online=false;
     if (online) {
         $("#top_button").html(register_button);
         $("#bottom_button").html(login_buton);
