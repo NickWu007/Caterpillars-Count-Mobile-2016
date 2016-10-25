@@ -227,7 +227,7 @@ function submitSurveyToServer(i, survey) {
         }),
         success: function(result){
             alert("Survey #" + i + " is submitted successfully.");
-            //uploadPhoto(survey.leafImageURI, "leaf-photo", result.surveyID);
+            uploadPhoto(survey.leafImageURI, "leaf-photo", result.surveyID);
             submitArthropodsToServer(result, survey);
             deleteSurvey(survey.timeStart);
         },
@@ -275,9 +275,9 @@ var submitArthropodsToServer = function(result, survey){
                         navigator.notification.alert("arthropod info submitted");
                         //If arthropod successfully submitted to database, attempt photo upload
                         //Upload arthropod photo if one exists
-                        if (arthropod.arthropodImageURI !== null && arthropod.arthropodImageURI !== undefined) {
+                        if (arthropod.ArthropodsImageURI !== null && arthropod.ArthropodsImageURI !== undefined) {
                             //navigator.notification.alert("Uploading order photo");
-                            uploadPhoto(arthropod.arthropodImageURI, "arthropod-photo", arthropodResult.orderID);
+                            uploadPhoto(arthropod.ArthropodsImageURI, "arthropod-photo", arthropodResult.orderID);
                         }
                     },
                     error : function(xhr, status){
