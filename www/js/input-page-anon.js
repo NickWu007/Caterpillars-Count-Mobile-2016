@@ -703,18 +703,11 @@ var submitArthropodsToDB = function(time,selectedOrder,length,count,notes){
 						//alert(selectedOrder);
 						//alert(length);
 						//alert(count);
-						db.transaction(function(tx){
-            					tx.executeSql("DELETE from SURVEY where timeStart=?", [timeStart]);
-        				},  function(error){
-            				alert("Transaction error: "+error.message);
-        				}, function(){
-            				//alert("Successfully delete this survey");
-        				});
                      });
 
 
 
-		navigator.notification.alert("Successfully submitted survey data!");
+		navigator.notification.alert("Successfully stored Arthropod data!");
 		//clearFields();
 	
 };
