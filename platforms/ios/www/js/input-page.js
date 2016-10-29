@@ -672,11 +672,7 @@ var submit = function( ) {
 	//navigator.notification.alert("SiteID: " + siteID +
 	//	"\nSite password: " +sitePassword);
 	//var online = navigator.onLine;
-<<<<<<< HEAD
-	if(navigator.online == false||anon== true){
-=======
 	if(navigator.onLine == false||anon== true){
->>>>>>> offline_proto
         //last field for error handler 0 is default
 		//alert("I am here");
 		db.transaction(function(tx){
@@ -857,7 +853,6 @@ var submitSurveyToServer = function(){
 			//Upload leaf photo
 			uploadPhoto(leafImageURI, "leaf-photo", result.surveyID);
 			submitArthropodsToServer(result);
-			alert("online submit successfull.");
 			if (edit) {
 				db.transaction(function(tx){
 		            tx.executeSql("DELETE from SURVEY where timeStart=?", [timeStart]);
@@ -867,6 +862,7 @@ var submitSurveyToServer = function(){
 		        }, function(){
 		            //alert("Successfully delete this survey");
 		        });
+		        edit=false;
 			}
 		},
 		error : function(xhr, status){
@@ -1031,7 +1027,6 @@ function uploadPhoto(photoURI, photoType, databaseID){
 
 //Clears fields following a successful survey submission
 var clearFields = function(){
-	edit=false;
 	$(".time-start").val("");
 	$(".notes").val("");
 
