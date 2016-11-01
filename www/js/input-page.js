@@ -1063,6 +1063,20 @@ var clearFields = function(){
 	$(".arthropod-input").each(function(){$(this).remove();});
 };
 
+function scanQRCode() {
+	// alert("clicked qr scanner button.");
+	cordova.plugins.barcodeScanner.scan(
+		function (result) {
+			alert(result.text); 
+			
+		}, 
+		function (error) {
+			alert("Scanning failed: " + error);
+		}
+	);
+
+}
+
 //Handles device rotation
 window.shouldRotateToOrientation = function() {
 	return true;

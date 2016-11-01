@@ -24,6 +24,9 @@
         },
         "cordova-plugin-camera": {
             "PACKAGE_NAME": "goldenCompass.caterpillarCount"
+        },
+        "phonegap-plugin-barcodescanner": {
+            "PACKAGE_NAME": "goldenCompass.caterpillarCount"
         }
     },
     "dependent_plugins": {

@@ -85,6 +85,18 @@ document.addEventListener("deviceready", onDeviceReady, false);
 //Return to start screen if android back button is pressed
 function onDeviceReady(){
 
+	// var QRdone = function(err, status){
+ //  		if(err){
+ //    		console.error(err._message);
+ //  		} else {
+ //    		console.log('QRScanner is initialized. Status:');
+ //    		console.log(status);
+    		
+ //  		}
+	// };
+
+	// QRScanner.prepare(QRdone);
+
 	db = window.sqlitePlugin.openDatabase(
         {name: 'app.db', location: 'default'}, 
         DBSuccessCB(), 
@@ -1062,6 +1074,32 @@ var clearFields = function(){
 
 	$(".arthropod-input").each(function(){$(this).remove();});
 };
+
+function scanQRCode() {
+	alert("clicked qr scanner button.");
+	// var QRCallback = function(err, contents){
+ //  		if(err){
+ //    		console.error(err._message);
+ //  		}
+ //  		alert('The QR Code contains: ' + contents);
+	// };
+
+	// alert("just before prepare and scan");
+	// // QRScanner.prepare(done);
+	// QRScanner.scan(QRCallback);
+	// 
+	cordova.plugins.barcodeScanner.scan(
+		function (result) {
+			alert(result.text); 
+			alert(result.format); 
+			alert(result.cancelled); 
+		}, 
+		function (error) {
+			alert("Scanning failed: " + error);
+		}
+	);
+
+}
 
 //Handles device rotation
 window.shouldRotateToOrientation = function() {
