@@ -243,12 +243,17 @@ var retrieveSiteList = function(){
         }, function(){
                 if(site_list.length>0){
 					var siteList = document.getElementById("site");
+					var siteOption;
                 	for(var i=0; i<site_list.length; i++){
-                        var siteOption = document.createElement("option");
+                        siteOption = document.createElement("option");
 						siteOption.text = site_list.item(i).siteName+"("+site_list.item(i).state+")";
 						siteOption.value = site_list.item(i).siteId;
 						siteList.add(siteOption);
                 	}
+                	siteOption = document.createElement("option");
+					siteOption.text = "Unknown Site";
+					siteOption.value = -1;
+					siteList.add(siteOption);
                 }else{
                     alert("You do not have permission for any Site.");
                 }
@@ -265,6 +270,7 @@ var retrieveCircleCount = function(){
 	var circleNum;
 	var siteID = $("#site option:selected").val();
 	if(siteID==-1){
+		populateCircleList(12);
 		return;
 	}
 	//Clear circle list to prevent circles from different site from being selected.
