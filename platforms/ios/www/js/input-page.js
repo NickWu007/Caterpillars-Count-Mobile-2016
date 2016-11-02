@@ -85,18 +85,6 @@ document.addEventListener("deviceready", onDeviceReady, false);
 //Return to start screen if android back button is pressed
 function onDeviceReady(){
 
-	// var QRdone = function(err, status){
- //  		if(err){
- //    		console.error(err._message);
- //  		} else {
- //    		console.log('QRScanner is initialized. Status:');
- //    		console.log(status);
-    		
- //  		}
-	// };
-
-	// QRScanner.prepare(QRdone);
-
 	db = window.sqlitePlugin.openDatabase(
         {name: 'app.db', location: 'default'}, 
         DBSuccessCB(), 
@@ -1076,23 +1064,17 @@ var clearFields = function(){
 };
 
 function scanQRCode() {
-	alert("clicked qr scanner button.");
-	// var QRCallback = function(err, contents){
- //  		if(err){
- //    		console.error(err._message);
- //  		}
- //  		alert('The QR Code contains: ' + contents);
-	// };
-
-	// alert("just before prepare and scan");
-	// // QRScanner.prepare(done);
-	// QRScanner.scan(QRCallback);
-	// 
+	// alert("clicked qr scanner button.");
 	cordova.plugins.barcodeScanner.scan(
 		function (result) {
-			alert(result.text); 
-			alert(result.format); 
-			alert(result.cancelled); 
+			alert(result.text);
+			var qr_obj = JSON.parse(result.text);
+			alert(qr_obj.siteID);
+			$("#site").val(qr_obj.siteID);
+			alert(qr_obj.circle);
+			$("#circle").val(qr_obj.circle);
+			alert(qr_obj.survey);
+			$("#survey").val(qr_obj.survey);
 		}, 
 		function (error) {
 			alert("Scanning failed: " + error);

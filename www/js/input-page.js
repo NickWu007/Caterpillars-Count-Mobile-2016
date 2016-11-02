@@ -1067,8 +1067,14 @@ function scanQRCode() {
 	// alert("clicked qr scanner button.");
 	cordova.plugins.barcodeScanner.scan(
 		function (result) {
-			alert(result.text); 
-			
+			alert(result.text);
+			var qr_obj = JSON.parse(result.text);
+			alert(qr_obj.siteID);
+			$("#site").val(qr_obj.siteID);
+			alert(qr_obj.circle);
+			$("#circle").val(qr_obj.circle);
+			alert(qr_obj.survey);
+			$("#survey").val(qr_obj.survey);
 		}, 
 		function (error) {
 			alert("Scanning failed: " + error);
