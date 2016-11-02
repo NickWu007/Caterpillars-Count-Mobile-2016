@@ -285,6 +285,9 @@ var retrieveCircleCount = function(){
         }, function(){
                 	
 			populateCircleList(circleNum);
+			if (circle > 0) {
+				$("#circle").val(circle);
+			}
 			if(edit){
 				if(editmode<circleNum){
 					$("#circle").val(editmode);
@@ -1072,7 +1075,9 @@ function scanQRCode() {
 			alert(qr_obj.siteID);
 			$("#site").val(qr_obj.siteID);
 			alert(qr_obj.circle);
-			$("#circle").val(qr_obj.circle);
+			circle = qr_obj.circle;
+			retrieveCircleCount();
+			// $("#circle").val(qr_obj.circle);
 			alert(qr_obj.survey);
 			$("#survey").val(qr_obj.survey);
 		}, 
