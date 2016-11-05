@@ -35,6 +35,9 @@
     <feature name="Camera">
         <param name="ios-package" value="CDVCamera" />
     </feature>
+    <feature name="BarcodeScanner">
+        <param name="ios-package" value="CDVBarcodeScanner" />
+    </feature>
     <name>Caterpillars Count!</name>
     <description>
         An application for conducting surveys of arthropod populations

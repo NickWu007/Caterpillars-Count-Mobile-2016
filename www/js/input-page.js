@@ -285,6 +285,9 @@ var retrieveCircleCount = function(){
         }, function(){
                 	
 			populateCircleList(circleNum);
+			if (circle > 0) {
+				$("#circle").val(circle);
+			}
 			if(edit){
 				if(editmode<circleNum){
 					$("#circle").val(editmode);
@@ -1008,8 +1011,12 @@ function uploadPhoto(photoURI, photoType, databaseID){
 	};
 
 	var options = new FileUploadOptions();
-	//options.fileKey = "file";
-	//options.fileName = photoURI.substr(photoURI.lastIndexOf('/') + 1);
+    options.fileKey = "file";
+    options.mimeType="image/jpeg";
+    options.chunkedMode = false;
+    options.headers = {
+        Connection: "close"
+    };
 
 	//var params = {};
 	//params.value1 = "test";
@@ -1062,6 +1069,24 @@ var clearFields = function(){
 
 	$(".arthropod-input").each(function(){$(this).remove();});
 };
+
+function scanQRCode() {
+	// alert("clicked qr scanner button.");
+	cordova.plugins.barcodeScanner.scan(
+		function (result) {
+			var qr_obj = JSON.parse(result.text);
+			$("#site").val(qr_obj.siteID);
+			circle = qr_obj.circle;
+			retrieveCircleCount();
+			// $("#circle").val(qr_obj.circle);
+			$("#survey").val(qr_obj.survey);
+		}, 
+		function (error) {
+			alert("Scanning failed: " + error);
+		}
+	);
+
+}
 
 //Handles device rotation
 window.shouldRotateToOrientation = function() {

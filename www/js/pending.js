@@ -333,7 +333,6 @@ function uploadPhoto(photoURI, photoType, databaseID){
 
     var options = new FileUploadOptions();
     options.fileKey = "file";
-    options.fileName = photoURI.substr(photoURI.lastIndexOf('/') + 1);
     options.mimeType="image/jpeg";
     options.chunkedMode = false;
     options.headers = {
