@@ -144,6 +144,7 @@ function onDeviceReady(){
 	if(!(timeStart===null)){
 		edit=true;
 		var retrivedRow;
+		var stored_arthropods = null;
 		db.transaction(function(tx){
 			tx.executeSql('select distinct type, siteID, userID, password, circle, survey, timeStart, '  +
 			'temperatureMin, temperatureMax, siteNotes, plantSpecies, herbivory, surveyType, leafCount,' +
@@ -153,6 +154,11 @@ function onDeviceReady(){
             	else{alert("Did not get indicated survey");}
         	});
 
+			tx.executeSql('select * from ARTHROPODS where timeStart=?', [timeStart], function(tx, rs){
+            	if(rs.rows.length>0) {
+            		stored_arthropods=rs.rows;
+            	}
+        	});
     	}, function(error){
         	alert("Transaction error: "+error.message);
     	}, function(){
@@ -175,26 +181,63 @@ function onDeviceReady(){
 			$(".survey-type").val(retrivedRow.surveyType);
 			$(".leaf-count").val(retrivedRow.leafCount);
 			//alert(retrivedRow.herbivory);
-			$("#herbivory-select").ddslick('select', {index: retrivedRow.herbivory });;
+			$("#herbivory-select").ddslick('select', {index: retrivedRow.herbivory });
 			if(retrivedRow.leafImageURI!=''){
 				$("#leaf-capture").html("<img onclick = 'leafCapture()' id='leaf-photo' height = '200' width ='200'>");
 				$("#leaf-photo").prop("src", retrivedRow.leafImageURI);
 				leafImageURI = retrivedRow.leafImageURI;
-			}	
-		});
-/*
-		db.transaction(function(tx){
-			tx.executeSql('select * from Arthropod where ?=?', [timeStart], function(tx, rs){
-            	if(rs.rows.length>0) {retrivedRow=rs.rows.item(0);}
-            	else{alert("Did not get indicated Arthropod");}
-        	});
+			}
 
-    	}, function(error){
-        	alert("Transaction error: "+error.message);
-    	}, function(){
-			//render Arthropod
-		}*/
+			if (stored_arthropods != null) {
+				for (var i = 0; i < stored_arthropods.length; i++) {
+					var arthropod = stored_arthropods.item(i);
 
+					var arthropodInputHtml;
+					// If user took photo, use that photo instead of stock image
+					var orderVal = $("option:contains('" + arthropod.surveyType +"')").val();
+					if(arthropod.ArthropodsImageURI != null && arthropod.ArthropodsImageURI != undefined){
+						arthropodInputHtml = "<div class='arthropod-input'>" +
+								"<span class='glyphicon glyphicon-remove' onclick='function(){$(this).parent().remove();}'></span>" +
+								"<h4>" + arthropod.surveyType + "</h4>" +
+								"<div><img class = 'saved-arthropod-image' src='" + arthropod.ArthropodsImageURI +  "' height='50' width='50'></div>" +
+								"<div>" +
+								"<div>Length: <span class='arthropod-length'>" + arthropod.length + "</span></div>" +
+								"<div>Count: <span class='arthropod-count'>" + arthropod.count + "</span></div>" +
+								"<div>Notes: <span class='arthropod-notes'>" + arthropod.notes + "</span></div>";
+					}
+					// Else use default image
+					else{
+						arthropodInputHtml = "<div class='arthropod-input'>" +
+								"<span class='glyphicon glyphicon-remove' onclick='$(this).parent().remove();'></span>" +
+								"<h4>" + arthropod.surveyType + "</h4>" +
+								"<div><img src='pictures/" + orderVal + ".png' height='50' width='50'></div>" +
+								"<div>" +
+								"<div>Length: <span class='arthropod-length'>" + arthropod.length + "</span></div>" +
+								"<div>Count: <span class='arthropod-count'>" + arthropod.count + "</span></div>" +
+								"<div>Notes: <span class='arthropod-notes'>" + arthropod.notes + "</span></div>";
+					}
+
+					// If order is not caterpillar, close divs
+					if(orderVal!== "caterpillar") {
+						$(".arthropod-order-information").append(
+								arthropodInputHtml +
+								"</div>" +
+								"</div>"
+						);
+					}
+					else{//Else add caterpillar extras then close divs.
+						$(".arthropod-order-information").append(
+								arthropodInputHtml +
+								"<div>Hairy or spiny: <span class='hairy-or-spiny'>" + Boolean(arthropod.hairyOrSpinyVal) + "</span></div>" +
+								"<div>Leaf roll: <span class='leaf-roll'>" + Boolean(arthropod.leafRollVal) + "</span></div>" +
+								"<div>Silk tent: <span class='silk-tent'>" + Boolean(arthropod.silkTentVal) + "</span></div>" +
+								"</div>" +
+								"</div>"
+						);
+					}
+				}	
+			}		
+	});		
 	}else{
 		setTime();
 	}

@@ -243,12 +243,17 @@ var retrieveSiteList = function(){
         }, function(){
                 if(site_list.length>0){
 					var siteList = document.getElementById("site");
+					var siteOption;
                 	for(var i=0; i<site_list.length; i++){
-                        var siteOption = document.createElement("option");
+                        siteOption = document.createElement("option");
 						siteOption.text = site_list.item(i).siteName+"("+site_list.item(i).state+")";
 						siteOption.value = site_list.item(i).siteId;
 						siteList.add(siteOption);
                 	}
+                	siteOption = document.createElement("option");
+					siteOption.text = "Unknown Site";
+					siteOption.value = -1;
+					siteList.add(siteOption);
                 }else{
                     alert("You do not have permission for any Site.");
                 }
@@ -265,6 +270,7 @@ var retrieveCircleCount = function(){
 	var circleNum;
 	var siteID = $("#site option:selected").val();
 	if(siteID==-1){
+		populateCircleList(12);
 		return;
 	}
 	//Clear circle list to prevent circles from different site from being selected.
@@ -279,6 +285,9 @@ var retrieveCircleCount = function(){
         }, function(){
                 	
 			populateCircleList(circleNum);
+			if (circle > 0) {
+				$("#circle").val(circle);
+			}
 			if(edit){
 				if(editmode<circleNum){
 					$("#circle").val(editmode);
@@ -1002,8 +1011,12 @@ function uploadPhoto(photoURI, photoType, databaseID){
 	};
 
 	var options = new FileUploadOptions();
-	//options.fileKey = "file";
-	//options.fileName = photoURI.substr(photoURI.lastIndexOf('/') + 1);
+    options.fileKey = "file";
+    options.mimeType="image/jpeg";
+    options.chunkedMode = false;
+    options.headers = {
+        Connection: "close"
+    };
 
 	//var params = {};
 	//params.value1 = "test";
@@ -1056,6 +1069,24 @@ var clearFields = function(){
 
 	$(".arthropod-input").each(function(){$(this).remove();});
 };
+
+function scanQRCode() {
+	// alert("clicked qr scanner button.");
+	cordova.plugins.barcodeScanner.scan(
+		function (result) {
+			var qr_obj = JSON.parse(result.text);
+			$("#site").val(qr_obj.siteID);
+			circle = qr_obj.circle;
+			retrieveCircleCount();
+			// $("#circle").val(qr_obj.circle);
+			$("#survey").val(qr_obj.survey);
+		}, 
+		function (error) {
+			alert("Scanning failed: " + error);
+		}
+	);
+
+}
 
 //Handles device rotation
 window.shouldRotateToOrientation = function() {
