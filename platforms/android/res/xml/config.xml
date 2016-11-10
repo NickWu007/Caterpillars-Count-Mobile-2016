@@ -24,6 +24,9 @@
     <feature name="Camera">
         <param name="android-package" value="org.apache.cordova.camera.CameraLauncher" />
     </feature>
+    <feature name="BarcodeScanner">
+        <param name="android-package" value="com.phonegap.plugins.barcodescanner.BarcodeScanner" />
+    </feature>
     <name>Caterpillars Count!</name>
     <description>
         An application for conducting surveys of arthropod populations
@@ -47,7 +50,4 @@
     <icon density="xxxhdpi" src="www/pictures/xxxhdpi_icon.png" />
     <preference name="loglevel" value="DEBUG" />
     <preference name="AndroidPersistentFileLocation" value="Compatibility" />
-    <feature name="BarcodeScanner">
-        <param name="android-package" value="com.phonegap.plugins.barcodescanner.BarcodeScanner" />
-    </feature>
 </widget>
