@@ -187,31 +187,51 @@ module.exports = [
         "runs": true
     },
     {
-        "file": "plugins/cordova-plugin-camera/www/CameraConstants.js",
+        "id": "cordova-sqlite-storage.SQLitePlugin",
+        "file": "plugins/cordova-sqlite-storage/www/SQLitePlugin.js",
+        "pluginId": "cordova-sqlite-storage",
+        "clobbers": [
+            "SQLitePlugin"
+        ]
+    },
+    {
         "id": "cordova-plugin-camera.Camera",
+        "file": "plugins/cordova-plugin-camera/www/CameraConstants.js",
+        "pluginId": "cordova-plugin-camera",
         "clobbers": [
             "Camera"
         ]
     },
     {
-        "file": "plugins/cordova-plugin-camera/www/CameraPopoverOptions.js",
         "id": "cordova-plugin-camera.CameraPopoverOptions",
+        "file": "plugins/cordova-plugin-camera/www/CameraPopoverOptions.js",
+        "pluginId": "cordova-plugin-camera",
         "clobbers": [
             "CameraPopoverOptions"
         ]
     },
     {
-        "file": "plugins/cordova-plugin-camera/www/Camera.js",
         "id": "cordova-plugin-camera.camera",
+        "file": "plugins/cordova-plugin-camera/www/Camera.js",
+        "pluginId": "cordova-plugin-camera",
         "clobbers": [
             "navigator.camera"
         ]
     },
     {
-        "file": "plugins/cordova-plugin-camera/www/CameraPopoverHandle.js",
         "id": "cordova-plugin-camera.CameraPopoverHandle",
+        "file": "plugins/cordova-plugin-camera/www/CameraPopoverHandle.js",
+        "pluginId": "cordova-plugin-camera",
         "clobbers": [
             "CameraPopoverHandle"
+        ]
+    },
+    {
+        "id": "phonegap-plugin-barcodescanner.BarcodeScanner",
+        "file": "plugins/phonegap-plugin-barcodescanner/www/barcodescanner.js",
+        "pluginId": "phonegap-plugin-barcodescanner",
+        "clobbers": [
+            "cordova.plugins.barcodeScanner"
         ]
     }
 ];
@@ -223,8 +243,10 @@ module.exports.metadata =
     "cordova-plugin-file-transfer": "1.3.0",
     "cordova-plugin-statusbar": "1.0.1",
     "cordova-plugin-whitelist": "1.0.0",
+    "cordova-sqlite-storage": "1.4.7",
     "cordova-plugin-compat": "1.0.0",
-    "cordova-plugin-camera": "2.2.0"
+    "cordova-plugin-camera": "2.3.0",
+    "phonegap-plugin-barcodescanner": "4.0.1"
 };
 // BOTTOM OF METADATA
 });

@@ -19,12 +19,11 @@
     <platform name="android">
         <allow-intent href="market:*" />
         <preference name="AndroidPersistentFileLocation" value="Compatibility" />
-        <icon src="www/pictures/mdpi_icon.png" density="mdpi" />
-        <icon src="www/pictures/hdpi_icon.png" density="hdpi" />
-        <icon src="www/pictures/xhdpi_icon.png" density="xhdpi" />
-        <icon src="www/pictures/xxhdpi_icon.png" density="xxhdpi" />
-        <icon src="www/pictures/xxxhdpi_icon.png" density="xxxhdpi" />
-
+        <icon density="mdpi" src="www/pictures/mdpi_icon.png" />
+        <icon density="hdpi" src="www/pictures/hdpi_icon.png" />
+        <icon density="xhdpi" src="www/pictures/xhdpi_icon.png" />
+        <icon density="xxhdpi" src="www/pictures/xxhdpi_icon.png" />
+        <icon density="xxxhdpi" src="www/pictures/xxxhdpi_icon.png" />
     </platform>
     <platform name="ios">
         <allow-intent href="itms:*" />
@@ -33,4 +32,5 @@
         <preference name="StatusBarBackgroundColor" value="#000000" />
         <preference name="StatusBarStyle" value="lightcontent" />
     </platform>
+    <plugin name="cordova-sqlite-storage" spec="~1.4.7" />
 </widget>

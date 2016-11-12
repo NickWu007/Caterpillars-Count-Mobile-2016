@@ -7,27 +7,38 @@
         "files": {}
     },
     "installed_plugins": {
+        "cordova-plugin-camera": {
+            "CAMERA_USAGE_DESCRIPTION": " ",
+            "PHOTOLIBRARY_USAGE_DESCRIPTION": " ",
+            "PACKAGE_NAME": "goldenCompass.caterpillarCount"
+        },
         "cordova-plugin-dialogs": {
-            "PACKAGE_NAME": "GoldenCompass.CaterpillarCount"
+            "PACKAGE_NAME": "goldenCompass.caterpillarCount"
         },
         "cordova-plugin-file-transfer": {
-            "PACKAGE_NAME": "GoldenCompass.CaterpillarCount"
+            "PACKAGE_NAME": "goldenCompass.caterpillarCount"
         },
         "cordova-plugin-statusbar": {
-            "PACKAGE_NAME": "GoldenCompass.CaterpillarCount"
+            "PACKAGE_NAME": "goldenCompass.caterpillarCount"
         },
         "cordova-plugin-whitelist": {
-            "PACKAGE_NAME": "GoldenCompass.CaterpillarCount"
+            "PACKAGE_NAME": "goldenCompass.caterpillarCount"
         },
-        "cordova-plugin-camera": {
+        "cordova-sqlite-storage": {
+            "PACKAGE_NAME": "goldenCompass.caterpillarCount"
+        },
+        "phonegap-plugin-barcodescanner": {
             "PACKAGE_NAME": "goldenCompass.caterpillarCount"
         }
     },
     "dependent_plugins": {
-        "cordova-plugin-file": {
-            "PACKAGE_NAME": "GoldenCompass.CaterpillarCount"
-        },
         "cordova-plugin-compat": {
+            "PACKAGE_NAME": "goldenCompass.caterpillarCount"
+        },
+        "cordova-plugin-file": {
+            "PACKAGE_NAME": "goldenCompass.caterpillarCount"
+        },
+        "cordova-plugin-swift-support": {
             "PACKAGE_NAME": "goldenCompass.caterpillarCount"
         }
     }
