@@ -1119,10 +1119,20 @@ function scanQRCode() {
 		function (result) {
 			var qr_obj = JSON.parse(result.text);
 			$("#site").val(qr_obj.siteID);
+			if ($("#site").val() === null  || $("#site").val() === undefined) {
+				$("#site").val(-1);
+			}
+
 			circle = qr_obj.circle;
 			retrieveCircleCount();
-			// $("#circle").val(qr_obj.circle);
+			if ($("#circle").val() === null  || $("#circle").val() === undefined) {
+				$("#circle").val(qr_obj.circle);
+			}
 			$("#survey").val(qr_obj.survey);
+
+			if (qr_obj.plantSpecies !== null && qr_obj.plantSpecies !== undefined && qr_obj.plantSpecies !== "") {
+				$(".plant-species").val(qr_obj.plantSpecies);
+			}
 		}, 
 		function (error) {
 			alert("Scanning failed: " + error);
