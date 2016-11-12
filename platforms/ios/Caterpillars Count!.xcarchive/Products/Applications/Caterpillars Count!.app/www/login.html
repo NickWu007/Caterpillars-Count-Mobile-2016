@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!--<meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *">-->
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/login.css">
+    <link rel="stylesheet" type="text/css" href="./jquery-ui-1.11.4.custom/jquery-ui.min.css">
+    <title>Login</title>
+    <script src="cordova.js"></script>
+    <script src="./js/jquery-1.11.3.min.js"></script>
+    <script src="./jquery-ui-1.11.4.custom/jquery-ui.min.js"></script>
+    <script src="./js/login.js"></script>
+</head>
+<body>
+    <div class='header'>
+        <a href = "StartScreen.html">
+        <div class='left-align'>
+            <span class="back-button glyphicon glyphicon-menu-left"></span>
+            <img src='pictures/ic_launcher.png' height='25' width='25'>
+            Log in
+        </div>
+        </a>
+    </div>
+    <div class= "left-align section">
+        <div class = "green-text"><h3>Log in to your account</h3></div>
+            <p>
+                <p class ="error"><br></p>
+                <div><input class="email" type="email" placeholder="Email address"/></div>
+            </p>
+
+            <p>
+                <div>
+                    <input class ="password" id = "hidden-password" type="password" placeholder="Password"/>
+                    <input class ="password" id = "visible-password" type="text" placeholder="Password"/>
+                    <input type = "checkbox" id = "show-password" onclick = "togglePassword()"/><label for = "show-password">Show password</label>
+                    <a class = "reset-button" onclick="showPasswordResetDialog()">Forgot password?</a>
+                    <p>
+                        <input type = "checkbox" id = "remember-me" checked/><label for = "remember-me">Remember Me</label>
+                    </p>
+                </div>
+            </p>
+        <div class="wrapper">
+            <div class="header-footer footer text-center white-text">
+                <div class = "login-button">Log in</div>
+            </div>
+        </div>
+    </div>
+
+    <div id = "password-reset" class="dialog" title="Password Reset Form">
+        <p>Please enter your email address.</p>
+        <label for = "reset-email">Email Address</label>
+        <input type = "email" id = "reset-email">
+    </div>
+    <div id = "password-reset-confirmation" class="dialog" title="Password Reset">
+        <p>Recovery email sent if account exists. Please check your email for further instructions.</p>
+    </div>
+</body>
+</html>

@@ -1,0 +1,279 @@
+html {
+    -webkit-user-select: none;
+}
+
+body {
+	background-color : #F2F2F2; 
+	padding-top: 3em;
+}
+
+.left-align {
+	margin-left : 1em;
+}
+
+.header-footer {
+	background-color: #385b3e;
+	padding : 5px;
+	padding-top: 8px;
+	font-size: 150%;
+	
+}
+
+
+.section {
+	margin : 1em;
+}
+
+h3 {
+	color : #416641;
+	font-size: 200%;
+	display : inline-block;
+}
+
+h6 {
+	color  : #627c66;
+	font-size: 120%;
+}
+
+input {
+	background-color:rgba(0, 0, 0, 0);
+    border: none;
+    border-bottom: thin solid gray;
+    outline:none;
+    margin-bottom : 1em;
+    width: 100%;
+}
+
+input[type="checkbox"]{
+	margin-right: 0.5em;
+	width: auto;
+}
+
+.top-section input {
+	max-width : 100%;
+}
+
+.more-info {
+
+	display : inline-block;
+	width : 1em;
+	height : 1em;
+	background-color: #385b3e;
+    border-radius: 60%;
+    padding: 0.2em;
+    line-height: 1em;
+    position: relative;
+    margin-left : 0.5em;
+
+}
+
+.more-info-content {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 100%;
+    width: 100%;
+    text-align: center;
+}
+
+.new-button{
+	background-color: #385b3e;
+	display: inline-block;
+	padding: 3px 5px;
+	margin-left: 0.5em;
+}
+
+.footer {
+	bottom:0;
+	left:0;
+	height: 2em;
+	width: 90%;
+	margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 1em;
+}
+
+.wrapper {
+    min-height: 100%;
+    margin: 0 auto -2em; /* the bottom margin is the negative value of the footer's height */
+}
+
+.white-text {
+	color : #F2F2F2;
+}
+
+#ptTimeSelectCntr, #ui-datepicker-div {
+	left : 15% !important;
+}
+
+.arthropod-order-select-screen {
+	display : none;
+}
+
+a {
+	color : white;
+}
+
+a:hover {
+	color: white;
+	/*font-size : 120%;*/
+	text-decoration:none;
+}
+
+.back-button {
+	display : none;
+}
+
+.arthropod-input{
+	background-color : white;
+	margin-bottom : 1em;
+	padding : 1em;
+}
+
+ .arthropod-input h4 {
+	 margin: 0 0 1em;
+	 color : black;
+ }
+
+.arthropod-input > div {
+	display : inline-block;
+	margin-right : 1em;
+    margin-left : 1em;
+}
+
+.arthropod-input img {
+	margin-top : -3em;
+}
+
+#herbivory-select a {
+	color : inherit;
+	font-size : 100%;
+	background-color: #F3F3F3;
+}
+
+.dd-option-image, .dd-selected-image {
+	max-height : 500px;
+	max-width : 250px !important;
+}
+
+.dd-option-text {
+	line-height : 0;
+	max-height : 1.5em;
+}
+
+#time, #date, #temperature{
+	margin: auto;
+	border: 1px solid #111;
+	background: lightgray;
+	/*padding: 5px 35px 5px 5px;*/
+	font-size: 0.85em;
+	height: 34px;
+	width: 100%;
+	-webkit-appearance: none;
+	/*-moz-appearance: none;*/
+	/*appearance: none;*/
+}
+
+select, option{
+	margin: auto;
+	border: 1px solid #111;
+	background: lightgray;
+	padding: 5px 35px 5px 5px;
+	font-size: 16px;
+	height: 34px;
+	width: 100%
+	/*-webkit-appearance: none;*/
+	/*-moz-appearance: none;*/
+	/*appearance: none;*/
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+	/* display: none; <- Crashes Chrome on hover */
+	-webkit-appearance: none;
+	margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+
+.capture {
+	background-color: gray;
+	width: 200px;
+	height: 200px;
+	margin: auto auto 20px;
+	border: 1px solid rgba(0, 0, 0, .2);
+	text-align: center;
+	line-height: 200px;
+	color: #627c66;
+}
+
+/*Centers the image*/
+#leaf-capture, #arthropod-capture{
+	display: block;
+	margin: auto auto 20px auto;
+	text-align: center;
+}
+
+.capture-text{
+	display: inline-block;
+	vertical-align: middle;
+	line-height: normal;
+	color: #F2F2F2
+}
+
+.saved-arthropod-image{
+	display: block;
+}
+
+span {
+	display: inline-block;
+	vertical-align: middle;
+	line-height: normal;
+	margin-bottom: 8px;
+}
+
+
+b{
+	color  : #627c66;
+	font-size: 120%;
+}
+
+.glyphicon-remove{
+	float: right;
+	display : inline-block;
+}
+
+/* Hide caterpillar checklist by default */
+.caterpillar-checklist{
+	display: none;
+}
+/*Hide dialogs unless tooltip is clicked*/
+.dialog{
+	display:none;
+}
+
+#photo-instruction{
+	display: inline-block;
+	width:100%;
+}
+#leaf-photo-tooltip{
+	height: 100%;
+	width: 100%;
+}
+
+#visible-password{
+	display: none;
+}
+
+#show-password{
+	width: auto;
+}
+
+.caterpillar-checklist input{
+	width: auto;
+}
+.caterpillar-checklist h4{
+	color  : #416641;
+	font-size: 150%;
+}
+label{
+	font-weight: normal;
+}

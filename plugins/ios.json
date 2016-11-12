@@ -7,6 +7,11 @@
         "files": {}
     },
     "installed_plugins": {
+        "cordova-plugin-camera": {
+            "CAMERA_USAGE_DESCRIPTION": " ",
+            "PHOTOLIBRARY_USAGE_DESCRIPTION": " ",
+            "PACKAGE_NAME": "goldenCompass.caterpillarCount"
+        },
         "cordova-plugin-dialogs": {
             "PACKAGE_NAME": "goldenCompass.caterpillarCount"
         },
@@ -22,20 +27,18 @@
         "cordova-sqlite-storage": {
             "PACKAGE_NAME": "goldenCompass.caterpillarCount"
         },
-        "cordova-plugin-camera": {
-            "CAMERA_USAGE_DESCRIPTION": "Use to take leaf/bug photo",
-            "PHOTOLIBRARY_USAGE_DESCRIPTION": "Use to store leaf/bug photo",
-            "PACKAGE_NAME": "goldenCompass.caterpillarCount"
-        },
         "phonegap-plugin-barcodescanner": {
             "PACKAGE_NAME": "goldenCompass.caterpillarCount"
         }
     },
     "dependent_plugins": {
+        "cordova-plugin-compat": {
+            "PACKAGE_NAME": "goldenCompass.caterpillarCount"
+        },
         "cordova-plugin-file": {
             "PACKAGE_NAME": "goldenCompass.caterpillarCount"
         },
-        "cordova-plugin-compat": {
+        "cordova-plugin-swift-support": {
             "PACKAGE_NAME": "goldenCompass.caterpillarCount"
         }
     }
