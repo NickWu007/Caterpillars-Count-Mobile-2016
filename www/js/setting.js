@@ -1,4 +1,10 @@
 var db;
+var site = "https://www.inaturalist.org";
+var app_id = 'f288a4e448fb2157ca940efcd471b5148fbb26f5de7dea47593fd863f978ddcb';
+var app_secret = '7ff165db65f1477b5b91a7d0b625a725f44a9eee929224c19f792fcfc37a4351';
+var username = 'caterpillarscount';
+var password = 'catcount!';
+var access_token;
 
 document.addEventListener("deviceready", onDeviceReady, false);
 //Return to start screen if android back button is pressed
@@ -33,5 +39,31 @@ function onDeviceReady(){
             window.location.assign("StartScreen.html");
         });
         // alert("after sql xact.");
+    });
+
+    $('.iNat-login').click(function() {
+        
+        $.ajax({
+            url: site + "/oauth/token",
+            type : "POST",
+            contentType: 'application/x-www-form-urlencoded',
+            data: {
+                "client_id" : app_id,
+                "client_secret" : app_secret,
+                "grant_type" : "password",
+                "username" : username,
+                "password" : password
+            },
+            success: function(response){
+                // alert("login successfully.");
+                // alert("access_token: " + response.access_token);
+                access_token = response.access_token;
+            },
+            error : function(xhr, status){
+                navigator.notification.alert("Unexpected error submitting survey: " + xhr.status);
+                alert(xhr.responseText);
+            }
+
+        });
     });
 }
