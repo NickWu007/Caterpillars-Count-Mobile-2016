@@ -121,6 +121,12 @@ $(document).ready(function(){
                                 }, function(tx, error) {
                                     alert('INSERT error: ' + error.message);
                                 });
+                                tx.executeSql('INSERT INTO SETTING VALUES (?,?,?,?)', [data.userID, "default", "default", ""], function(tx, resultSet) {
+                                    // alert('resultSet.insertId: ' + resultSet.insertId);
+                                    // alert('resultSet.rowsAffected: ' + resultSet.rowsAffected);
+                                }, function(tx, error) {
+                                    alert('INSERT error: ' + error.message);
+                                });
                             }
                             else{
                                 window.location.assign("homepage.html?userID="+json_obj.email+"&password="+json_obj.password);

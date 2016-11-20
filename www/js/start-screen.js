@@ -46,7 +46,6 @@ function onDeviceReady() {
     db.transaction(function(tx){
 		//tx.executeSql("DROP table if EXISTS USER_INFO");
         tx.executeSql("CREATE TABLE IF NOT EXISTS USER_INFO (name, password, userId)");
-		//tx.executeSql("INSERT INTO USER_INFO VALUES(?, ?, ? )",['leq94@live.unc.edu','leq941116','215']);
         //
         //refresh survey table each time it is started
         //
@@ -56,6 +55,8 @@ function onDeviceReady() {
 		tx.executeSql("CREATE TABLE IF NOT EXISTS ARTHROPODS(surveyType, length, notes, count, hairOrSpinyVal, leafRollVal, silkTentVal,ArthropodsImageURI,timeStart)");
         //tx.executeSql("DROP TABLE IF EXISTS SITE");
         tx.executeSql("CREATE TABLE IF NOT EXISTS SITE (siteId, siteName, userId, circle, state)");
+        tx.executeSql("DROP TABLE IF EXISTS SETTING");
+        tx.executeSql("CREATE TABLE IF NOT EXISTS SETTING (userID, useData, useINat, iNar_token)");
 		/*
         tx.executeSql("INSERT INTO SURVEY VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",   
                          	['survey',  
