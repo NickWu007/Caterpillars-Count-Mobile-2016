@@ -90,7 +90,7 @@
 		</data>
 		<key>CDVLaunchScreen.storyboardc/01J-lp-oVM-view-Ze5-6b-2t3.nib</key>
 		<data>
-		g/HNXEXoSwr/fEkGD5POjxqg+uo=
+		QfI40shKuBYhsOhULYVWZ+9+v0Y=
 		</data>
 		<key>CDVLaunchScreen.storyboardc/Info.plist</key>
 		<data>
@@ -98,7 +98,7 @@
 		</data>
 		<key>CDVLaunchScreen.storyboardc/UIViewController-01J-lp-oVM.nib</key>
 		<data>
-		RsOOAGArzLrYfyU+yn126yqcL3s=
+		0SlMjVvE85pyueUu7DeQOJIEZHg=
 		</data>
 		<key>CDVNotification.bundle/beep.wav</key>
 		<data>
@@ -166,7 +166,7 @@
 		</data>
 		<key>MainViewController.nib</key>
 		<data>
-		AxEVSGDch6IrW+x6pqK+ZjSMVIc=
+		UWIREOj0mba+h9BnpSRuVUzb6Ig=
 		</data>
 		<key>PkgInfo</key>
 		<data>
@@ -186,7 +186,7 @@
 		</data>
 		<key>scannerOverlay.nib</key>
 		<data>
-		a3mist2cGUjsBS/2saHQAyLy5lE=
+		mb5bp7kHoYROEBimilctrtzkgcA=
 		</data>
 		<key>www/AvailableSite.html</key>
 		<data>
@@ -990,11 +990,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			g/HNXEXoSwr/fEkGD5POjxqg+uo=
+			QfI40shKuBYhsOhULYVWZ+9+v0Y=
 			</data>
 			<key>hash2</key>
 			<data>
-			FMz+xUv7r8xeGphmUonROotgx7Zt7c/m6RKx/9kdsdc=
+			tKCqorDkePuLVEBq/zL0S1XxHLcog8rpz7v7Ai2yZyo=
 			</data>
 		</dict>
 		<key>CDVLaunchScreen.storyboardc/Info.plist</key>
@@ -1012,11 +1012,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			RsOOAGArzLrYfyU+yn126yqcL3s=
+			0SlMjVvE85pyueUu7DeQOJIEZHg=
 			</data>
 			<key>hash2</key>
 			<data>
-			3t86yHAeXnY9gRAx6BWqWh9elWc7UoFVakYwQsyBpdo=
+			HJGb5ROJGHIP3rmh+7/XxL+uOjCi7phjxA610Qid5ww=
 			</data>
 		</dict>
 		<key>CDVNotification.bundle/beep.wav</key>
@@ -1188,11 +1188,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			AxEVSGDch6IrW+x6pqK+ZjSMVIc=
+			UWIREOj0mba+h9BnpSRuVUzb6Ig=
 			</data>
 			<key>hash2</key>
 			<data>
-			ignZOfhGZaQkKi43/fu6MwJCoM2MzFmlAiygkvdmclI=
+			2A+KIPVghJZ6N5qQzp+PKkxl1C8MZXlAx6XX9GurEBo=
 			</data>
 		</dict>
 		<key>archived-expanded-entitlements.xcent</key>
@@ -1232,11 +1232,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			a3mist2cGUjsBS/2saHQAyLy5lE=
+			mb5bp7kHoYROEBimilctrtzkgcA=
 			</data>
 			<key>hash2</key>
 			<data>
-			1UK9iKhahM/kF8ZAYxMiJXmMTZI4s5HwxfnVwaSfKYk=
+			WP4kQbddJPmDcbNMJuGWYCZjZ7blz4ocVkXzfYoCUhE=
 			</data>
 		</dict>
 		<key>www/AvailableSite.html</key>

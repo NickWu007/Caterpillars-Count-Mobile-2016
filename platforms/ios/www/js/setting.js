@@ -1,4 +1,13 @@
 var db;
+var site = "https://www.inaturalist.org";
+var app_id = 'f288a4e448fb2157ca940efcd471b5148fbb26f5de7dea47593fd863f978ddcb';
+var app_secret = '7ff165db65f1477b5b91a7d0b625a725f44a9eee929224c19f792fcfc37a4351';
+var username = 'caterpillarscount';
+var password = 'catcount!';
+var access_token;
+var userID;
+var use_data;
+var use_inat;
 
 document.addEventListener("deviceready", onDeviceReady, false);
 //Return to start screen if android back button is pressed
@@ -11,27 +20,98 @@ function onDeviceReady(){
 
     db=window.sqlitePlugin.openDatabase(
         {name: 'app.db', location: 'default'}, 
-        DBSuccessCB(), 
+        DBsuccess(), 
         function(error){alert("Error Open Database:"+JSON.stringify(error));}
     );
-    function DBSuccessCB(){
-        // alert("DB open OK");
+    function DBsuccess(){
+        // alert("DB open ok, Create Table etc");
     }
 
+    db.transaction(function(tx){
+        tx.executeSql('select * from SETTING', [], function(tx, rs){
+            if (rs.rows.length > 0) {
+                userID = rs.rows.item(0).userID;
+                use_data = rs.rows.item(0).useData;
+                $('.data-perference option[value="' + use_data + '"]').prop("selected", true);
+                use_inat = rs.rows.item(0).useINat;
+                $('.iNaturalist option[value="' + use_inat + '"]').prop("selected", true);
+                alert("access_token: " + rs.rows.item(0).iNar_token);
+            }
+        });
+        }, function(error){
+            alert("Transaction Error: "+error.message);
+        }, function() {
+            // alert("finish pre-fill");
+    });
+    
     var $logoffButton = $(".logoff");
     $logoffButton.click(function (e) {
         // When manually clicks to log off, deletes stored login info.
-        
-        // alert("manually clicks to log off");
-        // alert("before sql xact.");
+
         db.transaction(function(tx){
             tx.executeSql('delete from USER_INFO');
+            tx.executeSql('delete from SETTING');
         }, function(error){
             alert("Transaction Error: " + error.message);
         }, function() {
             alert("user deleted from database.");
             window.location.assign("StartScreen.html");
         });
-        // alert("after sql xact.");
     });
+
+    $('.data-perference').change(function() {
+        use_data = $('.data-perference option:selected').val();
+        updateSettings();
+    });
+
+    $('.iNaturalist').change(function() {
+        if ($(this).val() == "Yes") {
+            iNar_login();
+        }
+
+        use_inat = $('.iNaturalist option:selected').val();
+        updateSettings();
+    });
+
+    function updateSettings() {
+        if (userID !== null && userID !== undefined) {
+            db.transaction(function(tx){
+                tx.executeSql('update SETTING set useData = ?, useINat = ?, iNar_token = ? where userID = ?', [use_data, use_inat, access_token, userID], 
+                    function(tx, resultSet) {
+                        // alert('resultSet.rowsAffected: ' + resultSet.rowsAffected);
+                    }, function(tx, error) {
+                        alert('UPDATE error: ' + error.message);
+                });
+            }, function(error){
+                alert("Transaction Error: " + error.message);
+            }, function() {
+                // alert("user settings updated.");
+            });
+        }
+    }
+
+    function iNar_login() {
+        $.ajax({
+            url: site + "/oauth/token",
+            type : "POST",
+            contentType: 'application/x-www-form-urlencoded',
+            data: {
+                "client_id" : app_id,
+                "client_secret" : app_secret,
+                "grant_type" : "password",
+                "username" : username,
+                "password" : password
+            },
+            success: function(response){
+                access_token = response.access_token;
+                updateSettings();
+            },
+            error : function(xhr, status){
+                navigator.notification.alert("Unexpected error submitting survey: " + xhr.status);
+                alert(xhr.responseText);
+            }
+        });
+    }
+
+    $('.iNat-login').click(iNar_login);
 }
