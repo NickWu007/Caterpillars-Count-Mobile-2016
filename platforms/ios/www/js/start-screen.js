@@ -55,7 +55,7 @@ function onDeviceReady() {
 		tx.executeSql("CREATE TABLE IF NOT EXISTS ARTHROPODS(surveyType, length, notes, count, hairOrSpinyVal, leafRollVal, silkTentVal,ArthropodsImageURI,timeStart)");
         //tx.executeSql("DROP TABLE IF EXISTS SITE");
         tx.executeSql("CREATE TABLE IF NOT EXISTS SITE (siteId, siteName, userId, circle, state)");
-        tx.executeSql("DROP TABLE IF EXISTS SETTING");
+        // tx.executeSql("DROP TABLE IF EXISTS SETTING");
         tx.executeSql("CREATE TABLE IF NOT EXISTS SETTING (userID, useData, useINat, iNar_token)");
 		/*
         tx.executeSql("INSERT INTO SURVEY VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",   

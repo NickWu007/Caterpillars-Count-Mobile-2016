@@ -35,7 +35,6 @@ function onDeviceReady(){
                 $('.data-perference option[value="' + use_data + '"]').prop("selected", true);
                 use_inat = rs.rows.item(0).useINat;
                 $('.iNaturalist option[value="' + use_inat + '"]').prop("selected", true);
-                alert("access_token: " + rs.rows.item(0).iNar_token);
             }
         });
         }, function(error){
@@ -103,6 +102,7 @@ function onDeviceReady(){
                 "password" : password
             },
             success: function(response){
+                alert("Signin to inatrualist successful");
                 access_token = response.access_token;
                 updateSettings();
             },

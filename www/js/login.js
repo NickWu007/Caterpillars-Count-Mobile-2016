@@ -121,11 +121,17 @@ $(document).ready(function(){
                                 }, function(tx, error) {
                                     alert('INSERT error: ' + error.message);
                                 });
-                                tx.executeSql('INSERT INTO SETTING VALUES (?,?,?,?)', [data.userID, "default", "default", ""], function(tx, resultSet) {
-                                    // alert('resultSet.insertId: ' + resultSet.insertId);
-                                    // alert('resultSet.rowsAffected: ' + resultSet.rowsAffected);
+                                tx.executeSql('SELECT * FROM SETTING', [], function(tx, resultSet) {
+                                    if (resultSet.rows.length == 0) {
+                                        tx.executeSql('INSERT INTO SETTING VALUES (?,?,?,?)', [data.userID, "default", "default", ""], function(tx, resultSet) {
+                                            // alert('resultSet.insertId: ' + resultSet.insertId);
+                                            // alert('resultSet.rowsAffected: ' + resultSet.rowsAffected);
+                                        }, function(tx, error) {
+                                            alert('INSERT error: ' + error.message);
+                                        });
+                                    }
                                 }, function(tx, error) {
-                                    alert('INSERT error: ' + error.message);
+                                    alert('SELECT error: ' + error.message);
                                 });
                             }
                             else{

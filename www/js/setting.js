@@ -102,6 +102,7 @@ function onDeviceReady(){
                 "password" : password
             },
             success: function(response){
+                alert("Signin to inatrualist successful");
                 access_token = response.access_token;
                 updateSettings();
             },
