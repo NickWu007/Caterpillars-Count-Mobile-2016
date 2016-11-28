@@ -38,6 +38,7 @@ var onArthropodPage = false;
 var timeStart;
 var edit= false;
 var inat_token;
+var use_data;
 
 var temperatures = {
 	"<30" : {min : - 10, max : 30},
@@ -118,6 +119,14 @@ function onDeviceReady(){
                // alert(inat_token);
         	}
         }); 
+	    tx.executeSql('select * from SETTING', [], function(tx, rs){
+                if (rs.rows.length > 0) {
+                    use_data = rs.rows.item(0).useData;
+                    //alert("use data:"+use_data);
+                }else{
+                    use_data='NONE'
+                }
+        });
     }, function(error){
         alert("Transaction Error: "+error.message);
     }, function(){
@@ -738,7 +747,9 @@ var submit = function( ) {
 	//navigator.notification.alert("SiteID: " + siteID +
 	//	"\nSite password: " +sitePassword);
 	//var online = navigator.onLine;
-	if(navigator.onLine == false||anon== true){
+	var online=isOnline();
+	alert("is online "+online);
+	if(online == false||anon== true){
         //last field for error handler 0 is default
 		//alert("I am here");
 		db.transaction(function(tx){
@@ -891,7 +902,6 @@ var toolTip = function(toolTipLocation){
 //Submits basic survey info and leaf photo to server
 //Calls submitArthropodsToServer if survey upload is successful
 var submitSurveyToServer = function(){
-	// navigator.notification.alert("Submitting survey");
 	 $.ajax({
 		url: DOMAIN + "/api/submission_full.php",
 		type : "POST",
@@ -1199,4 +1209,24 @@ function scanQRCode() {
 //Handles device rotation
 window.shouldRotateToOrientation = function() {
 	return true;
+};
+
+function isOnline(){
+        var networkState = navigator.connection.type;
+        alert(networkState);
+        if(use_data=='Yes'){
+            if(networkState==Connection.UNKNOWN||networkState==Connection.NONE){
+                return false;
+            }else{
+                return true;
+            }
+        }else{
+            if(networkState==Connection.UNKNOWN||networkState==Connection.NONE
+                ||networkState==Connection.CELL||networkState==Connection.CELL_2G
+                ||networkState==Connection.CELL_3G||networkState==Connection.CELL_4G){
+                return false;
+            }else{
+                return true;
+            }
+        }
 };
