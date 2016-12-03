@@ -947,9 +947,9 @@ function slugify(text){
     .replace(/\++$/, '');            // Trim - from end of text
 }
 
-function get_species(text) {
-	if (text.indexOf('(') > -1) {
-		return text.substring(0, text.indexOf('('));
+function trim_end(text, by) {
+	if (text.indexOf(by) > -1) {
+		return text.substring(0, text.indexOf(by));
 	} else {
 		return text;
 	}
@@ -988,32 +988,55 @@ var submitArthropodsToServer = function(result){
 
 			var arthropodImageURI = $(".saved-arthropod-image", this).prop("src");
 			//navigator.notification.alert("Arthropod image uri: " + arthropodImageURI);
-			
-			if (inat_token != null) {
-				var url = INATURALIST_DOMAIN + "/observations.json?";
-				//url += "observation[species_guess]="+slugify($("h4", this).text());
-				url += "observation[species_guess]="+slugify(get_species($("h4", this).text()));
-				url += "&observation[id_please]=1";
-				url += "&observation[description]=" + slugify($(".arthropod-notes", this).text());
 
-				// alert("url: " + url);
-				$.ajax({
-					url: url,
-					type: "POST",
-					crossDomain: true,
-					contentType: 'application/x-www-form-urlencoded',
-					data: {
-						"access_token": inat_token,
-					},
-					success: function () {
-						alert("New observation on iNaturalist uploaded.");
-					},
-					error: function(xhr, status){
-		                alert("Unexpected error submitting observation: " + xhr.status);
-		                alert(xhr.responseText);
-		            }
-				});
-			}
+			if (inat_token !== null) {
+							var url = INATURALIST_DOMAIN + "/observations.json?";
+							//url += "observation[species_guess]="+slugify($("h4", this).text());
+							url += "observation[species_guess]="+slugify(trim_end($("h4", this).text(), '('));
+							url += "&observation[id_please]=1";
+							alert(date);
+							url += "&observation[observed_on_string]=" + date;
+							url += "&observation[place_guess]=NC+Botanical+Garden"; //+ slugify(trim_end($("#site option:selected").text()), '(');
+							url += "&observation[description]=" + slugify($(".arthropod-notes", this).text());
+							url += "&observation[observation_field_values_attributes][0][observation_field_id]=1289";
+							url += "&observation[observation_field_values_attributes][0][value]="+$(".arthropod-length", this).text();
+							url += "&observation[observation_field_values_attributes][1][observation_field_id]=5716";
+							url += "&observation[observation_field_values_attributes][1][value]="+temperature;
+							url += "&observation[observation_field_values_attributes][2][observation_field_id]=1194";
+							url += "&observation[observation_field_values_attributes][2][value]="+$("#site option:selected").text();
+							url += "&observation[observation_field_values_attributes][3][observation_field_id]=5715";
+							url += "&observation[observation_field_values_attributes][3][value]="+circle;
+							url += "&observation[observation_field_values_attributes][4][observation_field_id]=5714";
+							url += "&observation[observation_field_values_attributes][4][value]="+survey;
+							url += "&observation[observation_field_values_attributes][5][observation_field_id]=306";
+							url += "&observation[observation_field_values_attributes][5][value]="+plantSpecies;
+							url += "&observation[observation_field_values_attributes][6][observation_field_id]=5712";
+							url += "&observation[observation_field_values_attributes][6][value]="+leafCount;
+							url += "&observation[observation_field_values_attributes][7][observation_field_id]=5711";
+							url += "&observation[observation_field_values_attributes][7][value]="+$("#herbivory-select").val();
+							url += "&observation[observation_field_values_attributes][8][observation_field_id]=1294";
+							url += "&observation[observation_field_values_attributes][8][value]="+$(".arthropod-count", this).text();
+							url += "&observation[observation_field_values_attributes][9][observation_field_id]=5710";
+							url += "&observation[observation_field_values_attributes][9][value]="+trim_end(stored_user_info.name, '@');
+
+							// alert("url: " + url);
+							$.ajax({
+								url: url,
+								type: "POST",
+								crossDomain: true,
+								contentType: 'application/x-www-form-urlencoded',
+								data: {
+									"access_token": inat_token,
+								},
+								success: function () {
+									alert("New observation on iNaturalist uploaded.");
+								},
+								error: function(xhr, status){
+					                alert("Unexpected error submitting observation: " + xhr.status);
+					                alert(xhr.responseText);
+					            }
+							});
+						}
 
 			$.ajax({
 				url: DOMAIN + "/api/submission_full.php",
