@@ -50,4 +50,7 @@
     <icon density="xxxhdpi" src="www/pictures/xxxhdpi_icon.png" />
     <preference name="loglevel" value="DEBUG" />
     <preference name="AndroidPersistentFileLocation" value="Compatibility" />
+    <feature name="NetworkStatus">
+        <param name="android-package" value="org.apache.cordova.networkinformation.NetworkManager" />
+    </feature>
 </widget>
