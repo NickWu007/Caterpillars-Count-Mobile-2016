@@ -62,6 +62,11 @@ function onDeviceReady(){
     $('.data-perference').change(function() {
         use_data = $('.data-perference option:selected').val();
         updateSettings();
+        if(use_data=='Yes'){
+            alert("Now, the App will use Cellular Data (4G/3G/2G) to submit survey.");
+        }else{
+            alert("Now, the App will only use WIFI to submit survey. Otherwise, surveys will be stored locally and you can upload them later.");
+        }
     });
 
     $('.iNaturalist').change(function() {
