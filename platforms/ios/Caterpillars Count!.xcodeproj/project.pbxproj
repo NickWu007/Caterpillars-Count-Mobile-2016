@@ -5,7 +5,6 @@
 	};
 	objectVersion = 46;
 	objects = {
-
 /* Begin PBXBuildFile section */
 		0207DA581B56EA530066E2B4 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0207DA571B56EA530066E2B4 /* Images.xcassets */; };
 		024878D601E64520B9295284 /* sqlite3.c in Sources */ = {isa = PBXBuildFile; fileRef = D9AFC7AD00394CB7A2AFFB35 /* sqlite3.c */; settings = {COMPILER_FLAGS = "-DSQLITE_TEMP_STORE=2 -DSQLITE_THREADSAFE=2 -DSQLITE_ENABLE_FTS3 -DSQLITE_ENABLE_FTS3_PARENTHESIS -DSQLITE_ENABLE_FTS4 -DSQLITE_ENABLE_COLUMN_METADATA -DSQLITE_ENABLE_RTREE -DSQLITE_LOCKING_STYLE=1 -DSQLITE_OMIT_BUILTIN_TEST -DSQLITE_OMIT_LOAD_EXTENSION"; }; };
@@ -38,6 +37,10 @@
 		C2BD0B41DAAC452481B78CB1 /* SQLitePlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A6B9E0C15D44C9EBADDCDFF /* SQLitePlugin.m */; };
 		DA85AFC438E645649C88C449 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5D068F430E724911A7DAC49F /* AudioToolbox.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		FC2D407ADAD14D3E9C849B7C /* scannerOverlay.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1B9CC687FF6B48288E59F48A /* scannerOverlay.xib */; };
+		83C96CFADBE540D38C42374D /* CDVConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = A06900E5D7F948B4BAB579C9 /* CDVConnection.m */; };
+		58D31C2F99E84FECB4781E88 /* CDVReachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 15EE760FCFD2406DA304DED7 /* CDVReachability.m */; };
+		38E5BEB6D8C848A4BE39B71D /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 201EA3235D394B61A7282E57 /* SystemConfiguration.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		D08ED6DFD7BA40D89599486E /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11D009D301DA4A06B1F962FD /* CoreTelephony.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -115,6 +118,12 @@
 		F1DA2DE774B443718236E657 /* CDVLocalFilesystem.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = CDVLocalFilesystem.h; path = "cordova-plugin-file/CDVLocalFilesystem.h"; sourceTree = "<group>"; };
 		F840E1F0165FE0F500CFE078 /* config.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = config.xml; path = "Caterpillars Count!/config.xml"; sourceTree = "<group>"; };
 		FE3748A685724C598E321274 /* CDVFileTransfer.m */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.objc; name = CDVFileTransfer.m; path = "cordova-plugin-file-transfer/CDVFileTransfer.m"; sourceTree = "<group>"; };
+		A06900E5D7F948B4BAB579C9 /* CDVConnection.m */ = {isa = PBXFileReference; name = "CDVConnection.m"; path = "cordova-plugin-network-information/CDVConnection.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
+		15EE760FCFD2406DA304DED7 /* CDVReachability.m */ = {isa = PBXFileReference; name = "CDVReachability.m"; path = "cordova-plugin-network-information/CDVReachability.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
+		084EF93F7BB340BEAFF9B0D1 /* CDVConnection.h */ = {isa = PBXFileReference; name = "CDVConnection.h"; path = "cordova-plugin-network-information/CDVConnection.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
+		289C0A2F27F345B483E076F1 /* CDVReachability.h */ = {isa = PBXFileReference; name = "CDVReachability.h"; path = "cordova-plugin-network-information/CDVReachability.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
+		201EA3235D394B61A7282E57 /* SystemConfiguration.framework */ = {isa = PBXFileReference; name = "SystemConfiguration.framework"; path = "System/Library/Frameworks/SystemConfiguration.framework"; sourceTree = SDKROOT; fileEncoding = undefined; lastKnownFileType = wrapper.framework; explicitFileType = undefined; includeInIndex = 0; };
+		11D009D301DA4A06B1F962FD /* CoreTelephony.framework */ = {isa = PBXFileReference; name = "CoreTelephony.framework"; path = "System/Library/Frameworks/CoreTelephony.framework"; sourceTree = SDKROOT; fileEncoding = undefined; lastKnownFileType = wrapper.framework; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -131,6 +140,8 @@
 				6E07677907404366B16D0CD5 /* CoreVideo.framework in Frameworks */,
 				0406EDAB7F904F1298250E5B /* QuartzCore.framework in Frameworks */,
 				053B52A12A9547C3A173FF46 /* CoreImage.framework in Frameworks */,
+				38E5BEB6D8C848A4BE39B71D /* SystemConfiguration.framework in Frameworks */,
+				D08ED6DFD7BA40D89599486E /* CoreTelephony.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -212,6 +223,8 @@
 				586D906168B342B9B8FD62D0 /* CoreVideo.framework */,
 				A54A037C142746508DB192AA /* QuartzCore.framework */,
 				DC8CFC95B3B04CA0901DCDF0 /* CoreImage.framework */,
+				201EA3235D394B61A7282E57 /* SystemConfiguration.framework */,
+				11D009D301DA4A06B1F962FD /* CoreTelephony.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -263,6 +276,10 @@
 				E8AB99192DDB4F57B1591C1B /* CDVBarcodeScanner.mm */,
 				46BA82D71B3B4C1AB7C63D6F /* zxing-all-in-one.cpp */,
 				1630ADCCAC1C41099A999528 /* zxing-all-in-one.h */,
+				A06900E5D7F948B4BAB579C9 /* CDVConnection.m */,
+				15EE760FCFD2406DA304DED7 /* CDVReachability.m */,
+				084EF93F7BB340BEAFF9B0D1 /* CDVConnection.h */,
+				289C0A2F27F345B483E076F1 /* CDVReachability.h */,
 			);
 			name = Plugins;
 			path = "Caterpillars Count!/Plugins";
@@ -399,6 +416,8 @@
 				024878D601E64520B9295284 /* sqlite3.c in Sources */,
 				8995E2A2F6CC4777B2A646B4 /* CDVBarcodeScanner.mm in Sources */,
 				8B9F384DF19A42A69FC3BA8F /* zxing-all-in-one.cpp in Sources */,
+				83C96CFADBE540D38C42374D /* CDVConnection.m in Sources */,
+				58D31C2F99E84FECB4781E88 /* CDVReachability.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

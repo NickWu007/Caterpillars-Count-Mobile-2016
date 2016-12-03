@@ -5,6 +5,7 @@ var DOMAIN = "http://master-caterpillars.vipapps.unc.edu";
 var db;
 var stored_user_info;
 var rememberMeChecked;
+var use_data;
 
 document.addEventListener("deviceready", onDeviceReady, false);
 //Return to start screen if android back button is pressed
@@ -31,6 +32,14 @@ function onDeviceReady(){
             // alert("# of entries: " + rs.rows.length);
             if (rs.rows.length > 0) stored_user_info=rs.rows.item(0);
         });
+        tx.executeSql('select * from SETTING', [], function(tx, rs){
+                if (rs.rows.length > 0) {
+                    use_data = rs.rows.item(0).useData;
+                    //alert("use data:"+use_data);
+                }else{
+                    use_data='NONE'
+                }
+            });
         }, function(error){
             alert("Transaction Error: "+error.message);
         }, function() {
@@ -54,7 +63,6 @@ function onDeviceReady(){
 
 
 $(document).ready(function(){
-
     var $submitButton = $(".login-button");
     $submitButton.click(function (e) {
         e.preventDefault();
@@ -85,7 +93,9 @@ $(document).ready(function(){
         
         // Check if offline. If so, use offline login logic
         // Offline log in logic, faking for now.
-        if (!navigator.onLine) {
+        online=isOnline();
+        alert("is online:"+online);
+        if (!online) {
             if((stored_user_info===null)||(stored_user_info.name!=$email.val())||(stored_user_info.password!=$pw.val())){
                   alert("No internet access. Cannot log in.");
               }
@@ -121,11 +131,17 @@ $(document).ready(function(){
                                 }, function(tx, error) {
                                     alert('INSERT error: ' + error.message);
                                 });
-                                tx.executeSql('INSERT INTO SETTING VALUES (?,?,?,?)', [data.userID, "default", "default", ""], function(tx, resultSet) {
-                                    // alert('resultSet.insertId: ' + resultSet.insertId);
-                                    // alert('resultSet.rowsAffected: ' + resultSet.rowsAffected);
+                                tx.executeSql('SELECT * FROM SETTING', [], function(tx, resultSet) {
+                                    if (resultSet.rows.length == 0) {
+                                        tx.executeSql('INSERT INTO SETTING VALUES (?,?,?,?)', [data.userID, "default", "default", ""], function(tx, resultSet) {
+                                            // alert('resultSet.insertId: ' + resultSet.insertId);
+                                            // alert('resultSet.rowsAffected: ' + resultSet.rowsAffected);
+                                        }, function(tx, error) {
+                                            alert('INSERT error: ' + error.message);
+                                        });
+                                    }
                                 }, function(tx, error) {
-                                    alert('INSERT error: ' + error.message);
+                                    alert('SELECT error: ' + error.message);
                                 });
                             }
                             else{
@@ -289,4 +305,24 @@ var resetPassword = function(resetDialog){
 //Handles device rotation
 window.shouldRotateToOrientation = function() {
     return true;
+};
+
+function isOnline(){
+        var networkState = navigator.connection.type;
+        alert(networkState);
+        if(use_data=='Yes'){
+            if(networkState==Connection.UNKNOWN||networkState==Connection.NONE){
+                return false;
+            }else{
+                return true;
+            }
+        }else{
+            if(networkState==Connection.UNKNOWN||networkState==Connection.NONE
+                ||networkState==Connection.CELL||networkState==Connection.CELL_2G
+                ||networkState==Connection.CELL_3G||networkState==Connection.CELL_4G){
+                return false;
+            }else{
+                return true;
+            }
+        }
 };

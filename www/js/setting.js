@@ -1,7 +1,8 @@
 var db;
 var site = "https://www.inaturalist.org";
-var app_id = 'f288a4e448fb2157ca940efcd471b5148fbb26f5de7dea47593fd863f978ddcb';
-var app_secret = '7ff165db65f1477b5b91a7d0b625a725f44a9eee929224c19f792fcfc37a4351';
+var ccsite="http://develop-caterpillars.vipapps.unc.edu/"
+//var app_id = 'f288a4e448fb2157ca940efcd471b5148fbb26f5de7dea47593fd863f978ddcb';
+//var app_secret = '7ff165db65f1477b5b91a7d0b625a725f44a9eee929224c19f792fcfc37a4351';
 var username = 'caterpillarscount';
 var password = 'catcount!';
 var access_token;
@@ -61,16 +62,39 @@ function onDeviceReady(){
     $('.data-perference').change(function() {
         use_data = $('.data-perference option:selected').val();
         updateSettings();
+        if(use_data=='Yes'){
+            alert("Now, the App will use Cellular Data (4G/3G/2G) to submit survey.");
+        }else{
+            alert("Now, the App will only use WIFI to submit survey. Otherwise, surveys will be stored locally and you can upload them later.");
+        }
     });
 
     $('.iNaturalist').change(function() {
         if ($(this).val() == "Yes") {
-            iNar_login();
+            retriveLogin();
+            //iNar_login(); #now moved into retriveLogin()
         }
 
         use_inat = $('.iNaturalist option:selected').val();
         updateSettings();
     });
+
+    function retriveLogin(){
+        $.ajax({
+            url: ccsite + "/api/iNaturalist.php",
+            type : "POST",
+            dataType: 'json',
+            data: JSON.stringify({
+                "action" : "getiNaturalistLogin"
+            }),
+            success: function(response){
+                iNar_login(response['7'],response['11']);
+            },
+            error : function(xhr, status){
+                alert("Cannot retrive iNaturelist Login:"+xhr.responseText);
+            }
+        });
+    }
 
     function updateSettings() {
         if (userID !== null && userID !== undefined) {
@@ -89,7 +113,7 @@ function onDeviceReady(){
         }
     }
 
-    function iNar_login() {
+    function iNar_login(app_id, app_secret) {
         $.ajax({
             url: site + "/oauth/token",
             type : "POST",
@@ -102,6 +126,7 @@ function onDeviceReady(){
                 "password" : password
             },
             success: function(response){
+                alert("Signin to inatrualist successful");
                 access_token = response.access_token;
                 updateSettings();
             },

@@ -1,4 +1,5 @@
 var DOMAIN = "http://master-caterpillars.vipapps.unc.edu";
+var INATURALIST_DOMAIN = "https://www.inaturalist.org";
 
 var leafPhotoTaken = false;
 
@@ -36,6 +37,8 @@ var numberOfArthropodsSubmitted;
 var onArthropodPage = false;
 var timeStart;
 var edit= false;
+var inat_token;
+var use_data;
 
 var temperatures = {
 	"<30" : {min : - 10, max : 30},
@@ -104,6 +107,26 @@ function onDeviceReady(){
             stored_user_info = rs.rows.item(0);
         }
         });    
+
+        tx.executeSql('SELECT * from SETTING',[], function(tx, rs){
+        	if(rs.rows.length > 0){
+               if (rs.rows.item(0).useINat == "Yes") {
+               	inat_token = rs.rows.item(0).iNar_token;
+               } else {
+               	inat_token = null;
+               }
+
+               // alert(inat_token);
+        	}
+        }); 
+	    tx.executeSql('select * from SETTING', [], function(tx, rs){
+                if (rs.rows.length > 0) {
+                    use_data = rs.rows.item(0).useData;
+                    //alert("use data:"+use_data);
+                }else{
+                    use_data='NONE'
+                }
+        });
     }, function(error){
         alert("Transaction Error: "+error.message);
     }, function(){
@@ -724,7 +747,9 @@ var submit = function( ) {
 	//navigator.notification.alert("SiteID: " + siteID +
 	//	"\nSite password: " +sitePassword);
 	//var online = navigator.onLine;
-	if(navigator.onLine == false||anon== true){
+	var online=isOnline();
+	alert("is online "+online);
+	if(online == false||anon== true){
         //last field for error handler 0 is default
 		//alert("I am here");
 		db.transaction(function(tx){
@@ -877,7 +902,6 @@ var toolTip = function(toolTipLocation){
 //Submits basic survey info and leaf photo to server
 //Calls submitArthropodsToServer if survey upload is successful
 var submitSurveyToServer = function(){
-	// navigator.notification.alert("Submitting survey");
 	 $.ajax({
 		url: DOMAIN + "/api/submission_full.php",
 		type : "POST",
@@ -903,7 +927,7 @@ var submitSurveyToServer = function(){
 		}),
 		success: function(result){
 			//Upload leaf photo
-			uploadPhoto(leafImageURI, "leaf-photo", result.surveyID);
+			//uploadPhoto(leafImageURI, "leaf-photo", result.surveyID);
 			submitArthropodsToServer(result);
 			if (edit) {
 				db.transaction(function(tx){
@@ -924,8 +948,22 @@ var submitSurveyToServer = function(){
 	});
 };
 
+function slugify(text){
+  return text
+    .replace(/\s+/g, '+')           // Replace spaces with -
+    .replace(/[^\w\+]+/g, '')       // Remove all non-word chars
+    .replace(/\+\++/g, '+')         // Replace multiple - with single -
+    .replace(/^\++/, '')             // Trim - from start of text
+    .replace(/\++$/, '');            // Trim - from end of text
+}
 
-
+function get_species(text) {
+	if (text.indexOf('(') > -1) {
+		return text.substring(0, text.indexOf('('));
+	} else {
+		return text;
+	}
+}
 
 //Submits arthropod info to server for each saved order/
 //Calls uploadPhoto with orderPhoto (if a photo was taken)
@@ -960,6 +998,33 @@ var submitArthropodsToServer = function(result){
 
 			var arthropodImageURI = $(".saved-arthropod-image", this).prop("src");
 			//navigator.notification.alert("Arthropod image uri: " + arthropodImageURI);
+			
+			if (inat_token != null) {
+				var url = INATURALIST_DOMAIN + "/observations.json?";
+				//url += "observation[species_guess]="+slugify($("h4", this).text());
+				url += "observation[species_guess]="+slugify(get_species($("h4", this).text()));
+				url += "&observation[id_please]=1";
+				url += "&observation[description]=" + slugify($(".arthropod-notes", this).text());
+
+				// alert("url: " + url);
+				$.ajax({
+					url: url,
+					type: "POST",
+					crossDomain: true,
+					contentType: 'application/x-www-form-urlencoded',
+					data: {
+						"access_token": inat_token,
+					},
+					success: function () {
+						alert("New observation on iNaturalist uploaded.");
+					},
+					error: function(xhr, status){
+		                alert("Unexpected error submitting observation: " + xhr.status);
+		                alert(xhr.responseText);
+		            }
+				});
+			}
+
 			$.ajax({
 				url: DOMAIN + "/api/submission_full.php",
 				type: "POST",
@@ -1144,4 +1209,24 @@ function scanQRCode() {
 //Handles device rotation
 window.shouldRotateToOrientation = function() {
 	return true;
+};
+
+function isOnline(){
+        var networkState = navigator.connection.type;
+        alert(networkState);
+        if(use_data=='Yes'){
+            if(networkState==Connection.UNKNOWN||networkState==Connection.NONE){
+                return false;
+            }else{
+                return true;
+            }
+        }else{
+            if(networkState==Connection.UNKNOWN||networkState==Connection.NONE
+                ||networkState==Connection.CELL||networkState==Connection.CELL_2G
+                ||networkState==Connection.CELL_3G||networkState==Connection.CELL_4G){
+                return false;
+            }else{
+                return true;
+            }
+        }
 };

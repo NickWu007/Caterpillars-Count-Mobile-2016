@@ -1,7 +1,7 @@
 /**
  * Created by skuroda on 12/6/15.
  */
-
+var use_data;
 document.addEventListener("deviceready", onDeviceReady, false);
 
 function  closeDB(){
@@ -55,8 +55,17 @@ function onDeviceReady() {
 		tx.executeSql("CREATE TABLE IF NOT EXISTS ARTHROPODS(surveyType, length, notes, count, hairOrSpinyVal, leafRollVal, silkTentVal,ArthropodsImageURI,timeStart)");
         //tx.executeSql("DROP TABLE IF EXISTS SITE");
         tx.executeSql("CREATE TABLE IF NOT EXISTS SITE (siteId, siteName, userId, circle, state)");
-        tx.executeSql("DROP TABLE IF EXISTS SETTING");
+        // tx.executeSql("DROP TABLE IF EXISTS SETTING");
         tx.executeSql("CREATE TABLE IF NOT EXISTS SETTING (userID, useData, useINat, iNar_token)");
+
+        tx.executeSql('select * from SETTING', [], function(tx, rs){
+            if (rs.rows.length > 0) {
+                use_data = rs.rows.item(0).useData;
+                //alert("use data:"+use_data);
+            }else{
+                use_data='NONE'
+            }
+        });
 		/*
         tx.executeSql("INSERT INTO SURVEY VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",   
                          	['survey',  
@@ -117,15 +126,17 @@ function onDeviceReady() {
     }, function(error){
         alert("Transaction Error: "+error.message);
     }, function(){
-        // alert("Transaction OK, database initialized successfully.");
+        createButtons();
     });
-    closeDB();
+
+    //closeDB();
+
 }
 
 $(document).ready(function() { 
     window.addEventListener("online", createButtons);
     window.addEventListener("offline", createButtons);
-	createButtons();
+	
 });
 
 //Handles device rotation
@@ -134,8 +145,9 @@ window.shouldRotateToOrientation = function() {
 };
 
 function createButtons(){
+   var networkState = navigator.connection.type;
 
-   var online = navigator.onLine;
+   var online = isOnline();
     var register_button = "<a href = 'register.html'>"+
                             "<div class='header-footer footer text-center green-text'>"+
                                 "<div class = 'button'><h4>Register</h4></div>"+
@@ -161,3 +173,23 @@ function createButtons(){
         $("#bottom_button").html(login_button);
     }
 }
+
+function isOnline(){
+        var networkState = navigator.connection.type;
+        alert(networkState);
+        if(use_data=='Yes'){
+            if(networkState==Connection.UNKNOWN||networkState==Connection.NONE){
+                return false;
+            }else{
+                return true;
+            }
+        }else{
+            if(networkState==Connection.UNKNOWN||networkState==Connection.NONE
+                ||networkState==Connection.CELL||networkState==Connection.CELL_2G
+                ||networkState==Connection.CELL_3G||networkState==Connection.CELL_4G){
+                return false;
+            }else{
+                return true;
+            }
+        }
+};
