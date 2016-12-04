@@ -90,7 +90,7 @@
 		</data>
 		<key>CDVLaunchScreen.storyboardc/01J-lp-oVM-view-Ze5-6b-2t3.nib</key>
 		<data>
-		QfI40shKuBYhsOhULYVWZ+9+v0Y=
+		QOdOPMFHYtF3QHEpxUJJk1CQwCU=
 		</data>
 		<key>CDVLaunchScreen.storyboardc/Info.plist</key>
 		<data>
@@ -98,7 +98,7 @@
 		</data>
 		<key>CDVLaunchScreen.storyboardc/UIViewController-01J-lp-oVM.nib</key>
 		<data>
-		0SlMjVvE85pyueUu7DeQOJIEZHg=
+		dRXLQ/3lETvJ7kz/SJRFescJ1ro=
 		</data>
 		<key>CDVNotification.bundle/beep.wav</key>
 		<data>
@@ -166,7 +166,7 @@
 		</data>
 		<key>MainViewController.nib</key>
 		<data>
-		UWIREOj0mba+h9BnpSRuVUzb6Ig=
+		FfXef0n13GrKPvxJo3xcOUrkjbA=
 		</data>
 		<key>PkgInfo</key>
 		<data>
@@ -178,15 +178,15 @@
 		</data>
 		<key>config.xml</key>
 		<data>
-		QvMT9SYx/WFmDCb4RHRiC2D59eo=
+		smf533JqJ/csHAbnNCkFxIaCLGM=
 		</data>
 		<key>embedded.mobileprovision</key>
 		<data>
-		o7edZDzWydqNcAtb8h5PnVBQjps=
+		87HsxqMqg3HGwo1QL9rz73hQEms=
 		</data>
 		<key>scannerOverlay.nib</key>
 		<data>
-		mb5bp7kHoYROEBimilctrtzkgcA=
+		Iqzv2odZz2z7G3Pe0R4nRp93vnQ=
 		</data>
 		<key>www/AvailableSite.html</key>
 		<data>
@@ -246,7 +246,7 @@
 		</data>
 		<key>www/cordova_plugins.js</key>
 		<data>
-		5mUza/qo7yxxj33igRlLEVqloQQ=
+		ZUv1asYG/8MISPNO43P//P18hW0=
 		</data>
 		<key>www/css/StartScreen.css</key>
 		<data>
@@ -426,7 +426,7 @@
 		</data>
 		<key>www/js/input-page.js</key>
 		<data>
-		DTgE6l5KCwfKjNuRWH1ycMuK0YI=
+		huow1DnVJhxQ9BoT+EU4I8iJ0Jk=
 		</data>
 		<key>www/js/jQuery.ptTimeSelect-0.8/README.txt</key>
 		<data>
@@ -474,7 +474,7 @@
 		</data>
 		<key>www/js/login.js</key>
 		<data>
-		L8JnuCRzLbrrDG3iHRcr4BEvLlk=
+		QHwoHAkb5JVWtdJym3IOHGrbkqo=
 		</data>
 		<key>www/js/pending.js</key>
 		<data>
@@ -486,11 +486,11 @@
 		</data>
 		<key>www/js/setting.js</key>
 		<data>
-		cDs2C0sIZNY7v8tFgLojNmonV+E=
+		xw+bYnaTxu6ij0gNp3EeSU004lE=
 		</data>
 		<key>www/js/start-screen.js</key>
 		<data>
-		9VRbQ1el6Ct5HveYdiylL60FAAM=
+		44ZY+ls/bPmzPb6NQCStz4zDThg=
 		</data>
 		<key>www/js/upload.js</key>
 		<data>
@@ -724,6 +724,14 @@
 		<data>
 		ZpQGinfhoEkEjYydpozSZw8aPWQ=
 		</data>
+		<key>www/plugins/cordova-plugin-network-information/www/Connection.js</key>
+		<data>
+		QP5YzumNbUCPIZ96Xkpu5RegRY0=
+		</data>
+		<key>www/plugins/cordova-plugin-network-information/www/network.js</key>
+		<data>
+		jxeuXL/JPk6C5eQC7iVThLg7NPc=
+		</data>
 		<key>www/plugins/cordova-plugin-statusbar/www/statusbar.js</key>
 		<data>
 		QtQ0Svk6AUTq6haQ9WBESDY8pgY=
@@ -742,7 +750,7 @@
 		</data>
 		<key>www/setting.html</key>
 		<data>
-		1HmcRF898EkGUhvv2Ba1/R+rgtM=
+		yOODPyeMcu3p/IGZhybEuVsebs8=
 		</data>
 		<key>www/survey.html</key>
 		<data>
@@ -990,11 +998,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			QfI40shKuBYhsOhULYVWZ+9+v0Y=
+			QOdOPMFHYtF3QHEpxUJJk1CQwCU=
 			</data>
 			<key>hash2</key>
 			<data>
-			tKCqorDkePuLVEBq/zL0S1XxHLcog8rpz7v7Ai2yZyo=
+			ayH7ya8HagBueL4b2BOq7y3mIaa4sDh+9yiBw5XbOrI=
 			</data>
 		</dict>
 		<key>CDVLaunchScreen.storyboardc/Info.plist</key>
@@ -1012,11 +1020,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			0SlMjVvE85pyueUu7DeQOJIEZHg=
+			dRXLQ/3lETvJ7kz/SJRFescJ1ro=
 			</data>
 			<key>hash2</key>
 			<data>
-			HJGb5ROJGHIP3rmh+7/XxL+uOjCi7phjxA610Qid5ww=
+			mu4GeZPspSjd4fHbQcL3RRuPkAHePI7YVwsrqYouZBM=
 			</data>
 		</dict>
 		<key>CDVNotification.bundle/beep.wav</key>
@@ -1188,11 +1196,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			UWIREOj0mba+h9BnpSRuVUzb6Ig=
+			FfXef0n13GrKPvxJo3xcOUrkjbA=
 			</data>
 			<key>hash2</key>
 			<data>
-			2A+KIPVghJZ6N5qQzp+PKkxl1C8MZXlAx6XX9GurEBo=
+			CtElqeudB2IIFRqwKiW5933oWs3TYgcRdToN7lACOoA=
 			</data>
 		</dict>
 		<key>archived-expanded-entitlements.xcent</key>
@@ -1210,33 +1218,33 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			QvMT9SYx/WFmDCb4RHRiC2D59eo=
+			smf533JqJ/csHAbnNCkFxIaCLGM=
 			</data>
 			<key>hash2</key>
 			<data>
-			qYT9wqYRglW9Fr1Azy4eFWizMwZowDO9FXU+T1mZG4E=
+			8eyUQPbamGEuEdpGkPdVyQVkEZogV7BB3ZBRng3GCaQ=
 			</data>
 		</dict>
 		<key>embedded.mobileprovision</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			o7edZDzWydqNcAtb8h5PnVBQjps=
+			87HsxqMqg3HGwo1QL9rz73hQEms=
 			</data>
 			<key>hash2</key>
 			<data>
-			axZTSKxw7DfiYo1ppHrLhFEQmP73F/Jc7mJOqa54y7s=
+			swSYO5nWkFuBAHJ/QNAFqRPdRgSfVQgymlaIjGbJsRw=
 			</data>
 		</dict>
 		<key>scannerOverlay.nib</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			mb5bp7kHoYROEBimilctrtzkgcA=
+			Iqzv2odZz2z7G3Pe0R4nRp93vnQ=
 			</data>
 			<key>hash2</key>
 			<data>
-			WP4kQbddJPmDcbNMJuGWYCZjZ7blz4ocVkXzfYoCUhE=
+			4LEo4xMa8gvagi/pEwiOx4ebGYDa+BIrAj31loD5JQk=
 			</data>
 		</dict>
 		<key>www/AvailableSite.html</key>
@@ -1397,11 +1405,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			5mUza/qo7yxxj33igRlLEVqloQQ=
+			ZUv1asYG/8MISPNO43P//P18hW0=
 			</data>
 			<key>hash2</key>
 			<data>
-			MoUX+iXoPMRhov4m5NHprPY2I2P274bmPFWpjjdlsPk=
+			GlSWz9xR8h2m3sOD2uMZ28py2Q/Vr7c9phbvvvdD+Cc=
 			</data>
 		</dict>
 		<key>www/css/StartScreen.css</key>
@@ -1892,11 +1900,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			DTgE6l5KCwfKjNuRWH1ycMuK0YI=
+			huow1DnVJhxQ9BoT+EU4I8iJ0Jk=
 			</data>
 			<key>hash2</key>
 			<data>
-			b2z21sug1shss93x7rGFdAaFaCIFd0NwtKosgzReZJQ=
+			NCxac5RgPQQExZx3OXb8IaTHg6JJX/SSUbjfGsDzSus=
 			</data>
 		</dict>
 		<key>www/js/jQuery.ptTimeSelect-0.8/README.txt</key>
@@ -2024,11 +2032,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			L8JnuCRzLbrrDG3iHRcr4BEvLlk=
+			QHwoHAkb5JVWtdJym3IOHGrbkqo=
 			</data>
 			<key>hash2</key>
 			<data>
-			43p2rWoyaEZ9ybeyOyitVPipMhMuqezSpel+VkEzZx0=
+			RPLUurrqvpIv41fhZvhebjYCc+sXP0Bqvu6teQDD9+w=
 			</data>
 		</dict>
 		<key>www/js/pending.js</key>
@@ -2057,22 +2065,22 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			cDs2C0sIZNY7v8tFgLojNmonV+E=
+			xw+bYnaTxu6ij0gNp3EeSU004lE=
 			</data>
 			<key>hash2</key>
 			<data>
-			FI7ZOo0lNywXwdlLhLzve7w0VA+hD+SN8064OgZafk8=
+			kqh6/GB7LTQ2H9XkEGyf7iO/sEe5KOr1q9KWnBQE0ZA=
 			</data>
 		</dict>
 		<key>www/js/start-screen.js</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			9VRbQ1el6Ct5HveYdiylL60FAAM=
+			44ZY+ls/bPmzPb6NQCStz4zDThg=
 			</data>
 			<key>hash2</key>
 			<data>
-			ikNAooktPxCUPogQ3zo9YROxIS+yfq8PrXsAVlPNs5A=
+			p9uGRY4jk59/QvAOjuPtiTG22KQzzicXA3csAiHzopc=
 			</data>
 		</dict>
 		<key>www/js/upload.js</key>
@@ -2713,6 +2721,28 @@
 			ilLTTYF7BQNXjlNSgzt/P8zTJbQ8vz6ACZG87cymODo=
 			</data>
 		</dict>
+		<key>www/plugins/cordova-plugin-network-information/www/Connection.js</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			QP5YzumNbUCPIZ96Xkpu5RegRY0=
+			</data>
+			<key>hash2</key>
+			<data>
+			e+LNrLCJeaza8OmeupCA7JOSHM6BaBjmEt95Z5DDRZo=
+			</data>
+		</dict>
+		<key>www/plugins/cordova-plugin-network-information/www/network.js</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			jxeuXL/JPk6C5eQC7iVThLg7NPc=
+			</data>
+			<key>hash2</key>
+			<data>
+			6BrhkQ/LskQvmM1rbhciH8KThNK7PeYwvje9PZsZIro=
+			</data>
+		</dict>
 		<key>www/plugins/cordova-plugin-statusbar/www/statusbar.js</key>
 		<dict>
 			<key>hash</key>
@@ -2761,11 +2791,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			1HmcRF898EkGUhvv2Ba1/R+rgtM=
+			yOODPyeMcu3p/IGZhybEuVsebs8=
 			</data>
 			<key>hash2</key>
 			<data>
-			eCwwSM/bTtL33JFVUe4HGv+ie2jwVVTPHz2gqSBOZkc=
+			NLwTgaFWgjAVjb95H2mJDAue2XdVm5vSvAh8BN7LXhw=
 			</data>
 		</dict>
 		<key>www/survey.html</key>

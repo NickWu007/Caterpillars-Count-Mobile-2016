@@ -38,6 +38,7 @@ var onArthropodPage = false;
 var timeStart;
 var edit= false;
 var inat_token;
+var use_data;
 
 var temperatures = {
 	"<30" : {min : - 10, max : 30},
@@ -118,6 +119,14 @@ function onDeviceReady(){
                // alert(inat_token);
         	}
         }); 
+	    tx.executeSql('select * from SETTING', [], function(tx, rs){
+                if (rs.rows.length > 0) {
+                    use_data = rs.rows.item(0).useData;
+                    //alert("use data:"+use_data);
+                }else{
+                    use_data='NONE';
+                }
+        });
     }, function(error){
         alert("Transaction Error: "+error.message);
     }, function(){
@@ -738,7 +747,9 @@ var submit = function( ) {
 	//navigator.notification.alert("SiteID: " + siteID +
 	//	"\nSite password: " +sitePassword);
 	//var online = navigator.onLine;
-	if(navigator.onLine == false||anon== true){
+	var online=isOnline();
+	// alert("is online "+online);
+	if(online == false||anon== true){
         //last field for error handler 0 is default
 		//alert("I am here");
 		db.transaction(function(tx){
@@ -891,7 +902,6 @@ var toolTip = function(toolTipLocation){
 //Submits basic survey info and leaf photo to server
 //Calls submitArthropodsToServer if survey upload is successful
 var submitSurveyToServer = function(){
-	// navigator.notification.alert("Submitting survey");
 	 $.ajax({
 		url: DOMAIN + "/api/submission_full.php",
 		type : "POST",
@@ -989,54 +999,56 @@ var submitArthropodsToServer = function(result){
 			var arthropodImageURI = $(".saved-arthropod-image", this).prop("src");
 			//navigator.notification.alert("Arthropod image uri: " + arthropodImageURI);
 
-			if (inat_token !== null) {
-							var url = INATURALIST_DOMAIN + "/observations.json?";
-							//url += "observation[species_guess]="+slugify($("h4", this).text());
-							url += "observation[species_guess]="+slugify(trim_end($("h4", this).text(), '('));
-							url += "&observation[id_please]=1";
-							alert(date);
-							url += "&observation[observed_on_string]=" + date;
-							url += "&observation[place_guess]=NC+Botanical+Garden"; //+ slugify(trim_end($("#site option:selected").text()), '(');
-							url += "&observation[description]=" + slugify($(".arthropod-notes", this).text());
-							url += "&observation[observation_field_values_attributes][0][observation_field_id]=1289";
-							url += "&observation[observation_field_values_attributes][0][value]="+$(".arthropod-length", this).text();
-							url += "&observation[observation_field_values_attributes][1][observation_field_id]=5716";
-							url += "&observation[observation_field_values_attributes][1][value]="+temperature;
-							url += "&observation[observation_field_values_attributes][2][observation_field_id]=1194";
-							url += "&observation[observation_field_values_attributes][2][value]="+$("#site option:selected").text();
-							url += "&observation[observation_field_values_attributes][3][observation_field_id]=5715";
-							url += "&observation[observation_field_values_attributes][3][value]="+circle;
-							url += "&observation[observation_field_values_attributes][4][observation_field_id]=5714";
-							url += "&observation[observation_field_values_attributes][4][value]="+survey;
-							url += "&observation[observation_field_values_attributes][5][observation_field_id]=306";
-							url += "&observation[observation_field_values_attributes][5][value]="+plantSpecies;
-							url += "&observation[observation_field_values_attributes][6][observation_field_id]=5712";
-							url += "&observation[observation_field_values_attributes][6][value]="+leafCount;
-							url += "&observation[observation_field_values_attributes][7][observation_field_id]=5711";
-							url += "&observation[observation_field_values_attributes][7][value]="+$("#herbivory-select").val();
-							url += "&observation[observation_field_values_attributes][8][observation_field_id]=1294";
-							url += "&observation[observation_field_values_attributes][8][value]="+$(".arthropod-count", this).text();
-							url += "&observation[observation_field_values_attributes][9][observation_field_id]=5710";
-							url += "&observation[observation_field_values_attributes][9][value]="+trim_end(stored_user_info.name, '@');
+			if (inat_token !== null && arthropodImageURI !== null && arthropodImageURI !== undefined) {
+				var url = INATURALIST_DOMAIN + "/observations.json?";
+				url += "observation[species_guess]="+slugify(trim_end($("h4", this).text(), '('));
+				url += "&observation[id_please]=1";
+				url += "&observation[observed_on_string]=" + date;
+				alert(slugify(trim_end($("#site option:selected").text(), '(')));
+				url += "&observation[place_guess]= " + slugify(trim_end($("#site option:selected").text(), '('));
+				if ($(".arthropod-notes", this).text().length > 0) 
+					url += "&observation[description]=" + slugify($(".arthropod-notes", this).text());
+				url += "&observation[observation_field_values_attributes][0][observation_field_id]=1289";
+				url += "&observation[observation_field_values_attributes][0][value]="+$(".arthropod-length", this).text();
+				url += "&observation[observation_field_values_attributes][1][observation_field_id]=5716";
+				url += "&observation[observation_field_values_attributes][1][value]="+temperature;
+				url += "&observation[observation_field_values_attributes][2][observation_field_id]=1194";
+				url += "&observation[observation_field_values_attributes][2][value]="+$("#site option:selected").text();
+				url += "&observation[observation_field_values_attributes][3][observation_field_id]=5715";
+				url += "&observation[observation_field_values_attributes][3][value]="+circle;
+				url += "&observation[observation_field_values_attributes][4][observation_field_id]=5714";
+				url += "&observation[observation_field_values_attributes][4][value]="+survey;
+				url += "&observation[observation_field_values_attributes][5][observation_field_id]=306";
+				url += "&observation[observation_field_values_attributes][5][value]="+plantSpecies;
+				url += "&observation[observation_field_values_attributes][6][observation_field_id]=5712";
+				url += "&observation[observation_field_values_attributes][6][value]="+leafCount;
+				url += "&observation[observation_field_values_attributes][7][observation_field_id]=5711";
+				url += "&observation[observation_field_values_attributes][7][value]="+$("#herbivory-select").val();
+				url += "&observation[observation_field_values_attributes][8][observation_field_id]=1294";
+				url += "&observation[observation_field_values_attributes][8][value]="+$(".arthropod-count", this).text();
+				url += "&observation[observation_field_values_attributes][9][observation_field_id]=5710";
+				url += "&observation[observation_field_values_attributes][9][value]="+trim_end(stored_user_info.name, '@');
 
-							// alert("url: " + url);
-							$.ajax({
-								url: url,
-								type: "POST",
-								crossDomain: true,
-								contentType: 'application/x-www-form-urlencoded',
-								data: {
-									"access_token": inat_token,
-								},
-								success: function () {
-									alert("New observation on iNaturalist uploaded.");
-								},
-								error: function(xhr, status){
-					                alert("Unexpected error submitting observation: " + xhr.status);
-					                alert(xhr.responseText);
-					            }
-							});
-						}
+				// alert("url: " + url);
+				$.ajax({
+					url: url,
+					type: "POST",
+					crossDomain: true,
+					contentType: 'application/x-www-form-urlencoded',
+					data: {
+						"access_token": inat_token,
+					},
+					success: function (obs_result) {
+						alert("New observation on iNaturalist uploaded.");
+						alert("Uploading order photo to iNaturalist");
+						uploadPhotoToiNat(obs_result, arthropodImageURI);
+					},
+					error: function(xhr, status){
+					    alert("Unexpected error submitting observation: " + xhr.status);
+					    alert(xhr.responseText);
+					}
+				});
+			}
 
 			$.ajax({
 				url: DOMAIN + "/api/submission_full.php",
@@ -1091,6 +1103,42 @@ var submitArthropodsToServer = function(result){
 	}
 
 };
+
+function uploadPhotoToiNat(obs_result, arthropodImageURI) {
+
+	var success = function (r) {
+		//navigator.notification.alert("leaf photo uploaded");
+		console.log("Code = " + r.responseCode);
+		console.log("Response = " + r.response);
+		console.log("Sent = " + r.bytesSent);
+	};
+
+	var fail = function (error) {
+		navigator.notification.alert("An error has occurred: Code = " + error.code);
+		console.log("upload error source " + error.source);
+		console.log("upload error target " + error.target);
+	};
+
+	var options = new FileUploadOptions();
+    options.fileKey = "file";
+    options.mimeType="image/jpeg";
+    options.chunkedMode = false;
+    options.headers = {
+        Connection: "close",
+        ContentType: "multipart/form-data",
+    };
+
+	var params = {
+		"access_token": inat_token,
+		"observation_photo[observation_id]": obs_result[0].id,
+	};
+
+	options.params = params;
+
+	var ft = new FileTransfer();
+	options.fileName = "bug_photo.jpg";
+	ft.upload(arthropodImageURI, encodeURI(INATURALIST_DOMAIN + '/observation_photos'), success, fail, options);
+}
 
 //databaseID = surveyID if leaf photo, orderID if arthropod photo
 //Form is cleared if final arthropod photo is successfully uploaded
@@ -1222,4 +1270,24 @@ function scanQRCode() {
 //Handles device rotation
 window.shouldRotateToOrientation = function() {
 	return true;
+};
+
+function isOnline(){
+        var networkState = navigator.connection.type;
+        // alert(networkState);
+        if(use_data=='Yes'){
+            if(networkState==Connection.UNKNOWN||networkState==Connection.NONE){
+                return false;
+            }else{
+                return true;
+            }
+        }else{
+            if(networkState==Connection.UNKNOWN||networkState==Connection.NONE
+                ||networkState==Connection.CELL||networkState==Connection.CELL_2G
+                ||networkState==Connection.CELL_3G||networkState==Connection.CELL_4G){
+                return false;
+            }else{
+                return true;
+            }
+        }
 };
