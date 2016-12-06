@@ -1,5 +1,5 @@
 var DOMAIN = "http://master-caterpillars.vipapps.unc.edu";
-var INATURALIST_DOMAIN = "https://www.inaturalist.org";
+var INATURALIST_DOMAIN = "http://www.inaturalist.org";
 
 var leafPhotoTaken = false;
 
@@ -39,6 +39,8 @@ var timeStart;
 var edit= false;
 var inat_token;
 var use_data;
+var longitude;
+var latitude;
 
 var temperatures = {
 	"<30" : {min : - 10, max : 30},
@@ -87,6 +89,32 @@ var stored_user_info;
 document.addEventListener("deviceready", onDeviceReady, false);
 //Return to start screen if android back button is pressed
 function onDeviceReady(){
+
+	// onSuccess Callback
+    // This method accepts a Position object, which contains the
+    // current GPS coordinates
+    //
+    var onSuccess = function(position) {
+    	longitude = position.coords.longitude;
+    	latitude = position.coords.latitude;
+        // alert('Latitude: '          + position.coords.latitude          + '\n' +
+        //       'Longitude: '         + position.coords.longitude         + '\n' +
+        //       'Altitude: '          + position.coords.altitude          + '\n' +
+        //       'Accuracy: '          + position.coords.accuracy          + '\n' +
+        //       'Altitude Accuracy: ' + position.coords.altitudeAccuracy  + '\n' +
+        //       'Heading: '           + position.coords.heading           + '\n' +
+        //       'Speed: '             + position.coords.speed             + '\n' +
+        //       'Timestamp: '         + position.timestamp                + '\n');
+    };
+
+    // onError Callback receives a PositionError object
+    //
+    function onError(error) {
+        alert('code: '    + error.code    + '\n' +
+              'message: ' + error.message + '\n');
+    }
+
+    navigator.geolocation.getCurrentPosition(onSuccess, onError);
 
 	db = window.sqlitePlugin.openDatabase(
         {name: 'app.db', location: 'default'}, 
@@ -927,7 +955,7 @@ var submitSurveyToServer = function(){
 		}),
 		success: function(result){
 			//Upload leaf photo
-			//uploadPhoto(leafImageURI, "leaf-photo", result.surveyID);
+			uploadPhoto(leafImageURI, "leaf-photo", result.surveyID);
 			submitArthropodsToServer(result);
 			if (edit) {
 				db.transaction(function(tx){
@@ -1004,8 +1032,13 @@ var submitArthropodsToServer = function(result){
 				url += "observation[species_guess]="+slugify(trim_end($("h4", this).text(), '('));
 				url += "&observation[id_please]=1";
 				url += "&observation[observed_on_string]=" + date;
-				alert(slugify(trim_end($("#site option:selected").text(), '(')));
 				url += "&observation[place_guess]= " + slugify(trim_end($("#site option:selected").text(), '('));
+
+				alert("1");
+				alert("latitude: " + latitude);
+				alert("longitude: " + longitude);
+				url += "&observation[latitude]=" + latitude;
+				url += "&observation[longitude]=" + longitude;
 				if ($(".arthropod-notes", this).text().length > 0) 
 					url += "&observation[description]=" + slugify($(".arthropod-notes", this).text());
 				url += "&observation[observation_field_values_attributes][0][observation_field_id]=1289";
@@ -1039,8 +1072,8 @@ var submitArthropodsToServer = function(result){
 						"access_token": inat_token,
 					},
 					success: function (obs_result) {
-						alert("New observation on iNaturalist uploaded.");
-						alert("Uploading order photo to iNaturalist");
+						// alert("Uploading order photo to iNaturalist");
+						linkToProject(obs_result);
 						uploadPhotoToiNat(obs_result, arthropodImageURI);
 					},
 					error: function(xhr, status){
@@ -1104,9 +1137,34 @@ var submitArthropodsToServer = function(result){
 
 };
 
+function linkToProject(obs_result) {
+	alert("access_token : " + inat_token);
+	alert("project_observation[observation_id] : " + obs_result[0].id);
+	alert("project_observation[project_id] : " + 5443);
+	$.ajax({
+		url: INATURALIST_DOMAIN + "/project_observations",
+		type: "POST",
+		crossDomain: true,
+		contentType: 'application/x-www-form-urlencoded',
+		data: {
+			"access_token": inat_token,
+			"project_observation[observation_id]": obs_result[0].id,
+			"project_observation[project_id]" : 5443
+		},
+		success: function (obs_result) {
+			alert("Successfully linked to CC Project");
+		},
+		error: function(xhr, status){
+			alert("Unexpected error submitting observation: " + xhr.status);
+			alert(xhr.responseText);
+		}
+	});
+}
+
 function uploadPhotoToiNat(obs_result, arthropodImageURI) {
 
 	var success = function (r) {
+		alert("New observation on iNaturalist uploaded.");
 		//navigator.notification.alert("leaf photo uploaded");
 		console.log("Code = " + r.responseCode);
 		console.log("Response = " + r.response);
