@@ -63,7 +63,7 @@ function onDeviceReady() {
                 use_data = rs.rows.item(0).useData;
                 //alert("use data:"+use_data);
             }else{
-                use_data='NONE'
+                use_data='NONE';
             }
         });
 		/*
@@ -176,7 +176,7 @@ function createButtons(){
 
 function isOnline(){
         var networkState = navigator.connection.type;
-        alert(networkState);
+        // alert(networkState);
         if(use_data=='Yes'){
             if(networkState==Connection.UNKNOWN||networkState==Connection.NONE){
                 return false;

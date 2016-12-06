@@ -94,7 +94,7 @@ $(document).ready(function(){
         // Check if offline. If so, use offline login logic
         // Offline log in logic, faking for now.
         online=isOnline();
-        alert("is online:"+online);
+        // alert("is online:"+online);
         if (!online) {
             if((stored_user_info===null)||(stored_user_info.name!=$email.val())||(stored_user_info.password!=$pw.val())){
                   alert("No internet access. Cannot log in.");
@@ -309,7 +309,7 @@ window.shouldRotateToOrientation = function() {
 
 function isOnline(){
         var networkState = navigator.connection.type;
-        alert(networkState);
+        // alert(networkState);
         if(use_data=='Yes'){
             if(networkState==Connection.UNKNOWN||networkState==Connection.NONE){
                 return false;
