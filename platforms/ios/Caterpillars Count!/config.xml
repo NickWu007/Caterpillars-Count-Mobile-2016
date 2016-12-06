@@ -41,6 +41,9 @@
     <feature name="NetworkStatus">
         <param name="ios-package" value="CDVConnection" />
     </feature>
+    <feature name="Geolocation">
+        <param name="ios-package" value="CDVLocation" />
+    </feature>
     <name>Caterpillars Count!</name>
     <description>
         An application for conducting surveys of arthropod populations
