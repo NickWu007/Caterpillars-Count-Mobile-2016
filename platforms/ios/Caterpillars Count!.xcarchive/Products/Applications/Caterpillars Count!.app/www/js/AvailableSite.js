@@ -83,7 +83,7 @@ var retriveSitePermission = function(){
 $(document).ready(function(){
     var $newsite = $(".newsite");
     $newsite.click(function() {
-                var password=window.prompt("Please enter passward for site selected");
+                var password=window.prompt("Please enter password for site selected");
                 var siteID = $("#site option:selected").val();
                 //validate site password
                 $.ajax({

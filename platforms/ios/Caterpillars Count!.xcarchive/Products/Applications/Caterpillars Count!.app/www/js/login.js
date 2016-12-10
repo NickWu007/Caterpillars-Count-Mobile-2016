@@ -151,8 +151,8 @@ $(document).ready(function(){
                         }, function(error){
                             alert("Transaction Error: " + error.message);
                         }, function() {
-                            if(rememberMeChecked){alert("new user added into database.");}
-                            else{alert("new user logged in. User info not cached.")}
+                            // if(rememberMeChecked){alert("new user added into database.");}
+                            // else{alert("new user logged in. User info not cached.")}
                             window.location.assign("homepage.html?userID="+data.userID+"&password="+json_obj.password);
                         });
                         // alert("after sql xact.");

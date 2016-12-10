@@ -178,6 +178,7 @@ function onDeviceReady(){
 	//alert(timeStart);
 	if(getURLParameter("anonmyous")==="true"){
 		anon=true;
+		$('#go-back').prop("href", "homepage-anon.html");
 		populateCircleList(12);
 		var siteList = document.getElementById("site");
 
@@ -1033,10 +1034,6 @@ var submitArthropodsToServer = function(result){
 				url += "&observation[id_please]=1";
 				url += "&observation[observed_on_string]=" + date;
 				url += "&observation[place_guess]= " + slugify(trim_end($("#site option:selected").text(), '('));
-
-				alert("1");
-				alert("latitude: " + latitude);
-				alert("longitude: " + longitude);
 				url += "&observation[latitude]=" + latitude;
 				url += "&observation[longitude]=" + longitude;
 				if ($(".arthropod-notes", this).text().length > 0) 
@@ -1057,7 +1054,7 @@ var submitArthropodsToServer = function(result){
 				url += "&observation[observation_field_values_attributes][6][value]="+leafCount;
 				url += "&observation[observation_field_values_attributes][7][observation_field_id]=5711";
 				url += "&observation[observation_field_values_attributes][7][value]="+$("#herbivory-select").val();
-				url += "&observation[observation_field_values_attributes][8][observation_field_id]=1294";
+				url += "&observation[observation_field_values_attributes][8][observation_field_id]=5748";
 				url += "&observation[observation_field_values_attributes][8][value]="+$(".arthropod-count", this).text();
 				url += "&observation[observation_field_values_attributes][9][observation_field_id]=5710";
 				url += "&observation[observation_field_values_attributes][9][value]="+trim_end(stored_user_info.name, '@');
@@ -1077,8 +1074,8 @@ var submitArthropodsToServer = function(result){
 						uploadPhotoToiNat(obs_result, arthropodImageURI);
 					},
 					error: function(xhr, status){
-					    alert("Unexpected error submitting observation: " + xhr.status);
-					    alert(xhr.responseText);
+					    alert("Unexpected error submitting observation to iNaturalist: " + xhr.status);
+					    // alert(xhr.responseText);
 					}
 				});
 			}
@@ -1138,9 +1135,6 @@ var submitArthropodsToServer = function(result){
 };
 
 function linkToProject(obs_result) {
-	alert("access_token : " + inat_token);
-	alert("project_observation[observation_id] : " + obs_result[0].id);
-	alert("project_observation[project_id] : " + 5443);
 	$.ajax({
 		url: INATURALIST_DOMAIN + "/project_observations",
 		type: "POST",
@@ -1155,8 +1149,11 @@ function linkToProject(obs_result) {
 			alert("Successfully linked to CC Project");
 		},
 		error: function(xhr, status){
-			alert("Unexpected error submitting observation: " + xhr.status);
-			alert(xhr.responseText);
+			// This always fails for some reason,
+			// even if the observation is linked to the project.
+			// alert("Unexpected error linking observation: " + xhr.status);
+			// alert(xhr.responseText);
+			// alert("Successfully linked to CC Project");
 		}
 	});
 }

@@ -1,5 +1,5 @@
 var DOMAIN = "http://master-caterpillars.vipapps.unc.edu";
-var INATURALIST_DOMAIN = "https://www.inaturalist.org";
+var INATURALIST_DOMAIN = "http://www.inaturalist.org";
 
 var leafPhotoTaken = false;
 
@@ -39,6 +39,8 @@ var timeStart;
 var edit= false;
 var inat_token;
 var use_data;
+var longitude;
+var latitude;
 
 var temperatures = {
 	"<30" : {min : - 10, max : 30},
@@ -87,6 +89,32 @@ var stored_user_info;
 document.addEventListener("deviceready", onDeviceReady, false);
 //Return to start screen if android back button is pressed
 function onDeviceReady(){
+
+	// onSuccess Callback
+    // This method accepts a Position object, which contains the
+    // current GPS coordinates
+    //
+    var onSuccess = function(position) {
+    	longitude = position.coords.longitude;
+    	latitude = position.coords.latitude;
+        // alert('Latitude: '          + position.coords.latitude          + '\n' +
+        //       'Longitude: '         + position.coords.longitude         + '\n' +
+        //       'Altitude: '          + position.coords.altitude          + '\n' +
+        //       'Accuracy: '          + position.coords.accuracy          + '\n' +
+        //       'Altitude Accuracy: ' + position.coords.altitudeAccuracy  + '\n' +
+        //       'Heading: '           + position.coords.heading           + '\n' +
+        //       'Speed: '             + position.coords.speed             + '\n' +
+        //       'Timestamp: '         + position.timestamp                + '\n');
+    };
+
+    // onError Callback receives a PositionError object
+    //
+    function onError(error) {
+        alert('code: '    + error.code    + '\n' +
+              'message: ' + error.message + '\n');
+    }
+
+    navigator.geolocation.getCurrentPosition(onSuccess, onError);
 
 	db = window.sqlitePlugin.openDatabase(
         {name: 'app.db', location: 'default'}, 
@@ -150,6 +178,7 @@ function onDeviceReady(){
 	//alert(timeStart);
 	if(getURLParameter("anonmyous")==="true"){
 		anon=true;
+		$('#go-back').prop("href", "homepage-anon.html");
 		populateCircleList(12);
 		var siteList = document.getElementById("site");
 
@@ -927,7 +956,7 @@ var submitSurveyToServer = function(){
 		}),
 		success: function(result){
 			//Upload leaf photo
-			//uploadPhoto(leafImageURI, "leaf-photo", result.surveyID);
+			uploadPhoto(leafImageURI, "leaf-photo", result.surveyID);
 			submitArthropodsToServer(result);
 			if (edit) {
 				db.transaction(function(tx){
@@ -999,13 +1028,16 @@ var submitArthropodsToServer = function(result){
 			var arthropodImageURI = $(".saved-arthropod-image", this).prop("src");
 			//navigator.notification.alert("Arthropod image uri: " + arthropodImageURI);
 
-			if (inat_token !== null) {
+			if (inat_token !== null && arthropodImageURI !== null && arthropodImageURI !== undefined) {
 				var url = INATURALIST_DOMAIN + "/observations.json?";
 				url += "observation[species_guess]="+slugify(trim_end($("h4", this).text(), '('));
 				url += "&observation[id_please]=1";
 				url += "&observation[observed_on_string]=" + date;
-				url += "&observation[place_guess]=NC+Botanical+Garden"; //+ slugify(trim_end($("#site option:selected").text()), '(');
-				url += "&observation[description]=" + slugify($(".arthropod-notes", this).text());
+				url += "&observation[place_guess]= " + slugify(trim_end($("#site option:selected").text(), '('));
+				url += "&observation[latitude]=" + latitude;
+				url += "&observation[longitude]=" + longitude;
+				if ($(".arthropod-notes", this).text().length > 0) 
+					url += "&observation[description]=" + slugify($(".arthropod-notes", this).text());
 				url += "&observation[observation_field_values_attributes][0][observation_field_id]=1289";
 				url += "&observation[observation_field_values_attributes][0][value]="+$(".arthropod-length", this).text();
 				url += "&observation[observation_field_values_attributes][1][observation_field_id]=5716";
@@ -1022,7 +1054,7 @@ var submitArthropodsToServer = function(result){
 				url += "&observation[observation_field_values_attributes][6][value]="+leafCount;
 				url += "&observation[observation_field_values_attributes][7][observation_field_id]=5711";
 				url += "&observation[observation_field_values_attributes][7][value]="+$("#herbivory-select").val();
-				url += "&observation[observation_field_values_attributes][8][observation_field_id]=1294";
+				url += "&observation[observation_field_values_attributes][8][observation_field_id]=5748";
 				url += "&observation[observation_field_values_attributes][8][value]="+$(".arthropod-count", this).text();
 				url += "&observation[observation_field_values_attributes][9][observation_field_id]=5710";
 				url += "&observation[observation_field_values_attributes][9][value]="+trim_end(stored_user_info.name, '@');
@@ -1036,65 +1068,63 @@ var submitArthropodsToServer = function(result){
 					data: {
 						"access_token": inat_token,
 					},
-					success: function (obs_id) {
-						alert("New observation on iNaturalist uploaded.");
-						if (arthropodImageURI !== null && arthropodImageURI !== undefined) {
-							alert("Uploading order photo to iNaturalist");
-							uploadPhotoToiNat(obs_id, arthropodImageURI);
-						}
+					success: function (obs_result) {
+						// alert("Uploading order photo to iNaturalist");
+						linkToProject(obs_result);
+						uploadPhotoToiNat(obs_result, arthropodImageURI);
 					},
 					error: function(xhr, status){
-					    alert("Unexpected error submitting observation: " + xhr.status);
-					    alert(xhr.responseText);
+					    alert("Unexpected error submitting observation to iNaturalist: " + xhr.status);
+					    // alert(xhr.responseText);
 					}
 				});
 			}
 
-			// $.ajax({
-			// 	url: DOMAIN + "/api/submission_full.php",
-			// 	type: "POST",
-			// 	crossDomain: true,
-			// 	dataType: 'json',
-			// 	data: JSON.stringify({
-			// 		"type": "order",
-			// 		"surveyID": result.surveyID,
-			// 		"userID": stored_user_info.userId,
-			// 		"password": stored_user_info.password,
-			// 		//order
-			// 		"orderArthropod": $("h4", this).text(),
-			// 		"orderLength": parseInt($(".arthropod-length", this).text()),
-			// 		"orderNotes": $(".arthropod-notes", this).text(),
-			// 		"orderCount": parseInt($(".arthropod-count", this).text()),
-			// 		//Caterpillar features
-			// 		"hairyOrSpiny": hairyOrSpiny,
-			// 		"leafRoll": leafRoll,
-			// 		"silkTent": silkTent
-			// 	}),
-			// 	success: function (arthropodResult) {
-			// 		//navigator.notification.alert("arthropod info submitted");
-			// 		//If arthropod successfully submitted to database, attempt photo upload
-			// 		//Upload arthropod photo if one exists
-			// 		if (arthropodImageURI !== null && arthropodImageURI !== undefined) {
-			// 			//navigator.notification.alert("Uploading order photo");
-			// 			uploadPhoto(arthropodImageURI, "arthropod-photo", arthropodResult.orderID);
-			// 		}
-			// 		else {
-			// 			//Increment number of arthropods submitted here when no photo to upload
-			// 			//to prevent duplicate success alerts
-			// 			numberOfArthropodsSubmitted++;
-			// 			if (numberOfArthropodsSubmitted == numberOfArthropodsToSubmit) {
-			// 				var successMessage = confirm("Successfully submitted survey data!\n\n" +
-			// 						"Clear form fields?");
-			// 				if (successMessage === true) {
-			// 					clearFields();
-			// 				}
-			// 			}
-			// 		}
-			// 	},
-			// 	error: function () {
-			// 		navigator.notification.alert("Unexpected error submitting " + $("h4", this).text() + " data.");
-			// 	}
-			// });
+			$.ajax({
+				url: DOMAIN + "/api/submission_full.php",
+				type: "POST",
+				crossDomain: true,
+				dataType: 'json',
+				data: JSON.stringify({
+					"type": "order",
+					"surveyID": result.surveyID,
+					"userID": stored_user_info.userId,
+					"password": stored_user_info.password,
+					//order
+					"orderArthropod": $("h4", this).text(),
+					"orderLength": parseInt($(".arthropod-length", this).text()),
+					"orderNotes": $(".arthropod-notes", this).text(),
+					"orderCount": parseInt($(".arthropod-count", this).text()),
+					//Caterpillar features
+					"hairyOrSpiny": hairyOrSpiny,
+					"leafRoll": leafRoll,
+					"silkTent": silkTent
+				}),
+				success: function (arthropodResult) {
+					//navigator.notification.alert("arthropod info submitted");
+					//If arthropod successfully submitted to database, attempt photo upload
+					//Upload arthropod photo if one exists
+					if (arthropodImageURI !== null && arthropodImageURI !== undefined) {
+						//navigator.notification.alert("Uploading order photo");
+						uploadPhoto(arthropodImageURI, "arthropod-photo", arthropodResult.orderID);
+					}
+					else {
+						//Increment number of arthropods submitted here when no photo to upload
+						//to prevent duplicate success alerts
+						numberOfArthropodsSubmitted++;
+						if (numberOfArthropodsSubmitted == numberOfArthropodsToSubmit) {
+							var successMessage = confirm("Successfully submitted survey data!\n\n" +
+									"Clear form fields?");
+							if (successMessage === true) {
+								clearFields();
+							}
+						}
+					}
+				},
+				error: function () {
+					navigator.notification.alert("Unexpected error submitting " + $("h4", this).text() + " data.");
+				}
+			});
 		});
 	}
 	else{
@@ -1104,37 +1134,65 @@ var submitArthropodsToServer = function(result){
 
 };
 
-function uploadPhotoToiNat(obs_id, arthropodImageURI) {
-
-	alert("1");
-	var formData = new FormData();
-
-	alert("2");
-	formData.append("access_token", inat_token);
-	alert("access_token: " + formData.get("access_token"));
-
-	alert("3");
-	formData.append("observation_photo[observation_id]", obs_id);
-	alert("access_token: " + formData.get("observation_photo[observation_id]"));
-
-	alert("4");
-	formData.append('file', 'photo', arthropodImageURI);
-	alert("access_token: " + formData.get("file"));
+function linkToProject(obs_result) {
 	$.ajax({
-    	url: INATURALIST_DOMAIN + '/observation_photos',
-    	data: data,
-    	cache: false,
-    	contentType: false,
-    	processData: false,
-    	type: 'POST',
-	    success: function(data){
-	        alert("photo attached");
-	    },
-	    error: function(xhr, status){
-			alert("Unexpected error submitting photo: " + xhr.status);
-			alert(xhr.responseText);
-		}		
+		url: INATURALIST_DOMAIN + "/project_observations",
+		type: "POST",
+		crossDomain: true,
+		contentType: 'application/x-www-form-urlencoded',
+		data: {
+			"access_token": inat_token,
+			"project_observation[observation_id]": obs_result[0].id,
+			"project_observation[project_id]" : 5443
+		},
+		success: function (obs_result) {
+			alert("Successfully linked to CC Project");
+		},
+		error: function(xhr, status){
+			// This always fails for some reason,
+			// even if the observation is linked to the project.
+			// alert("Unexpected error linking observation: " + xhr.status);
+			// alert(xhr.responseText);
+			// alert("Successfully linked to CC Project");
+		}
 	});
+}
+
+function uploadPhotoToiNat(obs_result, arthropodImageURI) {
+
+	var success = function (r) {
+		alert("New observation on iNaturalist uploaded.");
+		//navigator.notification.alert("leaf photo uploaded");
+		console.log("Code = " + r.responseCode);
+		console.log("Response = " + r.response);
+		console.log("Sent = " + r.bytesSent);
+	};
+
+	var fail = function (error) {
+		navigator.notification.alert("An error has occurred: Code = " + error.code);
+		console.log("upload error source " + error.source);
+		console.log("upload error target " + error.target);
+	};
+
+	var options = new FileUploadOptions();
+    options.fileKey = "file";
+    options.mimeType="image/jpeg";
+    options.chunkedMode = false;
+    options.headers = {
+        Connection: "close",
+        ContentType: "multipart/form-data",
+    };
+
+	var params = {
+		"access_token": inat_token,
+		"observation_photo[observation_id]": obs_result[0].id,
+	};
+
+	options.params = params;
+
+	var ft = new FileTransfer();
+	options.fileName = "bug_photo.jpg";
+	ft.upload(arthropodImageURI, encodeURI(INATURALIST_DOMAIN + '/observation_photos'), success, fail, options);
 }
 
 //databaseID = surveyID if leaf photo, orderID if arthropod photo
