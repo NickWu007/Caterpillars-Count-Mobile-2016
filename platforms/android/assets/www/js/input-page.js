@@ -1074,8 +1074,8 @@ var submitArthropodsToServer = function(result){
 						uploadPhotoToiNat(obs_result, arthropodImageURI);
 					},
 					error: function(xhr, status){
-					    alert("Unexpected error submitting observation: " + xhr.status);
-					    alert(xhr.responseText);
+					    alert("Unexpected error submitting observation to iNaturalist: " + xhr.status);
+					    // alert(xhr.responseText);
 					}
 				});
 			}
@@ -1138,7 +1138,6 @@ function linkToProject(obs_result) {
 	$.ajax({
 		url: INATURALIST_DOMAIN + "/project_observations",
 		type: "POST",
-		dataType: "text/html",
 		crossDomain: true,
 		contentType: 'application/x-www-form-urlencoded',
 		data: {
@@ -1154,6 +1153,7 @@ function linkToProject(obs_result) {
 			// even if the observation is linked to the project.
 			// alert("Unexpected error linking observation: " + xhr.status);
 			// alert(xhr.responseText);
+			// alert("Successfully linked to CC Project");
 		}
 	});
 }
