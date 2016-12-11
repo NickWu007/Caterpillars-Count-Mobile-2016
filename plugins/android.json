@@ -27,6 +27,12 @@
         },
         "phonegap-plugin-barcodescanner": {
             "PACKAGE_NAME": "goldenCompass.caterpillarCount"
+        },
+        "cordova-plugin-network-information": {
+            "PACKAGE_NAME": "goldenCompass.caterpillarCount"
+        },
+        "cordova-plugin-geolocation": {
+            "PACKAGE_NAME": "goldenCompass.caterpillarCount"
         }
     },
     "dependent_plugins": {

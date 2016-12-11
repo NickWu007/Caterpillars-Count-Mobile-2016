@@ -1,4 +1,5 @@
 var DOMAIN = "http://master-caterpillars.vipapps.unc.edu";
+var INATURALIST_DOMAIN = "http://www.inaturalist.org";
 
 var leafPhotoTaken = false;
 
@@ -36,6 +37,10 @@ var numberOfArthropodsSubmitted;
 var onArthropodPage = false;
 var timeStart;
 var edit= false;
+var inat_token;
+var use_data;
+var longitude;
+var latitude;
 
 var temperatures = {
 	"<30" : {min : - 10, max : 30},
@@ -85,6 +90,32 @@ document.addEventListener("deviceready", onDeviceReady, false);
 //Return to start screen if android back button is pressed
 function onDeviceReady(){
 
+	// onSuccess Callback
+    // This method accepts a Position object, which contains the
+    // current GPS coordinates
+    //
+    var onSuccess = function(position) {
+    	longitude = position.coords.longitude;
+    	latitude = position.coords.latitude;
+        // alert('Latitude: '          + position.coords.latitude          + '\n' +
+        //       'Longitude: '         + position.coords.longitude         + '\n' +
+        //       'Altitude: '          + position.coords.altitude          + '\n' +
+        //       'Accuracy: '          + position.coords.accuracy          + '\n' +
+        //       'Altitude Accuracy: ' + position.coords.altitudeAccuracy  + '\n' +
+        //       'Heading: '           + position.coords.heading           + '\n' +
+        //       'Speed: '             + position.coords.speed             + '\n' +
+        //       'Timestamp: '         + position.timestamp                + '\n');
+    };
+
+    // onError Callback receives a PositionError object
+    //
+    function onError(error) {
+        alert('code: '    + error.code    + '\n' +
+              'message: ' + error.message + '\n');
+    }
+
+    navigator.geolocation.getCurrentPosition(onSuccess, onError);
+
 	db = window.sqlitePlugin.openDatabase(
         {name: 'app.db', location: 'default'}, 
         DBSuccessCB(), 
@@ -104,6 +135,26 @@ function onDeviceReady(){
             stored_user_info = rs.rows.item(0);
         }
         });    
+
+        tx.executeSql('SELECT * from SETTING',[], function(tx, rs){
+        	if(rs.rows.length > 0){
+               if (rs.rows.item(0).useINat == "Yes") {
+               	inat_token = rs.rows.item(0).iNar_token;
+               } else {
+               	inat_token = null;
+               }
+
+               // alert(inat_token);
+        	}
+        }); 
+	    tx.executeSql('select * from SETTING', [], function(tx, rs){
+                if (rs.rows.length > 0) {
+                    use_data = rs.rows.item(0).useData;
+                    //alert("use data:"+use_data);
+                }else{
+                    use_data='NONE';
+                }
+        });
     }, function(error){
         alert("Transaction Error: "+error.message);
     }, function(){
@@ -127,6 +178,7 @@ function onDeviceReady(){
 	//alert(timeStart);
 	if(getURLParameter("anonmyous")==="true"){
 		anon=true;
+		$('#go-back').prop("href", "homepage-anon.html");
 		populateCircleList(12);
 		var siteList = document.getElementById("site");
 
@@ -724,7 +776,9 @@ var submit = function( ) {
 	//navigator.notification.alert("SiteID: " + siteID +
 	//	"\nSite password: " +sitePassword);
 	//var online = navigator.onLine;
-	if(navigator.onLine == false||anon== true){
+	var online=isOnline();
+	// alert("is online "+online);
+	if(online == false||anon== true){
         //last field for error handler 0 is default
 		//alert("I am here");
 		db.transaction(function(tx){
@@ -877,7 +931,6 @@ var toolTip = function(toolTipLocation){
 //Submits basic survey info and leaf photo to server
 //Calls submitArthropodsToServer if survey upload is successful
 var submitSurveyToServer = function(){
-	// navigator.notification.alert("Submitting survey");
 	 $.ajax({
 		url: DOMAIN + "/api/submission_full.php",
 		type : "POST",
@@ -924,8 +977,22 @@ var submitSurveyToServer = function(){
 	});
 };
 
+function slugify(text){
+  return text
+    .replace(/\s+/g, '+')           // Replace spaces with -
+    .replace(/[^\w\+]+/g, '')       // Remove all non-word chars
+    .replace(/\+\++/g, '+')         // Replace multiple - with single -
+    .replace(/^\++/, '')             // Trim - from start of text
+    .replace(/\++$/, '');            // Trim - from end of text
+}
 
-
+function trim_end(text, by) {
+	if (text.indexOf(by) > -1) {
+		return text.substring(0, text.indexOf(by));
+	} else {
+		return text;
+	}
+}
 
 //Submits arthropod info to server for each saved order/
 //Calls uploadPhoto with orderPhoto (if a photo was taken)
@@ -960,6 +1027,59 @@ var submitArthropodsToServer = function(result){
 
 			var arthropodImageURI = $(".saved-arthropod-image", this).prop("src");
 			//navigator.notification.alert("Arthropod image uri: " + arthropodImageURI);
+
+			if (inat_token !== null && arthropodImageURI !== null && arthropodImageURI !== undefined) {
+				var url = INATURALIST_DOMAIN + "/observations.json?";
+				url += "observation[species_guess]="+slugify(trim_end($("h4", this).text(), '('));
+				url += "&observation[id_please]=1";
+				url += "&observation[observed_on_string]=" + date;
+				url += "&observation[place_guess]= " + slugify(trim_end($("#site option:selected").text(), '('));
+				url += "&observation[latitude]=" + latitude;
+				url += "&observation[longitude]=" + longitude;
+				if ($(".arthropod-notes", this).text().length > 0) 
+					url += "&observation[description]=" + slugify($(".arthropod-notes", this).text());
+				url += "&observation[observation_field_values_attributes][0][observation_field_id]=1289";
+				url += "&observation[observation_field_values_attributes][0][value]="+$(".arthropod-length", this).text();
+				url += "&observation[observation_field_values_attributes][1][observation_field_id]=5716";
+				url += "&observation[observation_field_values_attributes][1][value]="+temperature;
+				url += "&observation[observation_field_values_attributes][2][observation_field_id]=1194";
+				url += "&observation[observation_field_values_attributes][2][value]="+$("#site option:selected").text();
+				url += "&observation[observation_field_values_attributes][3][observation_field_id]=5715";
+				url += "&observation[observation_field_values_attributes][3][value]="+circle;
+				url += "&observation[observation_field_values_attributes][4][observation_field_id]=5714";
+				url += "&observation[observation_field_values_attributes][4][value]="+survey;
+				url += "&observation[observation_field_values_attributes][5][observation_field_id]=306";
+				url += "&observation[observation_field_values_attributes][5][value]="+plantSpecies;
+				url += "&observation[observation_field_values_attributes][6][observation_field_id]=5712";
+				url += "&observation[observation_field_values_attributes][6][value]="+leafCount;
+				url += "&observation[observation_field_values_attributes][7][observation_field_id]=5711";
+				url += "&observation[observation_field_values_attributes][7][value]="+$("#herbivory-select").val();
+				url += "&observation[observation_field_values_attributes][8][observation_field_id]=5748";
+				url += "&observation[observation_field_values_attributes][8][value]="+$(".arthropod-count", this).text();
+				url += "&observation[observation_field_values_attributes][9][observation_field_id]=5710";
+				url += "&observation[observation_field_values_attributes][9][value]="+trim_end(stored_user_info.name, '@');
+
+				// alert("url: " + url);
+				$.ajax({
+					url: url,
+					type: "POST",
+					crossDomain: true,
+					contentType: 'application/x-www-form-urlencoded',
+					data: {
+						"access_token": inat_token,
+					},
+					success: function (obs_result) {
+						// alert("Uploading order photo to iNaturalist");
+						linkToProject(obs_result);
+						uploadPhotoToiNat(obs_result, arthropodImageURI);
+					},
+					error: function(xhr, status){
+					    alert("Unexpected error submitting observation to iNaturalist: " + xhr.status);
+					    // alert(xhr.responseText);
+					}
+				});
+			}
+
 			$.ajax({
 				url: DOMAIN + "/api/submission_full.php",
 				type: "POST",
@@ -1013,6 +1133,67 @@ var submitArthropodsToServer = function(result){
 	}
 
 };
+
+function linkToProject(obs_result) {
+	$.ajax({
+		url: INATURALIST_DOMAIN + "/project_observations",
+		type: "POST",
+		crossDomain: true,
+		contentType: 'application/x-www-form-urlencoded',
+		data: {
+			"access_token": inat_token,
+			"project_observation[observation_id]": obs_result[0].id,
+			"project_observation[project_id]" : 5443
+		},
+		success: function (obs_result) {
+			alert("Successfully linked to CC Project");
+		},
+		error: function(xhr, status){
+			// This always fails for some reason,
+			// even if the observation is linked to the project.
+			// alert("Unexpected error linking observation: " + xhr.status);
+			// alert(xhr.responseText);
+			// alert("Successfully linked to CC Project");
+		}
+	});
+}
+
+function uploadPhotoToiNat(obs_result, arthropodImageURI) {
+
+	var success = function (r) {
+		alert("New observation on iNaturalist uploaded.");
+		//navigator.notification.alert("leaf photo uploaded");
+		console.log("Code = " + r.responseCode);
+		console.log("Response = " + r.response);
+		console.log("Sent = " + r.bytesSent);
+	};
+
+	var fail = function (error) {
+		navigator.notification.alert("An error has occurred: Code = " + error.code);
+		console.log("upload error source " + error.source);
+		console.log("upload error target " + error.target);
+	};
+
+	var options = new FileUploadOptions();
+    options.fileKey = "file";
+    options.mimeType="image/jpeg";
+    options.chunkedMode = false;
+    options.headers = {
+        Connection: "close",
+        ContentType: "multipart/form-data",
+    };
+
+	var params = {
+		"access_token": inat_token,
+		"observation_photo[observation_id]": obs_result[0].id,
+	};
+
+	options.params = params;
+
+	var ft = new FileTransfer();
+	options.fileName = "bug_photo.jpg";
+	ft.upload(arthropodImageURI, encodeURI(INATURALIST_DOMAIN + '/observation_photos'), success, fail, options);
+}
 
 //databaseID = surveyID if leaf photo, orderID if arthropod photo
 //Form is cleared if final arthropod photo is successfully uploaded
@@ -1144,4 +1325,24 @@ function scanQRCode() {
 //Handles device rotation
 window.shouldRotateToOrientation = function() {
 	return true;
+};
+
+function isOnline(){
+        var networkState = navigator.connection.type;
+        // alert(networkState);
+        if(use_data=='Yes'){
+            if(networkState==Connection.UNKNOWN||networkState==Connection.NONE){
+                return false;
+            }else{
+                return true;
+            }
+        }else{
+            if(networkState==Connection.UNKNOWN||networkState==Connection.NONE
+                ||networkState==Connection.CELL||networkState==Connection.CELL_2G
+                ||networkState==Connection.CELL_3G||networkState==Connection.CELL_4G){
+                return false;
+            }else{
+                return true;
+            }
+        }
 };

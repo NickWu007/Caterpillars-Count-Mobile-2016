@@ -25,7 +25,7 @@
 
 	<div class="header-footer navbar-fixed-top white-text"> 
 		<div class="pull-left"> 
-			<a href="homepage.html" font-size="20px">
+			<a id= "go-back" href="homepage.html" font-size="20px">
 			<span class=" icon glyphicon glyphicon-menu-left"></span>
 			<span class=" icon glyphicon glyphicon-home"></span>
 			&nbsp;Go back</a>
@@ -90,15 +90,6 @@
 			</div>
 
 			<div>
-				<h6>Survey Type</h6>
-				<select class="survey-type" onchange="editableLeafCount()">
-					<option value ="default" selected disabled hidden>Please select a survey type</option>
-					<option value="Visual">Visual Survey</option>
-					<option value="Beat_Sheet">Beat Sheet</option>
-				</select>
-			</div>
-
-			<div>
 				<h6>Circle</h6>
 				<select id = "circle" onclick="checkIfCirclesRetrieved()">
 					<option value ="default" selected disabled hidden>Please select a circle</option>
@@ -118,7 +109,14 @@
 
 			</div>
 
-
+			<div>
+				<h6>Survey Type</h6>
+				<select class="survey-type" onchange="editableLeafCount()">
+					<option value ="default" selected disabled hidden>Please select a survey type</option>
+					<option value="Visual">Visual Survey</option>
+					<option value="Beat_Sheet">Beat Sheet</option>
+				</select>
+			</div>
 
 			<div>
 				<h6>Notes</h6>

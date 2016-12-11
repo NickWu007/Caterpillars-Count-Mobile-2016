@@ -18,6 +18,12 @@
         "cordova-plugin-file-transfer": {
             "PACKAGE_NAME": "goldenCompass.caterpillarCount"
         },
+        "cordova-plugin-geolocation": {
+            "PACKAGE_NAME": "goldenCompass.caterpillarCount"
+        },
+        "cordova-plugin-network-information": {
+            "PACKAGE_NAME": "goldenCompass.caterpillarCount"
+        },
         "cordova-plugin-statusbar": {
             "PACKAGE_NAME": "goldenCompass.caterpillarCount"
         },
