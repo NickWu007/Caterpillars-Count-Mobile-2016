@@ -134,9 +134,10 @@ function onDeviceReady() {
 }
 
 $(document).ready(function() { 
-    window.addEventListener("online", createButtons);
-    window.addEventListener("offline", createButtons);
-	
+    // window.addEventListener("online", createButtons);
+    // window.addEventListener("offline", createButtons);
+	 
+    setInterval(createButtons, 1000);
 });
 
 //Handles device rotation
@@ -165,6 +166,7 @@ function createButtons(){
                                 "<div class = 'button'><h4>Anonymous Mode</h4></div>"+
                             "</div>"+
                         "</a>"; 
+    // alert(online);
     if (online) {
         $("#top_button").html(register_button);
         $("#bottom_button").html(login_buton);
