@@ -86,7 +86,7 @@
 		</data>
 		<key>CDVLaunchScreen.storyboardc/01J-lp-oVM-view-Ze5-6b-2t3.nib</key>
 		<data>
-		ZzNptR2plpoeJH/JpN5F/4/ccwM=
+		Cec9KviZVBFMQYbi1uJa9zl+ioU=
 		</data>
 		<key>CDVLaunchScreen.storyboardc/Info.plist</key>
 		<data>
@@ -94,7 +94,7 @@
 		</data>
 		<key>CDVLaunchScreen.storyboardc/UIViewController-01J-lp-oVM.nib</key>
 		<data>
-		J+aELL0/PqHEepKbpkNem6aVY1s=
+		ZeiJq4/TYxa9F4evPc8a5s4kM2c=
 		</data>
 		<key>CDVNotification.bundle/beep.wav</key>
 		<data>
@@ -162,7 +162,7 @@
 		</data>
 		<key>MainViewController.nib</key>
 		<data>
-		vxG0VzM9MpHO34EkxvvZhZ0j9hY=
+		hG0YQ1EvKuXpCHmcZ5dc9BdBanc=
 		</data>
 		<key>PkgInfo</key>
 		<data>
@@ -182,7 +182,7 @@
 		</data>
 		<key>scannerOverlay.nib</key>
 		<data>
-		yCsLFJQhdBdEeiLhcvrfYkqoi4c=
+		hiMZqb3FNYY9STeuSsFhpAvHuMs=
 		</data>
 		<key>www/AvailableSite.html</key>
 		<data>
@@ -422,7 +422,7 @@
 		</data>
 		<key>www/js/input-page.js</key>
 		<data>
-		mTG+yNyTquJMwljfapPOuCBZvHg=
+		3zspsnfuwlX5lPj/E4mvETNENMA=
 		</data>
 		<key>www/js/jQuery.ptTimeSelect-0.8/README.txt</key>
 		<data>
@@ -999,11 +999,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			ZzNptR2plpoeJH/JpN5F/4/ccwM=
+			Cec9KviZVBFMQYbi1uJa9zl+ioU=
 			</data>
 			<key>hash2</key>
 			<data>
-			dhv0oz5gxTLthlhMzqK88BKtZZlX7sEv8WdeW5PjEbs=
+			+wJKSinBqI3Nl4nJtdk5ErhM1vKjOGheB4JG7jtb9r0=
 			</data>
 		</dict>
 		<key>CDVLaunchScreen.storyboardc/Info.plist</key>
@@ -1021,11 +1021,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			J+aELL0/PqHEepKbpkNem6aVY1s=
+			ZeiJq4/TYxa9F4evPc8a5s4kM2c=
 			</data>
 			<key>hash2</key>
 			<data>
-			NVW2CVW1Vf60L2WMHG77QvXHmA840G+Ix9wHoqq48uQ=
+			FW0NlKUfpGZkgRPG30K+nZ7bu/+bGXjMf8gVgdtOgvM=
 			</data>
 		</dict>
 		<key>CDVNotification.bundle/beep.wav</key>
@@ -1197,11 +1197,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			vxG0VzM9MpHO34EkxvvZhZ0j9hY=
+			hG0YQ1EvKuXpCHmcZ5dc9BdBanc=
 			</data>
 			<key>hash2</key>
 			<data>
-			sOnyFsw3xzAJE12+m4QH+Jf2CYurpx2OmPFRrIDyetU=
+			5nd/s67zWYueMlx66lkozpilPkbxaTdfpEE4bCo14cM=
 			</data>
 		</dict>
 		<key>archived-expanded-entitlements.xcent</key>
@@ -1241,11 +1241,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			yCsLFJQhdBdEeiLhcvrfYkqoi4c=
+			hiMZqb3FNYY9STeuSsFhpAvHuMs=
 			</data>
 			<key>hash2</key>
 			<data>
-			65rdKOSAOsC5GYB4TglOwCryxgXsc/IzUM0LxtJaOHs=
+			ezmilxW4w1iEZLqflRpdNORENlG4EZqCx3nTIes2FdQ=
 			</data>
 		</dict>
 		<key>www/AvailableSite.html</key>
@@ -1901,11 +1901,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			mTG+yNyTquJMwljfapPOuCBZvHg=
+			3zspsnfuwlX5lPj/E4mvETNENMA=
 			</data>
 			<key>hash2</key>
 			<data>
-			JQ0tZB4z5gBx5p4A1SZX2EyTVGU2gkMz/Hcbmm8lmsU=
+			Sxy4+FOAG/ItQrpFR2wR6Ll3TCvl8QxbseyeoOm5Ep8=
 			</data>
 		</dict>
 		<key>www/js/jQuery.ptTimeSelect-0.8/README.txt</key>

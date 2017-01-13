@@ -186,7 +186,7 @@ function onDeviceReady(){
 		siteOption.text = "Unknown Site";
 		siteOption.value = -1;
 		siteList.add(siteOption);
-		$("#site option:selected").val(-1);
+		$('#site option[value="-1"]').attr('selected', true);
 		stored_user_info={};
 		stored_user_info.userId="";
         stored_user_info.password="";
@@ -846,7 +846,7 @@ var submit = function( ) {
 					}, function(error){
                         alert("Transaction Error: "+error.message);
                     }, function(){
-						alert("This page was successfully stored");
+						alert("This survey was successfully saved to Pending Surveys. You can submit it when you have wifi or cell service.");
 						if(anon){
 							window.location = "homepage-anon.html";
 						}else{
