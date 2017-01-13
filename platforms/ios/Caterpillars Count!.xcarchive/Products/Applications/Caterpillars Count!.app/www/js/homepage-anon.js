@@ -26,7 +26,7 @@ $(document).ready(function(){
             alert("DB open OK");
         }
 
-        alert("User in anonymous mode. Not logged in.");
+        alert("User in Offline Anonymous Mode. Not logged in.");
     }
 });
 //Handles device rotation

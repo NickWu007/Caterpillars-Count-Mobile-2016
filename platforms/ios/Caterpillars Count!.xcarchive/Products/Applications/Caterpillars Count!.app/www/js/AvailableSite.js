@@ -153,7 +153,7 @@ function retriveCircleCount(siteID){
                         }, function(error){
                                 alert("Transaction Error: "+error.message);
                         }, function() {
-                                alert("Site "+circleResult.siteName+"successfully added");
+                                alert("Site "+circleResult.siteName+" successfully added");
 
                         });
 		},

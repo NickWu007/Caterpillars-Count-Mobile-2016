@@ -59,7 +59,7 @@ function renderSurvey(){
                     var circle_text;
                     if(row.circle === -1){circle_text="Unknown";}
                     else{circle_text = row.circle;}
-                     new_list_item= '<li class="survey_item_Pending" id="'+row.timeStart+'"><h5>Click Here to Complete this Survey</h5><h5>Circle: '+circle_text+
+                     new_list_item= '<li class="survey_item_Pending" id="'+row.timeStart+'"><h5>Click here to specify Site before survey can be submitted</h5><h5>Circle: '+circle_text+
                     '</h5><h5>Survey: '+row.survey+'</h5><h5>Time: '+row.timeStart+
                     '<br><div class="survey_delete text-center white-text" id="'+row.timeStart+'"> Delete this Survey</div></li><hr>';
                     incomplete_list+=new_list_item;
@@ -155,7 +155,7 @@ $(document).ready(function(){
 });
 
 function numSurveys(){
-    $(".survey-count").html("Total Stored Survey: " + $list_length); //updates survey-count
+    $(".survey-count").html("Total Stored Surveys: " + $list_length); //updates survey-count
 }
 
 function deleteSurvey(timeStart){
@@ -168,14 +168,14 @@ function deleteSurvey(timeStart){
         },  function(error){
             alert("Transaction error: "+error.message);
         }, function(){
-            alert("Successfully delete this survey");
+            alert("Successfully deleted this survey");
             
         });
     }
     if($list_length==1){
         $list_length=0;
         $(".survey_list").html(" ");
-        $(".survey-count").html("Total Stored Survey: 0");
+        $(".survey-count").html("Total Stored Surveys: 0");
     }else{
         renderSurvey();
     }

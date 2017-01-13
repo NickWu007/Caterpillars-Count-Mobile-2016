@@ -1,6 +1,6 @@
 var db;
 var site = "https://www.inaturalist.org";
-var ccsite="http://develop-caterpillars.vipapps.unc.edu/"
+var ccsite="http://develop-caterpillars.vipapps.unc.edu/";
 //var app_id = 'f288a4e448fb2157ca940efcd471b5148fbb26f5de7dea47593fd863f978ddcb';
 //var app_secret = '7ff165db65f1477b5b91a7d0b625a725f44a9eee929224c19f792fcfc37a4351';
 var username = 'caterpillarscount';

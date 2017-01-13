@@ -149,30 +149,25 @@ function createButtons(){
    var networkState = navigator.connection.type;
 
    var online = isOnline();
-    var register_button = "<a href = 'register.html'>"+
-                            "<div class='header-footer footer text-center green-text'>"+
-                                "<div class = 'button'><h4>Register</h4></div>"+
-                            "</div>"+
-                          "</a>";
+    var register_button = "<div class='header-footer text-center white-text'>"+
+                            "<h5>Don't have an account? <a href = 'register.html'>Click here to register</a></h5>"+
+                          "</div>";
 
     var login_button = "<a href='login.html'>"+
                             "<div class='header-footer footer text-center green-text'>"+
-                                "<div class = 'button'><h4>Login</h4></div>"+
+                                "<div class = 'button'><h3>Login</h3></div>"+
                             "</div>"+
                         "</a>";
 
-    var amode_button = "<a href='homepage-anon.html'>"+
-                            "<div class='header-footer footer text-center green-text'>"+
-                                "<div class = 'button'><h4>Anonymous Mode</h4></div>"+
-                            "</div>"+
-                        "</a>"; 
+    var amode_button = "<div class='header-footer text-center white-text'>"+
+                          "<h5>You currently have no cell or wifi signal. If you are at a New Site for the first time <a href='homepage-anon.html'>Click here to submit surveys.</a></h5>"+
+                        "</div>"; 
     // alert(online);
+    $("#top_button").html(login_button);
     if (online) {
-        $("#top_button").html(register_button);
-        $("#bottom_button").html(login_buton);
+        $("#bottom_button").html(register_button);
     } else {
-        $("#top_button").html(amode_button);
-        $("#bottom_button").html(login_button);
+        $("#bottom_button").html(amode_button);
     }
 }
 
