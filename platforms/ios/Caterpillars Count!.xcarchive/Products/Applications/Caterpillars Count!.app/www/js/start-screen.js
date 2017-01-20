@@ -66,63 +66,6 @@ function onDeviceReady() {
                 use_data='NONE';
             }
         });
-		/*
-        tx.executeSql("INSERT INTO SURVEY VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",   
-                         	['survey',  
-                         	8892356,  
-                         	215,  
-                        	'leq941116',  
-                        	6,  
-                        	'A',  
-                      	    "2016-10-23 23:08:41",  
-                       	    30,  
-                        	39,  
-                       	    'note',  
-                         	'plantSpecies',  
-                         	'2',  
-                       	    'Visual',  
-                       	    5,  
-                        	"Mobile",   
-							'', 
-							0]);
-		tx.executeSql("INSERT INTO SURVEY VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",   
-                         	['survey',  
-                         	8892356,  
-                         	159,  
-                        	12345,  
-                        	6,  
-                        	'A',  
-                      	    "2016-10-23 22:08:41",  
-                       	    30,  
-                        	39,  
-                       	    '$(".notes").val()',  
-                         	'plantSpecies',  
-                         	'2',  
-                       	    'surveyType',  
-                       	    5,  
-                        	"Mobile",   
-							'', 
-							0]);
-        tx.executeSql("INSERT INTO SURVEY VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",   
-                         	['survey',  
-                         	-1,  
-                         	159,  
-                        	12345,  
-                        	6,  
-                        	'A',  
-                      	    "2016-10-23 21:08:41",  
-                       	    30,  
-                        	39,  
-                       	    '$(".notes").val()',  
-                         	'plantSpecies',  
-                         	'2',  
-                       	    'Visual',  
-                       	    5,  
-                        	"Mobile",   
-							'', 
-							0]);*/
-							
-        
     }, function(error){
         alert("Transaction Error: "+error.message);
     }, function(){
@@ -189,4 +132,4 @@ function isOnline(){
                 return true;
             }
         }
-};
+}

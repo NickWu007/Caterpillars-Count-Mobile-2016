@@ -1,5 +1,5 @@
 var db;
-var DOMAIN = "http://develop-caterpillars.vipapps.unc.edu";
+var DOMAIN = "http://master-caterpillars.vipapps.unc.edu";
 document.addEventListener("deviceready", onDeviceReady, false);
 //Return to start screen if android back button is pressed
 function onDeviceReady(){
@@ -14,10 +14,10 @@ function onDeviceReady(){
         retrieveSiteList();
         //retrive sites with permission
         
-    };
+    }
 
     retriveSitePermission();
-};
+}
 
 
 var retrieveSiteList = function(){
@@ -35,7 +35,7 @@ var retrieveSiteList = function(){
 			populateSiteList(siteResult);
 		},
 		error : function(){
-			navigator.notification.alert("Unexpected error retrieving site list.");
+			navigator.notification.alert("You must have wifi or cell service to Add a New Site.");
 		}
 	});
 };
@@ -45,10 +45,12 @@ var populateSiteList = function(siteResult){
         //alert(siteResult.length+" sites get");
         var siteList = document.getElementById("site");
 	for(var i = 0; i < siteResult.length; i++){
-		var siteOption = document.createElement("option");
-		siteOption.text = siteResult[i].siteName+"("+siteResult[i].siteState+")";
-		siteOption.value = siteResult[i].siteID;
-		siteList.add(siteOption);
+        if (!siteResult[i].siteName.startsWith("BBS")) {
+            var siteOption = document.createElement("option");
+            siteOption.text = siteResult[i].siteName+"("+siteResult[i].siteState+")";
+            siteOption.value = siteResult[i].siteID;
+            siteList.add(siteOption);
+        }
 	}
 };
 var permission_list;

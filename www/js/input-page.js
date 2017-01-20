@@ -122,10 +122,6 @@ function onDeviceReady(){
         function(error){alert("Error Open Database:"+JSON.stringify(error));}
     );
     function DBSuccessCB(){
-        // alert("DB open OK");
-            //retrive site data from server
-        //retrive sites with permission
-        
     }
     stored_user_info = null;
 
@@ -160,10 +156,6 @@ function onDeviceReady(){
     }, function(){
         console.log("Transaction OK.");
     });
-
-	//alert("begin wait");
-	
-
 
 	document.addEventListener("backbutton", function(e){
 		e.preventDefault();
@@ -384,10 +376,10 @@ var retrieveCircleCount = function(){
 				$("#circle").val(circle);
 			}
 			if(edit){
-				if(editmode<circleNum){
+				if(editmode<=circleNum){
 					$("#circle").val(editmode);
 				}else{
-					alert("The circle you already choose does not match this site, Please select again");
+					alert("This site does not have " + editmode + " survey circles. Double check the site name or circle number.");
 				}
 			}
 
@@ -994,6 +986,19 @@ function trim_end(text, by) {
 	}
 }
 
+function taxon(species) {
+	if (species.startsWith("Aphids")) return "Sternorrhyncha";
+	if (species.startsWith("Bees")) return "Hymenoptera";
+	if (species.startsWith("Grasshoppers")) return "Orthoptera";
+	if (species.startsWith("Leaf+Hoppers")) return "Auchenorrhyncha";
+	if (species.startsWith("Moths")) return "Hymenoptera";
+	if (species.startsWith("OTHER")) return slugify($(".arthropod-notes", this).text());
+	if (species.startsWith("UNIDENTIFIED")) return "Arthropoda";
+	if (species.startsWith("Caterpillars")) return "Lepidoptera";
+
+	return species;
+}
+
 //Submits arthropod info to server for each saved order/
 //Calls uploadPhoto with orderPhoto (if a photo was taken)
 //upon each successful arthropod submission upload
@@ -1030,7 +1035,8 @@ var submitArthropodsToServer = function(result){
 
 			if (inat_token !== null && arthropodImageURI !== null && arthropodImageURI !== undefined) {
 				var url = INATURALIST_DOMAIN + "/observations.json?";
-				url += "observation[species_guess]="+slugify(trim_end($("h4", this).text(), '('));
+				var species = taxon(slugify(trim_end($("h4", this).text(), '(')));
+				url += "observation[species_guess]="+species;
 				url += "&observation[id_please]=1";
 				url += "&observation[observed_on_string]=" + date;
 				url += "&observation[place_guess]= " + slugify(trim_end($("#site option:selected").text(), '('));
@@ -1058,6 +1064,12 @@ var submitArthropodsToServer = function(result){
 				url += "&observation[observation_field_values_attributes][8][value]="+$(".arthropod-count", this).text();
 				url += "&observation[observation_field_values_attributes][9][observation_field_id]=5710";
 				url += "&observation[observation_field_values_attributes][9][value]="+trim_end(stored_user_info.name, '@');
+				if (species == "Lepidoptera") {
+					url += "&observation[observation_field_values_attributes][8][observation_field_id]=3441";
+					url += "&observation[observation_field_values_attributes][8][value]=caterpillar";
+					url += "&observation[observation_field_values_attributes][9][observation_field_id]=325";
+					url += "&observation[observation_field_values_attributes][9][value]=larva";
+				}
 
 				// alert("url: " + url);
 				$.ajax({
