@@ -43,7 +43,20 @@ var retrieveSiteList = function(){
 //Populates the site dropdown list
 var populateSiteList = function(siteResult){
         //alert(siteResult.length+" sites get");
-        var siteList = document.getElementById("site");
+    var siteList = document.getElementById("site");
+    siteResult.sort(function(a,b) {
+        var nameA = a.siteName.toUpperCase(); // ignore upper and lowercase
+        var nameB = b.siteName.toUpperCase(); // ignore upper and lowercase
+        if (nameA < nameB) {
+            return -1;
+        }
+        if (nameA > nameB) {
+            return 1;
+        }
+
+        // names must be equal
+        return 0;
+    });
 	for(var i = 0; i < siteResult.length; i++){
         if (!siteResult[i].siteName.startsWith("BBS")) {
             var siteOption = document.createElement("option");
@@ -71,12 +84,12 @@ var retriveSitePermission = function(){
                 if(permission_list.length>0){
                 var insertlist=" ";
                 for(var i=0; i<permission_list.length; i++){
-                        insertlist+="<hr><li class='survey_item'><h5>Site: "+permission_list.item(i).siteName+"</h5><h5>State: "+permission_list.item(i).state+"</h5><h5>Circle#: "+permission_list.item(i).circle+"</h5></li> "
+                        insertlist+="<hr><li class='survey_item'><h5>Site: "+permission_list.item(i).siteName+"</h5><h5>State: "+permission_list.item(i).state+"</h5><h5>Circle#: "+permission_list.item(i).circle+"</h5></li> ";
                 }
                 $("#permissionList").html(insertlist);
                 //"<li class='survey_item1'><h5>Site: "++"</h5><h5>Site Id: "++"</h5></li> "
                 }else{
-                        $("#permissionList").html("<li class='survey_item'><h5>You Do Not Have Any Site Permission</h5><h5>Please contact Site Manager for detail</h5></li>");
+                        $("#permissionList").html("<li class='survey_item'><h5>You have not added any sites. To add a site from the list above, please enter the site password. Contact the relevant Site Manager for assistance if necessary.</li>");
                 }
         });
 };

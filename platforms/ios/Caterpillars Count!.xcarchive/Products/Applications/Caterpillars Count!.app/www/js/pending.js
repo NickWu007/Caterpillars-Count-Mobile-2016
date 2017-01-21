@@ -360,6 +360,8 @@ function uploadPhoto(photoURI, photoType, databaseID){
 
     var fail = function (error) {
         navigator.notification.alert("An error has occurred: Code = " + error.code);
+        alert("upload error source: " + error.source);
+        alert("upload error target: " + error.target);
         console.log("upload error source " + error.source);
         console.log("upload error target " + error.target);
     };

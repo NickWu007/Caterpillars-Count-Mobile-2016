@@ -126,7 +126,7 @@ function onDeviceReady(){
                 "password" : password
             },
             success: function(response){
-                alert("Signin to inatrualist successful");
+                alert("Signin to iNaturalist successful");
                 access_token = response.access_token;
                 updateSettings();
             },

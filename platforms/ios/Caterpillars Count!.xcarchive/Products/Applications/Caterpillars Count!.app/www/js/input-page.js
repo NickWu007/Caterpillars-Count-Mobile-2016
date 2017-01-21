@@ -546,6 +546,63 @@ var returnToMainSelectScreen = function( ) {
 	$(".back-button").css("display", "none");
 	$(".caterpillar-checklist").css("display","none");
 };
+
+var editArthropod = function() {
+	var selectedOrder = $("h4", this).text();
+
+	length = parseInt($(".arthropod-length", this).text());
+	count = parseInt($(".arthropod-count", this).text());
+	notes = $(".arthropod-notes", this).text();
+	
+	hairyOrSpinyVal = parseInt($(".hairy-or-spiny", this).text());
+	leafRollVal = parseInt($(".leaf-roll", this).text());
+	silkTentVal = parseInt($(".silk-tent", this).text());
+
+	var imageSrc = $(".saved-arthropod-image", this).attr("src");
+
+	showArthropodSelectScreen();
+
+	var shortOrder = selectedOrder.substr(0, selectedOrder.indexOf("(")).trim();
+	alert("before select");
+	$(".order-selection option").filter(function() {
+    	return $(this).text().startsWith(shortOrder); 
+	})[0].attr('selected', true);
+	alert("after select");
+	// option.get(0).attr('selected', true);
+	// option.first().attr('selected', true);
+
+	$("input[name='Length']").val(length);
+	$("input[name='Count']").val(count);
+	$("input[name='Notes']").val(notes);
+
+	if (imageSrc != null && imageSrc.length > 0) {
+		$("#arthropod-capture").html("<img onclick='arthropodCapture()' id='arthropod-photo' height = '200' width ='200'>");
+		$("#arthropod-photo").attr("src", imageSrc);
+		arthropodPhotoTaken = true;
+		ArthropodsImageURI = imageSrc;
+	}
+
+	if (selectedOrder == "Caterpillars (Lepidoptera larvae)") {
+		if (hairyOrSpinyVal > 0) {
+			$("input#hairyOrSpiny").attr('checked', true);
+		} else {
+			$("input#notHairyOrSpiny").attr('checked', true);
+		}
+
+		if (leafRollVal > 0) {
+			$("input#leafRoll").attr('checked', true);
+		} else {
+			$("input#notLeafRoll").attr('checked', true);
+		}
+
+		if (silkTentVal > 0) {
+			$("input#silkTent").attr('checked', true);
+		} else {
+			$("input#notSilkTent").attr('checked', true);
+		}
+	}
+}
+
 //Function to save arthropod data. Checks for valid values before saving
 var saveArthropod = function( ) {
 
@@ -596,45 +653,47 @@ var saveArthropod = function( ) {
 		var arthropodInputHtml;
 		//If user took photo, use that photo instead of stock image
 		if(arthropodPhotoTaken){
-			arthropodInputHtml = "<div class='arthropod-input'>"
-					+ "<span class='glyphicon glyphicon-remove' onclick='function(){$(this).parent().remove();}'></span>"
-					+ "<h4>" + selectedOrderText + "</h4>"
-					+ "<div><img class = 'saved-arthropod-image' src='" + imageSrc +  "' height='50' width='50'></div>"
-					+ "<div>"
-					+ "<div>Length: <span class='arthropod-length'>" + length + "</span></div>"
-					+ "<div>Count: <span class='arthropod-count'>" + count + "</span></div>"
-					+ "<div>Notes: <span class='arthropod-notes'>" + notes + "</span></div>";
+			arthropodInputHtml = "<div class='arthropod-input'>" +
+					"<span class='glyphicon glyphicon-remove' onclick='function(){$(this).parent().remove();}'></span>" +
+					"<h4>" + selectedOrderText + "</h4>" +
+					"<div><img class = 'saved-arthropod-image' src='" + imageSrc +  "' height='50' width='50'></div>" +
+					"<div>" +
+					"<div>Length: <span class='arthropod-length'>" + length + "</span></div>" +
+					"<div>Count: <span class='arthropod-count'>" + count + "</span></div>" +
+					"<div>Notes: <span class='arthropod-notes'>" + notes + "</span></div>";
 			arthropodPhotoTaken = false;
 		}
 		//Else use default image
 		else{
-			arthropodInputHtml = "<div class='arthropod-input'>"
-					+ "<span class='glyphicon glyphicon-remove' onclick='$(this).parent().remove();'></span>"
-					+ "<h4>" + selectedOrderText + "</h4>"
-					+ "<div><img src='pictures/" + selectedOrder + ".png' height='50' width='50'></div>"
-					+ "<div>"
-					+ "<div>Length: <span class='arthropod-length'>" + length + "</span></div>"
-					+ "<div>Count: <span class='arthropod-count'>" + count + "</span></div>"
-					+ "<div>Notes: <span class='arthropod-notes'>" + notes + "</span></div>";
+			arthropodInputHtml = "<div class='arthropod-input'>" +
+					"<span class='glyphicon glyphicon-remove' onclick='$(this).parent().remove();'></span>" +
+					"<h4>" + selectedOrderText + "</h4>" +
+					"<div><img src='pictures/" + selectedOrder + ".png' height='50' width='50'></div>" +
+					"<div>" +
+					"<div>Length: <span class='arthropod-length'>" + length + "</span></div>" +
+					"<div>Count: <span class='arthropod-count'>" + count + "</span></div>" +
+					"<div>Notes: <span class='arthropod-notes'>" + notes + "</span></div>";
 		}
 		//If order is not caterpillar, close divs
 		if(selectedOrder !== "caterpillar") {
 			$(".arthropod-order-information").append(
-					arthropodInputHtml
-					+ "</div>"
-					+ "</div>"
+					arthropodInputHtml +
+					"</div>" +
+					"</div>"
 			);
 		}
 		else{//Else add caterpillar extras then close divs.
 			$(".arthropod-order-information").append(
-					arthropodInputHtml
-					+ "<div>Hairy or spiny: <span class='hairy-or-spiny'>" + Boolean(hairyOrSpinyVal) + "</span></div>"
-					+ "<div>Leaf roll: <span class='leaf-roll'>" + Boolean(leafRollVal) + "</span></div>"
-					+ "<div>Silk tent: <span class='silk-tent'>" + Boolean(silkTentVal) + "</span></div>"
-					+ "</div>"
-					+ "</div>"
+					arthropodInputHtml +
+					"<div>Hairy or spiny: <span class='hairy-or-spiny'>" + Boolean(hairyOrSpinyVal) + "</span></div>" +
+					"<div>Leaf roll: <span class='leaf-roll'>" + Boolean(leafRollVal) + "</span></div>" +
+					"<div>Silk tent: <span class='silk-tent'>" + Boolean(silkTentVal) + "</span></div>" +
+					"</div>" +
+					"</div>"
 			);
 		}
+
+		$(".arthropod-input").click(editArthropod);
 		//Original arthropod save
 		//$(".arthropod-order-information").append(
 		//		"<div class='arthropod-input'>"
@@ -990,9 +1049,8 @@ function taxon(species) {
 	if (species.startsWith("Aphids")) return "Sternorrhyncha";
 	if (species.startsWith("Bees")) return "Hymenoptera";
 	if (species.startsWith("Grasshoppers")) return "Orthoptera";
-	if (species.startsWith("Leaf+Hoppers")) return "Sternorrhyncha";
-	if (species.startsWith("Moths")) return "Hymenoptera";
-	if (species.startsWith("OTHER")) return slugify($(".arthropod-notes", this).text());
+	if (species.startsWith("Leaf+Hoppers")) return "Auchenorrhyncha";
+	if (species.startsWith("Moths")) return "Lepidoptera";
 	if (species.startsWith("UNIDENTIFIED")) return "Arthropoda";
 	if (species.startsWith("Caterpillars")) return "Lepidoptera";
 
@@ -1036,6 +1094,7 @@ var submitArthropodsToServer = function(result){
 			if (inat_token !== null && arthropodImageURI !== null && arthropodImageURI !== undefined) {
 				var url = INATURALIST_DOMAIN + "/observations.json?";
 				var species = taxon(slugify(trim_end($("h4", this).text(), '(')));
+				if (species.startsWith("OTHER")) species =  slugify($(".arthropod-notes", this).text());
 				url += "observation[species_guess]="+species;
 				url += "&observation[id_please]=1";
 				url += "&observation[observed_on_string]=" + date;
@@ -1182,7 +1241,9 @@ function uploadPhotoToiNat(obs_result, arthropodImageURI) {
 
 	var fail = function (error) {
 		navigator.notification.alert("An error has occurred: Code = " + error.code);
-		console.log("upload error source " + error.source);
+		alert("upload error source for iNaturalist: " + error.source);
+        alert("upload error target for iNaturalist: " + error.target);
+		console.log("upload error source: " + error.source);
 		console.log("upload error target " + error.target);
 	};
 
@@ -1223,6 +1284,8 @@ function uploadPhoto(photoURI, photoType, databaseID){
 
 	var fail = function (error) {
 		navigator.notification.alert("An error has occurred: Code = " + error.code);
+		alert("upload error source: " + error.source);
+        alert("upload error target: " + error.target);
 		console.log("upload error source " + error.source);
 		console.log("upload error target " + error.target);
 	};
