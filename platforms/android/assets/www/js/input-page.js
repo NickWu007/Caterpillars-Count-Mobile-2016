@@ -84,6 +84,23 @@ var ddData = [
 		imageSrc: "pictures/heavy.png"
 	}
 ];
+
+var bug_info = {
+	"Ants" : "ant",
+	"Aphids and Psyllids" : "aphid",
+	"Bees and Wasps" : "bee",
+	"Beetles" : "beetle",
+	"Caterpillars" : "caterpillar",
+	"Daddy longlegs" : "daddylonglegs",
+	"Flies" : "fly",
+	"Grasshoppers, Crickets" : "grasshopper",
+	"Leaf Hoppers and Cicadas" : "leafhopper",
+	"Moths, Butterflies" : "moths",
+	"Spiders" : "spider",
+	"True Bugs" : "truebugs",
+	"OTHER" : "other",
+	"UNIDENTIFIED" : "unidentified"
+};
 var db;
 var stored_user_info;
 document.addEventListener("deviceready", onDeviceReady, false);
@@ -122,10 +139,6 @@ function onDeviceReady(){
         function(error){alert("Error Open Database:"+JSON.stringify(error));}
     );
     function DBSuccessCB(){
-        // alert("DB open OK");
-            //retrive site data from server
-        //retrive sites with permission
-        
     }
     stored_user_info = null;
 
@@ -161,10 +174,6 @@ function onDeviceReady(){
         console.log("Transaction OK.");
     });
 
-	//alert("begin wait");
-	
-
-
 	document.addEventListener("backbutton", function(e){
 		e.preventDefault();
 		//If displaying arthropod screen, return to main select screen
@@ -186,7 +195,7 @@ function onDeviceReady(){
 		siteOption.text = "Unknown Site";
 		siteOption.value = -1;
 		siteList.add(siteOption);
-		$("#site option:selected").val(-1);
+		$('#site option[value="-1"]').attr('selected', true);
 		stored_user_info={};
 		stored_user_info.userId="";
         stored_user_info.password="";
@@ -287,7 +296,9 @@ function onDeviceReady(){
 								"</div>"
 						);
 					}
-				}	
+				}
+
+				$(".arthropod-input").click(editArthropod);	
 			}		
 	});		
 	}else{
@@ -384,10 +395,10 @@ var retrieveCircleCount = function(){
 				$("#circle").val(circle);
 			}
 			if(edit){
-				if(editmode<circleNum){
+				if(editmode<=circleNum){
 					$("#circle").val(editmode);
 				}else{
-					alert("The circle you already choose does not match this site, Please select again");
+					alert("This site does not have " + editmode + " survey circles. Double check the site name or circle number.");
 				}
 			}
 
@@ -554,6 +565,60 @@ var returnToMainSelectScreen = function( ) {
 	$(".back-button").css("display", "none");
 	$(".caterpillar-checklist").css("display","none");
 };
+
+var editArthropod = function() {
+	var selectedOrder = $("h4", this).text();
+
+	length = parseInt($(".arthropod-length", this).text());
+	count = parseInt($(".arthropod-count", this).text());
+	notes = $(".arthropod-notes", this).text();
+	
+	hairyOrSpinyVal = $(".hairy-or-spiny", this).text();
+	leafRollVal = $(".leaf-roll", this).text();
+	silkTentVal = $(".silk-tent", this).text();
+
+	var imageSrc = $(".saved-arthropod-image", this).attr("src");
+
+	$(this).remove();
+	showArthropodSelectScreen();
+	
+	var shortOrder = selectedOrder.substring(0, selectedOrder.indexOf("(")).trim();
+	var value = bug_info[shortOrder];
+	$('.order-selection').val(value);
+	caterpillarSelected();
+
+	$("input[name='Length']").val(length);
+	$("input[name='Count']").val(count);
+	$("input[name='Notes']").val(notes);
+
+	if (imageSrc != null && imageSrc.length > 0) {
+		$("#arthropod-capture").html("<img onclick='arthropodCapture()' id='arthropod-photo' height = '200' width ='200'>");
+		$("#arthropod-photo").attr("src", imageSrc);
+		arthropodPhotoTaken = true;
+		ArthropodsImageURI = imageSrc;
+	}
+
+	if (selectedOrder.startsWith("Caterpillar")) {
+		if (hairyOrSpinyVal.localeCompare("true") == 0) {
+			$("#hairyOrSpiny").prop('checked', true);
+		} else {
+			$("#notHairyOrSpiny").prop('checked', true);
+		}
+
+		if (leafRollVal.localeCompare("true") == 0) {
+			$("#leafRoll").prop('checked', true);
+		} else {
+			$("#notLeafRoll").prop('checked', true);
+		}
+
+		if (silkTentVal.localeCompare("true") == 0) {
+			$("#silkTent").prop('checked', true);
+		} else {
+			$("#notSilkTent").prop('checked', true);
+		}
+	}
+}
+
 //Function to save arthropod data. Checks for valid values before saving
 var saveArthropod = function( ) {
 
@@ -604,45 +669,47 @@ var saveArthropod = function( ) {
 		var arthropodInputHtml;
 		//If user took photo, use that photo instead of stock image
 		if(arthropodPhotoTaken){
-			arthropodInputHtml = "<div class='arthropod-input'>"
-					+ "<span class='glyphicon glyphicon-remove' onclick='function(){$(this).parent().remove();}'></span>"
-					+ "<h4>" + selectedOrderText + "</h4>"
-					+ "<div><img class = 'saved-arthropod-image' src='" + imageSrc +  "' height='50' width='50'></div>"
-					+ "<div>"
-					+ "<div>Length: <span class='arthropod-length'>" + length + "</span></div>"
-					+ "<div>Count: <span class='arthropod-count'>" + count + "</span></div>"
-					+ "<div>Notes: <span class='arthropod-notes'>" + notes + "</span></div>";
+			arthropodInputHtml = "<div class='arthropod-input'>" +
+					"<span class='glyphicon glyphicon-remove' onclick='function(){$(this).parent().remove();}'></span>" +
+					"<h4>" + selectedOrderText + "</h4>" +
+					"<div><img class = 'saved-arthropod-image' src='" + imageSrc +  "' height='50' width='50'></div>" +
+					"<div>" +
+					"<div>Length: <span class='arthropod-length'>" + length + "</span></div>" +
+					"<div>Count: <span class='arthropod-count'>" + count + "</span></div>" +
+					"<div>Notes: <span class='arthropod-notes'>" + notes + "</span></div>";
 			arthropodPhotoTaken = false;
 		}
 		//Else use default image
 		else{
-			arthropodInputHtml = "<div class='arthropod-input'>"
-					+ "<span class='glyphicon glyphicon-remove' onclick='$(this).parent().remove();'></span>"
-					+ "<h4>" + selectedOrderText + "</h4>"
-					+ "<div><img src='pictures/" + selectedOrder + ".png' height='50' width='50'></div>"
-					+ "<div>"
-					+ "<div>Length: <span class='arthropod-length'>" + length + "</span></div>"
-					+ "<div>Count: <span class='arthropod-count'>" + count + "</span></div>"
-					+ "<div>Notes: <span class='arthropod-notes'>" + notes + "</span></div>";
+			arthropodInputHtml = "<div class='arthropod-input'>" +
+					"<span class='glyphicon glyphicon-remove' onclick='$(this).parent().remove();'></span>" +
+					"<h4>" + selectedOrderText + "</h4>" +
+					"<div><img src='pictures/" + selectedOrder + ".png' height='50' width='50'></div>" +
+					"<div>" +
+					"<div>Length: <span class='arthropod-length'>" + length + "</span></div>" +
+					"<div>Count: <span class='arthropod-count'>" + count + "</span></div>" +
+					"<div>Notes: <span class='arthropod-notes'>" + notes + "</span></div>";
 		}
 		//If order is not caterpillar, close divs
 		if(selectedOrder !== "caterpillar") {
 			$(".arthropod-order-information").append(
-					arthropodInputHtml
-					+ "</div>"
-					+ "</div>"
+					arthropodInputHtml +
+					"</div>" +
+					"</div>"
 			);
 		}
 		else{//Else add caterpillar extras then close divs.
 			$(".arthropod-order-information").append(
-					arthropodInputHtml
-					+ "<div>Hairy or spiny: <span class='hairy-or-spiny'>" + Boolean(hairyOrSpinyVal) + "</span></div>"
-					+ "<div>Leaf roll: <span class='leaf-roll'>" + Boolean(leafRollVal) + "</span></div>"
-					+ "<div>Silk tent: <span class='silk-tent'>" + Boolean(silkTentVal) + "</span></div>"
-					+ "</div>"
-					+ "</div>"
+					arthropodInputHtml +
+					"<div>Hairy or spiny: <span class='hairy-or-spiny'>" + Boolean(hairyOrSpinyVal) + "</span></div>" +
+					"<div>Leaf roll: <span class='leaf-roll'>" + Boolean(leafRollVal) + "</span></div>" +
+					"<div>Silk tent: <span class='silk-tent'>" + Boolean(silkTentVal) + "</span></div>" +
+					"</div>" +
+					"</div>"
 			);
 		}
+
+		$(".arthropod-input").click(editArthropod);
 		//Original arthropod save
 		//$(".arthropod-order-information").append(
 		//		"<div class='arthropod-input'>"
@@ -783,6 +850,7 @@ var submit = function( ) {
 		//alert("I am here");
 		db.transaction(function(tx){
 						tx.executeSql("DELETE from SURVEY where timeStart=?", [timeStart]);
+						tx.executeSql("DELETE from ARTHROPODS where timeStart=?", [timeStart]);
                         tx.executeSql("INSERT INTO SURVEY VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", 
                         	['survey',
                         	siteID,
@@ -846,7 +914,7 @@ var submit = function( ) {
 					}, function(error){
                         alert("Transaction Error: "+error.message);
                     }, function(){
-						alert("This page was successfully stored");
+						alert("This survey was successfully saved to Pending Surveys. You can submit it when you have wifi or cell service.");
 						if(anon){
 							window.location = "homepage-anon.html";
 						}else{
@@ -994,6 +1062,18 @@ function trim_end(text, by) {
 	}
 }
 
+function taxon(species) {
+	if (species.startsWith("Aphids")) return "Sternorrhyncha";
+	if (species.startsWith("Bees")) return "Hymenoptera";
+	if (species.startsWith("Grasshoppers")) return "Orthoptera";
+	if (species.startsWith("Leaf+Hoppers")) return "Auchenorrhyncha";
+	if (species.startsWith("Moths")) return "Lepidoptera";
+	if (species.startsWith("UNIDENTIFIED")) return "Arthropoda";
+	if (species.startsWith("Caterpillars")) return "Lepidoptera";
+
+	return species;
+}
+
 //Submits arthropod info to server for each saved order/
 //Calls uploadPhoto with orderPhoto (if a photo was taken)
 //upon each successful arthropod submission upload
@@ -1030,7 +1110,20 @@ var submitArthropodsToServer = function(result){
 
 			if (inat_token !== null && arthropodImageURI !== null && arthropodImageURI !== undefined) {
 				var url = INATURALIST_DOMAIN + "/observations.json?";
-				url += "observation[species_guess]="+slugify(trim_end($("h4", this).text(), '('));
+
+				var life_stage;
+				var insect_life_stage;
+				if ($("h4", this).text().startsWith("Moth")) {
+					life_stage = "adult";
+					insect_life_stage = "adult";
+				}
+				if ($("h4", this).text().startsWith("Caterpillar")) {
+					life_stage = "caterpillar";
+					insect_life_stage = "larva";
+				} 
+				var species = taxon(slugify(trim_end($("h4", this).text(), '(')));
+				if (species.startsWith("OTHER")) species =  slugify($(".arthropod-notes", this).text());
+				url += "observation[species_guess]="+species;
 				url += "&observation[id_please]=1";
 				url += "&observation[observed_on_string]=" + date;
 				url += "&observation[place_guess]= " + slugify(trim_end($("#site option:selected").text(), '('));
@@ -1058,6 +1151,12 @@ var submitArthropodsToServer = function(result){
 				url += "&observation[observation_field_values_attributes][8][value]="+$(".arthropod-count", this).text();
 				url += "&observation[observation_field_values_attributes][9][observation_field_id]=5710";
 				url += "&observation[observation_field_values_attributes][9][value]="+trim_end(stored_user_info.name, '@');
+				if (species == "Lepidoptera") {
+					url += "&observation[observation_field_values_attributes][8][observation_field_id]=3441";
+					url += "&observation[observation_field_values_attributes][8][value]=" + life_stage;
+					url += "&observation[observation_field_values_attributes][9][observation_field_id]=325";
+					url += "&observation[observation_field_values_attributes][9][value]=" + insect_life_stage;
+				}
 
 				// alert("url: " + url);
 				$.ajax({
@@ -1169,8 +1268,10 @@ function uploadPhotoToiNat(obs_result, arthropodImageURI) {
 	};
 
 	var fail = function (error) {
-		navigator.notification.alert("An error has occurred: Code = " + error.code);
-		console.log("upload error source " + error.source);
+		// navigator.notification.alert("An error has occurred: Code = " + error.code);
+		// alert("upload error source for iNaturalist: " + error.source);
+  //       alert("upload error target for iNaturalist: " + error.target);
+		console.log("upload error source: " + error.source);
 		console.log("upload error target " + error.target);
 	};
 
@@ -1211,6 +1312,8 @@ function uploadPhoto(photoURI, photoType, databaseID){
 
 	var fail = function (error) {
 		navigator.notification.alert("An error has occurred: Code = " + error.code);
+		alert("upload error source: " + error.source);
+        alert("upload error target: " + error.target);
 		console.log("upload error source " + error.source);
 		console.log("upload error target " + error.target);
 	};

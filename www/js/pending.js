@@ -4,6 +4,12 @@
 var db;
 var survey_result;
 var survey;
+var use_data;
+var pending_surveys_num;
+var survey_submitted;
+var success_survey;
+var fail_survey;
+var site_infos;
 var $list_length;
 var DOMAIN = "http://master-caterpillars.vipapps.unc.edu";
 
@@ -24,9 +30,41 @@ function onDeviceReady(){
     );
     function DBSuccessCB(){
         //alert("DB open OK");
-
     }
-    renderSurvey();
+
+    db.transaction(function(tx){
+        tx.executeSql('select * from SETTING', [], function(tx, rs){
+            if (rs.rows.length > 0) {
+                use_data = rs.rows.item(0).useData;
+                //alert("use data:"+use_data);
+            }else{
+                use_data='NONE';
+            }
+        });
+    }, function(error){
+        alert("Transaction Error: "+error.message);
+    }, function(){
+    });
+
+    $.ajax({
+        url: DOMAIN + "/api/sites.php",
+        type : "POST",
+        crossDomain: true,
+        dataType: 'json',
+        data: JSON.stringify({
+            "action" : "getAllSiteState"
+        }),
+        success: function(siteResult){
+            site_infos = {};
+            for(var i = 0; i < siteResult.length; i++){
+                site_infos[String(siteResult[i].siteID)] = siteResult[i].siteName;
+            }
+            renderSurvey();
+        },
+        error : function(){
+            navigator.notification.alert("Error retriving site info, please try again.");
+        }
+    });
 }
 
 function renderSurvey(){
@@ -37,6 +75,7 @@ function renderSurvey(){
             } else {
                 // alert("survey database empty");
                 $list_length = 0;
+                pending_surveys_num = 0;
                 $(".survey_list").html("");
                 numSurveys();
             }
@@ -50,6 +89,7 @@ function renderSurvey(){
         var incomplete_list="";
         var error_list="";
         $list_length=survey_result.length;
+        pending_surveys_num = 0;
         for(var i=0; i<survey_result.length; i++){
             var row = survey_result.item(i);
             var new_list_item;
@@ -59,16 +99,19 @@ function renderSurvey(){
                     var circle_text;
                     if(row.circle === -1){circle_text="Unknown";}
                     else{circle_text = row.circle;}
-                     new_list_item= '<li class="survey_item_Pending" id="'+row.timeStart+'"><h5>Click Here to Complete this Survey</h5><h5>Circle: '+circle_text+
+                     new_list_item= '<li class="survey_item_Pending" id="'+row.timeStart+'"><h5>Click here to specify Site before survey can be submitted</h5><h5>Circle: '+circle_text+
                     '</h5><h5>Survey: '+row.survey+'</h5><h5>Time: '+row.timeStart+
                     '<br><div class="survey_delete text-center white-text" id="'+row.timeStart+'"> Delete this Survey</div></li><hr>';
                     incomplete_list+=new_list_item;
                 }else{
-                    new_list_item= '<li class="survey_item" id="'+row.timeStart+'"><h5>Site: '+row.siteID+'</h5><h5>Circle: '+row.circle+
-                    '</h5><h5>Survey: '+row.survey+'</h5><h5>Time: '+row.timeStart+
+                    alert(row.siteID);
+                    alert(site_infos[String(row.siteID)]);
+                    new_list_item= '<li class="survey_item" id="'+row.timeStart+'"><h5>Site: '+site_infos[String(row.siteID)]+'</h5><h5>Circle: '+row.circle+
+                    '</h5><h5>Site: '+site_infos[String(row.survey)]+'</h5><h5>Time: '+row.timeStart+
                     "</h5><img src='" + row.leafImageURI + "' id='arthropod-photo' height = '200' width ='200'>" + 
                     '<br><div class="survey_delete text-center white-text" id="'+row.timeStart+'"> Delete this Survey</div></li><hr>';
                     normal_list+=new_list_item;
+                    pending_surveys_num++;
                 }
 
             }else{
@@ -93,20 +136,14 @@ function renderSurvey(){
 
             //list_content += new_list_item;
         }
-        if(normal_list==""){
-            normal_list="=======There is no pending Survey======<br>";
-        }else{
-            normal_list="=======Regular Pending Survey======<br>"+normal_list;
+        if(normal_list!=""){
+            normal_list="=======Complete pending surveys======<br>"+normal_list;
         }
-        if(error_list==""){
-            error_list="=======There is no Error Survey======<br>";
-        }else{
-            error_list="=======Error Pending Survey======<br>"+error_list;
+        if(error_list!=""){
+            error_list="=======Error pending surveys======<br>"+error_list;
         }
-        if(incomplete_list==""){
-            incomplete_list="======There is no incomplete Survey=====<br>";
-        }else{
-            incomplete_list="=======incomplete Pending Survey======<br>"+incomplete_list
+        if(incomplete_list!=""){
+            incomplete_list="=======Incomplete pending surveys======<br>"+incomplete_list;
         }
         list_content=normal_list+incomplete_list+error_list;
         $(".survey_list").html(list_content);
@@ -123,12 +160,32 @@ function renderSurvey(){
 
         $(".survey_delete").click(function(e){
             var time=$(this).attr('id');
-            if (confirm("Are you sure you wanted to delete this survey") === true) {
+            if (confirm("Are you sure you want to delete this survey?") === true) {
                 deleteSurvey(time);
             }
             e.stopPropagation();
         });
     });
+}
+
+function isOnline(){
+        var networkState = navigator.connection.type;
+        // alert(networkState);
+        if(use_data=='Yes'){
+            if(networkState==Connection.UNKNOWN||networkState==Connection.NONE){
+                return false;
+            }else{
+                return true;
+            }
+        }else{
+            if(networkState==Connection.UNKNOWN||networkState==Connection.NONE
+                ||networkState==Connection.CELL||networkState==Connection.CELL_2G
+                ||networkState==Connection.CELL_3G||networkState==Connection.CELL_4G){
+                return false;
+            }else{
+                return true;
+            }
+        }
 }
 
 $(document).ready(function(){
@@ -137,8 +194,15 @@ $(document).ready(function(){
     var $submitButton = $(".upload-button");
     $submitButton.click(function(e) {
         e.preventDefault();
+        if (pending_surveys_num === 0 || !isOnline()) {
+            //alert("no surveys to upload or offline.");
+            return;
+        }
         var ask = window.confirm("Ready to upload?");
         if (ask) {
+            survey_submitted = 0;
+            success_survey = 0;
+            fail_survey = 0;
             for (var i = 0; i< survey_result.length; i++){
                 survey = survey_result.item(i);
                 if(survey.siteID>-1){
@@ -148,14 +212,14 @@ $(document).ready(function(){
                 }
                
             }
-    }else{
-        window.alert("Upload unsuccessful");
-    }  
+        }else{
+            window.alert("Upload unsuccessful");
+        }  
    });
 });
 
 function numSurveys(){
-    $(".survey-count").html("Total Stored Survey: " + $list_length); //updates survey-count
+    $(".survey-count").html("Total Stored Surveys: " + $list_length); //updates survey-count
 }
 
 function deleteSurvey(timeStart){
@@ -168,14 +232,14 @@ function deleteSurvey(timeStart){
         },  function(error){
             alert("Transaction error: "+error.message);
         }, function(){
-            alert("Successfully delete this survey");
+            alert("Successfully deleted this survey.");
             
         });
     }
     if($list_length==1){
         $list_length=0;
         $(".survey_list").html(" ");
-        $(".survey-count").html("Total Stored Survey: 0");
+        $(".survey-count").html("Total Stored Surveys: 0");
     }else{
         renderSurvey();
     }
@@ -226,17 +290,25 @@ function submitSurveyToServer(i, survey) {
             "source" : "Mobile"
         }),
         success: function(result){
-            alert("Survey #" + i + " is submitted successfully.");
+            //alert("Survey #" + (i+1) + " is submitted successfully.");
+            survey_submitted++;
+            success_survey++;
             uploadPhoto(survey.leafImageURI, "leaf-photo", result.surveyID);
             submitArthropodsToServer(result, survey);
             deleteSurvey(survey.timeStart);
         },
         error : function(xhr, status){
-            navigator.notification.alert("Unexpected error submitting survey #" + i + " with error status: " + xhr.status + ".");
+            fail_survey++;
+            survey_submitted++;
+            navigator.notification.alert("Unexpected error submitting survey #" + (i+1) + " with error status: " + xhr.status + ".");
         },
         complete: function(xhr, textStatus) {
             if (xhr.status >= 400) {
                 recordErrorCode(survey, xhr.status);
+            }
+
+            if (survey_submitted == survey_result.length) {
+                alert(success_survey + " surveys successfully submitted, " + fail_survey + " surveys failed.");
             }
         } 
     });
@@ -272,7 +344,7 @@ var submitArthropodsToServer = function(result, survey){
                         "silkTent": arthropod.silkTentVal
                     }),
                     success: function (arthropodResult) {
-                        navigator.notification.alert("arthropod info submitted");
+                        // navigator.notification.alert("arthropod info submitted");
                         //If arthropod successfully submitted to database, attempt photo upload
                         //Upload arthropod photo if one exists
                         if (arthropod.ArthropodsImageURI !== null && arthropod.ArthropodsImageURI !== undefined) {
@@ -281,7 +353,7 @@ var submitArthropodsToServer = function(result, survey){
                         }
                     },
                     error : function(xhr, status){
-                        navigator.notification.alert("Unexpected error submitting arthropod #" + i + " with error status: " + xhr.status + ".");
+                        navigator.notification.alert("Unexpected error submitting arthropod #" + (i+1) + " with error status: " + xhr.status + ".");
                     },
                 });
             }
@@ -309,6 +381,8 @@ function uploadPhoto(photoURI, photoType, databaseID){
 
     var fail = function (error) {
         navigator.notification.alert("An error has occurred: Code = " + error.code);
+        alert("upload error source: " + error.source);
+        alert("upload error target: " + error.target);
         console.log("upload error source " + error.source);
         console.log("upload error target " + error.target);
     };

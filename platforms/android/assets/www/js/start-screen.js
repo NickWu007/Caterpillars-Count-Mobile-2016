@@ -66,63 +66,6 @@ function onDeviceReady() {
                 use_data='NONE';
             }
         });
-		/*
-        tx.executeSql("INSERT INTO SURVEY VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",   
-                         	['survey',  
-                         	8892356,  
-                         	215,  
-                        	'leq941116',  
-                        	6,  
-                        	'A',  
-                      	    "2016-10-23 23:08:41",  
-                       	    30,  
-                        	39,  
-                       	    'note',  
-                         	'plantSpecies',  
-                         	'2',  
-                       	    'Visual',  
-                       	    5,  
-                        	"Mobile",   
-							'', 
-							0]);
-		tx.executeSql("INSERT INTO SURVEY VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",   
-                         	['survey',  
-                         	8892356,  
-                         	159,  
-                        	12345,  
-                        	6,  
-                        	'A',  
-                      	    "2016-10-23 22:08:41",  
-                       	    30,  
-                        	39,  
-                       	    '$(".notes").val()',  
-                         	'plantSpecies',  
-                         	'2',  
-                       	    'surveyType',  
-                       	    5,  
-                        	"Mobile",   
-							'', 
-							0]);
-        tx.executeSql("INSERT INTO SURVEY VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",   
-                         	['survey',  
-                         	-1,  
-                         	159,  
-                        	12345,  
-                        	6,  
-                        	'A',  
-                      	    "2016-10-23 21:08:41",  
-                       	    30,  
-                        	39,  
-                       	    '$(".notes").val()',  
-                         	'plantSpecies',  
-                         	'2',  
-                       	    'Visual',  
-                       	    5,  
-                        	"Mobile",   
-							'', 
-							0]);*/
-							
-        
     }, function(error){
         alert("Transaction Error: "+error.message);
     }, function(){
@@ -149,30 +92,25 @@ function createButtons(){
    var networkState = navigator.connection.type;
 
    var online = isOnline();
-    var register_button = "<a href = 'register.html'>"+
-                            "<div class='header-footer footer text-center green-text'>"+
-                                "<div class = 'button'><h4>Register</h4></div>"+
-                            "</div>"+
-                          "</a>";
+    var register_button = "<div class='header-footer text-center white-text'>"+
+                            "<h5>Don't have an account? <a href = 'register.html'>Click here to register</a></h5>"+
+                          "</div>";
 
     var login_button = "<a href='login.html'>"+
                             "<div class='header-footer footer text-center green-text'>"+
-                                "<div class = 'button'><h4>Login</h4></div>"+
+                                "<div class = 'button'><h3>Login</h3></div>"+
                             "</div>"+
                         "</a>";
 
-    var amode_button = "<a href='homepage-anon.html'>"+
-                            "<div class='header-footer footer text-center green-text'>"+
-                                "<div class = 'button'><h4>Anonymous Mode</h4></div>"+
-                            "</div>"+
-                        "</a>"; 
+    var amode_button = "<div class='header-footer text-center white-text'>"+
+                          "<h5>You currently have no cell or wifi signal. If you are at a New Site for the first time <a href='homepage-anon.html'>Click here to submit surveys.</a></h5>"+
+                        "</div>"; 
     // alert(online);
+    $("#top_button").html(login_button);
     if (online) {
-        $("#top_button").html(register_button);
-        $("#bottom_button").html(login_buton);
+        $("#bottom_button").html(register_button);
     } else {
-        $("#top_button").html(amode_button);
-        $("#bottom_button").html(login_button);
+        $("#bottom_button").html(amode_button);
     }
 }
 
@@ -194,4 +132,4 @@ function isOnline(){
                 return true;
             }
         }
-};
+}
