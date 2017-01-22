@@ -9,6 +9,7 @@ var pending_surveys_num;
 var survey_submitted;
 var success_survey;
 var fail_survey;
+var site_infos;
 var $list_length;
 var DOMAIN = "http://master-caterpillars.vipapps.unc.edu";
 
@@ -31,7 +32,6 @@ function onDeviceReady(){
         //alert("DB open OK");
     }
 
-
     db.transaction(function(tx){
         tx.executeSql('select * from SETTING', [], function(tx, rs){
             if (rs.rows.length > 0) {
@@ -45,7 +45,26 @@ function onDeviceReady(){
         alert("Transaction Error: "+error.message);
     }, function(){
     });
-    renderSurvey();
+
+    $.ajax({
+        url: DOMAIN + "/api/sites.php",
+        type : "POST",
+        crossDomain: true,
+        dataType: 'json',
+        data: JSON.stringify({
+            "action" : "getAllSiteState"
+        }),
+        success: function(siteResult){
+            site_infos = {};
+            for(var i = 0; i < siteResult.length; i++){
+                site_infos[String(siteResult[i].siteID)] = siteResult[i].siteName;
+            }
+            renderSurvey();
+        },
+        error : function(){
+            navigator.notification.alert("Error retriving site info, please try again.");
+        }
+    });
 }
 
 function renderSurvey(){
@@ -85,8 +104,10 @@ function renderSurvey(){
                     '<br><div class="survey_delete text-center white-text" id="'+row.timeStart+'"> Delete this Survey</div></li><hr>';
                     incomplete_list+=new_list_item;
                 }else{
-                    new_list_item= '<li class="survey_item" id="'+row.timeStart+'"><h5>Site: '+row.siteID+'</h5><h5>Circle: '+row.circle+
-                    '</h5><h5>Survey: '+row.survey+'</h5><h5>Time: '+row.timeStart+
+                    alert(row.siteID);
+                    alert(site_infos[String(row.siteID)]);
+                    new_list_item= '<li class="survey_item" id="'+row.timeStart+'"><h5>Site: '+site_infos[String(row.siteID)]+'</h5><h5>Circle: '+row.circle+
+                    '</h5><h5>Site: '+site_infos[String(row.survey)]+'</h5><h5>Time: '+row.timeStart+
                     "</h5><img src='" + row.leafImageURI + "' id='arthropod-photo' height = '200' width ='200'>" + 
                     '<br><div class="survey_delete text-center white-text" id="'+row.timeStart+'"> Delete this Survey</div></li><hr>';
                     normal_list+=new_list_item;
@@ -323,7 +344,7 @@ var submitArthropodsToServer = function(result, survey){
                         "silkTent": arthropod.silkTentVal
                     }),
                     success: function (arthropodResult) {
-                        navigator.notification.alert("arthropod info submitted");
+                        // navigator.notification.alert("arthropod info submitted");
                         //If arthropod successfully submitted to database, attempt photo upload
                         //Upload arthropod photo if one exists
                         if (arthropod.ArthropodsImageURI !== null && arthropod.ArthropodsImageURI !== undefined) {

@@ -86,7 +86,7 @@
 		</data>
 		<key>CDVLaunchScreen.storyboardc/01J-lp-oVM-view-Ze5-6b-2t3.nib</key>
 		<data>
-		sqxHlzuI0LKYjrmyrTuvXye2AEE=
+		QFiCb5fakcCmd/VHmDkAZ7Os7Xk=
 		</data>
 		<key>CDVLaunchScreen.storyboardc/Info.plist</key>
 		<data>
@@ -94,7 +94,7 @@
 		</data>
 		<key>CDVLaunchScreen.storyboardc/UIViewController-01J-lp-oVM.nib</key>
 		<data>
-		egKDvaZL6/bFZJr+1/kswsa2mlY=
+		Wsl0Nc5rDJcMjIDebwVC+KmXNi8=
 		</data>
 		<key>CDVNotification.bundle/beep.wav</key>
 		<data>
@@ -162,7 +162,7 @@
 		</data>
 		<key>MainViewController.nib</key>
 		<data>
-		6fgrc8lICsKuNTJe+7uXkszL0sE=
+		5TxC6I1iGLfkbeevrHR7waf8hO8=
 		</data>
 		<key>PkgInfo</key>
 		<data>
@@ -182,7 +182,7 @@
 		</data>
 		<key>scannerOverlay.nib</key>
 		<data>
-		7Q+E/1p2UA8jYdR9cJvbWFkaM1Q=
+		Es/48Qi54ZCe5SET7Mr1oyJA/so=
 		</data>
 		<key>www/AvailableSite.html</key>
 		<data>
@@ -422,7 +422,7 @@
 		</data>
 		<key>www/js/input-page.js</key>
 		<data>
-		qPGMu4XAe+MqgNcI9uEaZJqbHSw=
+		cb1JAtqhBSUpppQAimRuuVRI/xA=
 		</data>
 		<key>www/js/jQuery.ptTimeSelect-0.8/README.txt</key>
 		<data>
@@ -474,7 +474,7 @@
 		</data>
 		<key>www/js/pending.js</key>
 		<data>
-		2VFz2A6EWveVoWrn39dwATGU/s8=
+		rd9/6/NjWjLUDhjMa7LeyWjTgiY=
 		</data>
 		<key>www/js/register.js</key>
 		<data>
@@ -999,11 +999,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			sqxHlzuI0LKYjrmyrTuvXye2AEE=
+			QFiCb5fakcCmd/VHmDkAZ7Os7Xk=
 			</data>
 			<key>hash2</key>
 			<data>
-			VDf9DvcXXumKIlLsRqccRsbIfS1nKfWtPlTUK8qbKaE=
+			ALfXmybX14KVBia4/S/KulqYrlxSoLO6mI6EwIQu1YA=
 			</data>
 		</dict>
 		<key>CDVLaunchScreen.storyboardc/Info.plist</key>
@@ -1021,11 +1021,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			egKDvaZL6/bFZJr+1/kswsa2mlY=
+			Wsl0Nc5rDJcMjIDebwVC+KmXNi8=
 			</data>
 			<key>hash2</key>
 			<data>
-			X+X0HCKoMS88iljDbRysKveAQTzLYoj96KswKuV4Q8k=
+			81H9DWc+2Zu5VNCyBe0IxuiuT2J4a7d+fhaefuRMB2w=
 			</data>
 		</dict>
 		<key>CDVNotification.bundle/beep.wav</key>
@@ -1197,11 +1197,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			6fgrc8lICsKuNTJe+7uXkszL0sE=
+			5TxC6I1iGLfkbeevrHR7waf8hO8=
 			</data>
 			<key>hash2</key>
 			<data>
-			60bNmdaQzr8wW/DOpVY7Xkoy5NvCOK+6mtaefuDs1zo=
+			1RbT6+1E3r8v2IiU8CfB0Bn+SkmCU8ap0/zlFK/OGJ0=
 			</data>
 		</dict>
 		<key>archived-expanded-entitlements.xcent</key>
@@ -1241,11 +1241,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			7Q+E/1p2UA8jYdR9cJvbWFkaM1Q=
+			Es/48Qi54ZCe5SET7Mr1oyJA/so=
 			</data>
 			<key>hash2</key>
 			<data>
-			zaW5V3/Rh8Dzgqn0mKU3nYVWp/NnCOO4wUONmrE6uik=
+			7kEYaiBnV+7mXfAUaDHD6dGep4q2B2yKohxeVBqlJ60=
 			</data>
 		</dict>
 		<key>www/AvailableSite.html</key>
@@ -1901,11 +1901,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			qPGMu4XAe+MqgNcI9uEaZJqbHSw=
+			cb1JAtqhBSUpppQAimRuuVRI/xA=
 			</data>
 			<key>hash2</key>
 			<data>
-			tfAp/AYQmkBF/vQLXEB3uzFoVr9kHSIDBiIzBCuVhdM=
+			LGxLujHJuJ53FOciNQa96cajJw6ai3Zfb4RgECg7chI=
 			</data>
 		</dict>
 		<key>www/js/jQuery.ptTimeSelect-0.8/README.txt</key>
@@ -2044,11 +2044,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			2VFz2A6EWveVoWrn39dwATGU/s8=
+			rd9/6/NjWjLUDhjMa7LeyWjTgiY=
 			</data>
 			<key>hash2</key>
 			<data>
-			H7Owl6PFPaIusGzGfpqtYEppsauCCfbK6ymelwNW45o=
+			aKmZk+FZ+X/NqGzucel3hVZ2KmsnpQXSoRNWkhhOr44=
 			</data>
 		</dict>
 		<key>www/js/register.js</key>

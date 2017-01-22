@@ -296,7 +296,9 @@ function onDeviceReady(){
 								"</div>"
 						);
 					}
-				}	
+				}
+
+				$(".arthropod-input").click(editArthropod);	
 			}		
 	});		
 	}else{
@@ -848,6 +850,7 @@ var submit = function( ) {
 		//alert("I am here");
 		db.transaction(function(tx){
 						tx.executeSql("DELETE from SURVEY where timeStart=?", [timeStart]);
+						tx.executeSql("DELETE from ARTHROPODS where timeStart=?", [timeStart]);
                         tx.executeSql("INSERT INTO SURVEY VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", 
                         	['survey',
                         	siteID,
@@ -1107,6 +1110,17 @@ var submitArthropodsToServer = function(result){
 
 			if (inat_token !== null && arthropodImageURI !== null && arthropodImageURI !== undefined) {
 				var url = INATURALIST_DOMAIN + "/observations.json?";
+
+				var life_stage;
+				var insect_life_stage;
+				if ($("h4", this).text().startsWith("Moth")) {
+					life_stage = "adult";
+					insect_life_stage = "adult";
+				}
+				if ($("h4", this).text().startsWith("Caterpillar")) {
+					life_stage = "caterpillar";
+					insect_life_stage = "larva";
+				} 
 				var species = taxon(slugify(trim_end($("h4", this).text(), '(')));
 				if (species.startsWith("OTHER")) species =  slugify($(".arthropod-notes", this).text());
 				url += "observation[species_guess]="+species;
@@ -1139,9 +1153,9 @@ var submitArthropodsToServer = function(result){
 				url += "&observation[observation_field_values_attributes][9][value]="+trim_end(stored_user_info.name, '@');
 				if (species == "Lepidoptera") {
 					url += "&observation[observation_field_values_attributes][8][observation_field_id]=3441";
-					url += "&observation[observation_field_values_attributes][8][value]=caterpillar";
+					url += "&observation[observation_field_values_attributes][8][value]=" + life_stage;
 					url += "&observation[observation_field_values_attributes][9][observation_field_id]=325";
-					url += "&observation[observation_field_values_attributes][9][value]=larva";
+					url += "&observation[observation_field_values_attributes][9][value]=" + insect_life_stage;
 				}
 
 				// alert("url: " + url);
@@ -1254,9 +1268,9 @@ function uploadPhotoToiNat(obs_result, arthropodImageURI) {
 	};
 
 	var fail = function (error) {
-		navigator.notification.alert("An error has occurred: Code = " + error.code);
-		alert("upload error source for iNaturalist: " + error.source);
-        alert("upload error target for iNaturalist: " + error.target);
+		// navigator.notification.alert("An error has occurred: Code = " + error.code);
+		// alert("upload error source for iNaturalist: " + error.source);
+  //       alert("upload error target for iNaturalist: " + error.target);
 		console.log("upload error source: " + error.source);
 		console.log("upload error target " + error.target);
 	};
