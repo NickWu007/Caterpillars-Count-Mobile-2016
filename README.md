@@ -10,4 +10,4 @@ please consultant [official project site](https://caterpillarscount16.web.unc.ed
 
 
 #Contributor
-@Erqian Li
+@Erqian Li @Nick Wu @Matt Wu @Chris Palmour
