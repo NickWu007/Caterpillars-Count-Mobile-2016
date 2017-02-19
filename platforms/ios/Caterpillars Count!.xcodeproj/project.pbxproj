@@ -331,7 +331,8 @@
 				LastUpgradeCheck = 510;
 				TargetAttributes = {
 					1D6058900D05DD3D006BFB54 = {
-						DevelopmentTeam = 59QJT7T2ER;
+						DevelopmentTeam = BFZYMS7L7S;
+						ProvisioningStyle = Automatic;
 					};
 				};
 			};
@@ -449,8 +450,9 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				DEVELOPMENT_TEAM = 59QJT7T2ER;
+				DEVELOPMENT_TEAM = BFZYMS7L7S;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -460,7 +462,7 @@
 				INFOPLIST_FILE = "Caterpillars Count!/Caterpillars Count!-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = nickwu.goldenCompass.caterpillarCount;
+				PRODUCT_BUNDLE_IDENTIFIER = GoldenCompass.CaterpillarCount;
 				PRODUCT_NAME = "Caterpillars Count!";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/$(PROJECT_NAME)/Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
@@ -478,8 +480,10 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: The University of North Carolina at Chapel Hill, Department of Computer Science (BFZYMS7L7S)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
-				DEVELOPMENT_TEAM = 59QJT7T2ER;
+				DEVELOPMENT_TEAM = BFZYMS7L7S;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Caterpillars Count!/Caterpillars Count!-Prefix.pch";
 				GCC_THUMB_SUPPORT = NO;
@@ -487,7 +491,7 @@
 				INFOPLIST_FILE = "Caterpillars Count!/Caterpillars Count!-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = nickwu.goldenCompass.caterpillarCount;
+				PRODUCT_BUNDLE_IDENTIFIER = GoldenCompass.CaterpillarCount;
 				PRODUCT_NAME = "Caterpillars Count!";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/$(PROJECT_NAME)/Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
